@@ -1,0 +1,86 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Chapter 5.&nbsp; Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-10.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-1.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-5"></a>
+                <H2 id="title-IDA3M3KL" class="docChapterTitle">Chapter 5. Functions</H2>
+                <p class="docText"><I>Functions</I> are preprogrammed mini-programs that perform a certain task. As with
+                    mathematics, functions<a name="IDX-CHP-5-0252"></a>
+                    transform values into another result. SQL Server has a wide range of built-in functions to
+                    carry out various tasks. In this chapter, we introduce several of SQL Server's useful built-in
+                    functions, which can be divided into row-level functions, aggregate functions, and other special
+                    functions. Row-level functions operate on a row at a time, whereas aggregate functions operate on
+                    many rows at once.</p>
+                <p class="docText">In SQL Server, we can group the row-level functions into four types: numeric
+                    functions, string functions, conversion functions, and date functions. Numeric functions are used
+                    for calculations. An example of a numeric function is the <tt>SQUARE</tt> function, which would
+                    return the square (a row at a time) of every number (row) of a particular column. String functions
+                    are used to manipulate strings in a particular column (again, one row at a time). An example of a
+                    string function is <tt>SUBSTRING</tt>, which extracts characters from a string. Conversion functions
+                    are used to convert a particular column (a row at a time) from one data type to another. And, date
+                    functions (created using the <tt>DATETIME</tt> data type) operate on a particular data column or
+                    attribute, a row at a time. Date functions are also considered fundamental to the operations of a
+                    database.</p>
+                <p class="docText">The second category of functions that we will discuss is aggregate functions.
+                    Aggregate functions provide a one-number result after calculations based on multiple rows. Examples
+                    of aggregate functions are <tt>MIN</tt> or <tt>AVG</tt>, which stand for the minimum or average,
+                    respectively, and return the minimum or average value respectively, of multiple rows of a particular
+                    column.</p>
+                <p class="docText">The third category of functions that we will discuss is a special class of "other"
+                    functions. These other functions produce a smaller subset of rows from multiple rows. Example of
+                    these other kind of functions would be the <tt>DISTINCT</tt> function or the <tt>TOP</tt> function,
+                    both of which produce a smaller subset of rows from the complete set.</P>
+                <p class="docText">Note that most of the functions discussed in this chapter are placed in a
+                    <tt>SELECT</tt> statement, and so they are "read-only" or "display-only" functions. Any
+                    <tt>SELECT</tt> statement function will not <tt>change</tt> the underlying data in the database. To
+                    change the underlying data in a database, UPDATE (instead of <tt>SELECT</tt>) would have to be used
+                    (as shown in <a class="docLink" href="learnsqlsvr05-CHP-3.html#learnsqlsvr05-CHP-3">Chapter 3</a>).
+                </P>
+                <p class="docText">We begin the chapter by discussing aggregate functions. We discuss row-level
+                    functions later in the chapter.</P>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-10.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-1.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

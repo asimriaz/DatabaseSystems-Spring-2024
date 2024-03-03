@@ -1,0 +1,64 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 4.5.&nbsp; Using ORDER BY with a Join</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-5"></a>
+<H3 id="title-IDAXWS45" class="docSection1Title">4.5. Using ORDER BY with a Join</H3><a name="IDX-CHP-4-0235"></a> 
+<a name="IDX-CHP-4-0236"></a> 
+
+<p class="docText">As with other <tt>SELECT</tt> statements, the <tt>ORDER BY</tt> clause can be used in joins to order the result set. For example, to order the result set (output) of one of the queries presented earlier in this chapter by the <tt>course_number</tt> column, we would type the following:</P>
+<pre>
+SELECT c.course_name, c.course_number, c.credit_hours, c.offering_dept, p.prereq
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+ORDER BY c.course_number
+</pre><BR>
+
+<p class="docText">Or this alternative:</p>
+<pre>
+SELECT c.course_name, c.course_number, c.credit_hours, c.offering_dept, p.prereq
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+ORDER BY 2
+</pre><br>
+
+<p class="docText"><tt>ORDER BY 2</tt> means to order by the second column of the result set. This query produces the same 12 rows as the previous query, but ordered alphabetically in the order of <tt>course_number</tt>:</p>
+<pre>
+COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT PREREQ
+-------------------- ------------- ------------ ------------- --------
+MANAGERIAL FINANCE   ACCT3333      3         ACCT          ACCT2220
+ORGANIC CHEMISTRY    CHEM3001      3         CHEM          CHEM2001
+DATA STRUCTURES      COSC3320      4         COSC          COSC1310
+DATABASE             COSC3380      3         COSC          COSC3320
+DATABASE             COSC3380      3         COSC          MATH2410
+ADA - INTRODUCTION   COSC5234      4         COSC          COSC3320
+ENGLISH COMP II      ENGL1011      3         ENGL          ENGL1010
+FUND. TECH. WRITING  ENGL3401      3         ENGL          ENGL1011
+WRITING FOR NON MAJO ENGL3520      2         ENGL          ENGL1011
+MATH ANALYSIS        MATH5501      3         MATH          MATH2333
+AMERICAN GOVERNMENT  POLY2103      2         POLY          POLY1201
+POLITICS OF CUBA     POLY5501      4         POLY          POLY4103
+&nbsp;
+(12 row(s) affected)
+</pre><BR>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

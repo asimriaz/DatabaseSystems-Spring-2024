@@ -1,0 +1,85 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 4.6.&nbsp; Joining More Than Two Tables</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-6"></a>
+<H3 id="title-IDAQDVIP" class="docSection1Title">4.6. Joining More Than Two Tables</H3>
+<p class="docText">You will frequently need to perform a join in which you have to get data from more than two tables. A join is a pair-wise, binary operation. In SQL Server, you can join more than two tables in either of two ways: by using a nested <tt>JOIN</tt>, or by using a <tt>WHERE</tt> clause. Joins are always done pair-wise.</P>
+<a name="learnsqlsvr05-CHP-4-SECT-6.1"></a>
+<H4 id="title-IDA3DVIP" class="docSection2Title">4.6.1. Joining Multiple Tables Using a Nested JOIN</h4>
+<p class="docText">The simplest form of the nested <tt>JOIN</tt> is as follows:</p>
+<pre>
+SELECT columns
+FROM table1 JOIN
+(table2 JOIN table3
+ON table3.column3=table2.column2)
+ON table1.column1=table2.column2
+</pre><br>
+
+<p class="docText">Here Tables 2 and 3 are joined to form a virtual table that is then joined to Table 1 to create your result set. Note that the join in parentheses is completed first.</P>
+<p class="docText">As an example of a nested join, if we want to see the courses (course names and numbers) that have prerequisites and the departments (department names) offering those courses, we will have to join three tables--<tt>Course</tt>, <tt>Prereq</tt>, and <tt>Department_to_major</tt>, because the data that we want to display is spread among these three tables. We could choose to first join the <tt>Course</tt> table with the <tt>Prereq</tt> table, and then join that result to the <tt>Department_to_major</tt> table. The <tt>Department_to_major</tt> table contains the names of the departments. To determine which columns of the <tt>Department_to_major</tt> table can be used in the join, we have to also look at the description of the <tt>Department_to_major</tt> table, which is shown in <a class="docLink" href="#learnsqlsvr05-CHP-4-FIG-5">Figure 4-5</a>.</P>
+<a name="learnsqlsvr05-CHP-4-FIG-5"></a><P><center>
+<H5 class="docFigureTitle">Figure 4-5. Description of Department_to_major table</H5>
+<img border="0" alt="" width="232" height="60" SRC="images/learnsqlsvr05_0405.jpg">
+</center></p><BR>
+<p class="docText">The query to join the <tt>Course</tt> table to the <tt>Prereq</tt> table to the <tt>Department_to_major</tt> table with the <tt>Course/Prereq</tt> join done first is:</p>
+<pre>
+SELECT c.course_name, c.course_number, d2m.dname
+FROM department_to_major d2m JOIN
+(course c JOIN prereq  p
+ON c.course_number=p.course_number)
+ON c.offering_dept=d2m.dcode
+</pre><br>
+
+<p class="docText">In the nested <tt>JOIN</tt>, the part within the parentheses, <tt>course c JOIN prereq p ON c.course_number=p.course_number</tt>, is performed first to produce a result set. The internal result is then used to join to the third table, <tt>Department_to_major</tt>.</P>
+<p class="docText">The result of the join is the following 12 rows:</P>
+<pre>
+course_name          course_number dname
+-------------------- ------------- --------------------
+MANAGERIAL FINANCE   ACCT3333      Accounting
+ORGANIC CHEMISTRY    CHEM3001      Chemistry
+DATA STRUCTURES      COSC3320      Computer Science
+DATABASE             COSC3380      Computer Science
+DATABASE             COSC3380      Computer Science
+ADA - INTRODUCTION   COSC5234      Computer Science
+ENGLISH COMP II      ENGL1011      English
+FUND. TECH. WRITING  ENGL3401      English
+WRITING FOR NON MAJO ENGL3520      English
+Math Analysis        MATH5501      Mathematics
+AMERICAN GOVERNMENT  POLY2103      Political Science
+POLITICS OF CUBA     POLY5501      Political Science
+&nbsp;
+ (12 row(s) affected)
+</pre><br>
+
+<p class="docText">Which join is performed first has performance implications. We could choose to do the <tt>Course/Department_to_major</tt> table join first, in which case the query could be written as follows:</p>
+<pre>
+SELECT c.course_name, c.course_number, d.dname
+FROM (course c JOIN department_to_major d
+ON c.offering_dept = d.dcode)
+JOIN prereq p
+ON p.course_number = c.course_number
+</pre><br>
+
+<p class="docText">For larger tables and multi-table joins, the order will determine which version of the query would be most efficient.</p>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

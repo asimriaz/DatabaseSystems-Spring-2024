@@ -1,0 +1,437 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.2.&nbsp; Displaying or SELECTing Rows or Tuples from a Table</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-2"></a>
+                <H3 id="title-IDAIT0S5" class="docSection1Title">2.2. Displaying or SELECTing Rows or Tuples from a
+                    Table</H3><a name="IDX-CHP-2-0083"></a>
+                <a name="IDX-CHP-2-0084"></a>
+                <a name="IDX-CHP-2-0085"></a>
+                <a name="IDX-CHP-2-0086"></a>
+                <a name="IDX-CHP-2-0087"></a>
+                <a name="IDX-CHP-2-0088"></a>
+
+                <p class="docText">In relational database terminology, a table is called a <I>relation</I>, and is
+                    denoted by the name of the relation followed by the columns (or attributes), as shown here:</p>
+                <pre>
+Dependent(pno, dname, relationship, sex, age)
+</pre><br>
+
+                <p class="docText">An instance of a relation is a row of a relation (table) with values. We will use the
+                    term "row" to refer to a line of output. Although database literature also uses the term "tuple" or
+                    "record" in place of row, we will most often use the word "row," because "row" is more commonly used
+                    in relational databases (and SQL Server is a relational database).</p>
+                <p class="docText">In the previous section, we showed you how to select or display particular columns
+                    from a table, but we did not explain how to select or display specific rows. Usually you would want
+                    to select or display only particular rows from a table. For example, you may want to list all the
+                    dependents who are older than five, or list all the dependents who are female. In such a case, you
+                    want only the rows <tt>WHERE</tt> the dependents are older than five, or, only the rows
+                    <tt>WHERE</tt> the dependents are female. That is, you want to display only the rows that meet a
+                    certain condition or criteria.</P>
+                <p class="docText">By using a <tt>WHERE</tt> clause in a <tt>SELECT</tt> statement, you can selectively
+                    choose rows that you wish to display based on a criterion. For additional filtering, the
+                    <tt>WHERE</tt> clause can be used with logical operators like <tt>AND</tt> and <tt>OR</tt>, and the
+                    <tt>BETWEEN</tt> operator and its negation, <tt>NOT BETWEEN</tt>.</P>
+                <a name="learnsqlsvr05-CHP-2-SECT-2.1"></a>
+                <H4 id="title-IDAOV0S5" class="docSection2Title">2.2.1. Filtering with WHERE</H4>
+                <p class="docText">The <tt>WHERE</tt> clause is a row filter that is used to restrict the output of rows
+                    (or tuples<a name="IDX-CHP-2-0089"></a>
+                    <a name="IDX-CHP-2-0090"></a>
+                    ) in a result set. When the <tt>WHERE</tt> clause is used, the SQL Server database engine selects
+                    the rows from the table for the result set that meet the conditions listed in the <tt>WHERE</tt>
+                    clause. So, as we have previously illustrated, if no <tt>WHERE</tt> clause is used in a query, the
+                    query will return all rows from the table.
+                </P>
+                <p class="docText">Following is the general syntax of a <tt>SELECT</tt> statement with a <tt>WHERE</tt>
+                    clause:</p>
+                <pre>
+SELECT column-names
+FROM   Table
+WHERE  criteria
+</pre><BR>
+
+                <p class="docText">For example, consider the following query:</p>
+                <pre>
+SELECT *
+FROM   Dependent
+WHERE  sex = 'F'
+</pre><br>
+
+                <p class="docText">This query produces 22 rows of output (of which we show the first 10 rows):</P>
+                <pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+2      Mary                 Daughter     F    9
+2      Beena                Spouse       F    31
+10     Shantu               Daughter     F    5
+14     Rani                              F    3
+17     Susan                Daughter     F    4
+34     Susan                Daughter     F    5
+34     Monica               Daughter     F    1
+62     Hillary              Daughter     F    16
+62     Phoebe               Daughter     F    12
+128    Mita                 Daughter     F    NULL
+.
+.
+.
+&nbsp;
+(22 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The output for this query lists all the columns of the <tt>Dependent</tt> table, but
+                    only the rows <tt>WHERE</tt> the sex attribute has been assigned a value of <tt>F</tt>.</p>
+                <p class="docText">The <tt>WHERE</tt> clause can be used with several comparison operators:</p>
+                <ul>
+                    <li>
+                        <p class="docList">&gt; (greater than)</P>
+                    </li>
+                    <li>
+                        <p class="docList">&lt;&gt; not equal</p>
+                    </li>
+                    <LI>
+                        <p class="docList">= equal</P>
+                    </li>
+                    <li>
+                        <p class="docList">&gt;= greater than or equal to</p>
+                    </li>
+                    <li>
+                        <p class="docList">&lt;= less than or equal to</p>
+                    </li>
+                </ul>
+                <p class="docText"><tt>WHERE</tt> may be used in a query in addition to <tt>ORDER BY</tt>. Following is
+                    an example of a query that displays the dname and age from the <tt>Dependent</tt> table where the
+                    age of the dependent is less than or equal to 5, ordered by age:</p>
+                <pre>
+SELECT   dname, age
+FROM     Dependent
+WHERE    age &lt;= 5
+ORDER BY age
+</pre><br>
+
+                <p class="docText">This query produces 19 rows of output (of which we show the first 11 rows):</p>
+                <pre>
+dname                age
+-------------------- ------
+Raju                 1
+Sam                  1
+Monica               1
+Prakash              1
+Mithu                1
+Nita                 2
+Rakhi                2
+Jake                 2
+Jon                  2
+Mahesh               2
+Rani                 3
+.
+.
+.
+&nbsp;
+(19 row(s) affected)
+</pre><br>
+
+                <p class="docText">So far we have shown you how to include only one condition in your <tt>WHERE</tt>
+                    clause. If you want to include multiple conditions in your <tt>WHERE</tt> clause, you can use
+                    logical operators like <tt>AND</tt> and <tt>OR</tt>, and other operators like <tt>BETWEEN</tt> and
+                    its negation, <tt>NOT BETWEEN</tt>. The following sections discuss and illustrate the use of the
+                    <tt>AND</tt>, <tt>OR</tt>, and <tt>BETWEEN</tt> operators, and also the <tt>NOT BETWEEN</tt> in the
+                    <tt>WHERE</tt> clause.</p>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-2.2"></a>
+                <h4 id="title-IDADB1S5" class="docSection2Title">2.2.2. The AND Operator</H4><a
+                    name="IDX-CHP-2-0091"></a>
+                <a name="IDX-CHP-2-0092"></a>
+                <a name="IDX-CHP-2-0093"></a>
+
+                <p class="docText">The <tt>AND</tt> is a way of combining conditions in a <tt>WHERE</tt> clause. An
+                    <tt>AND</tt> operator is used in a <tt>WHERE</tt> clause if more that one condition is required.
+                    Using the <tt>AND</tt> further restricts the output of rows (tuples) in the result set. For example,
+                    consider the following query:</p>
+                <pre>
+SELECT *
+FROM   Dependent
+WHERE  age &lt;= 5
+AND    sex = 'F'
+</pre><br>
+
+                <p class="docText">which produces the following nine rows of output:</p>
+                <pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+10     Shantu               Daughter     F    5
+14     Rani                              F    3
+17     Susan                Daughter     F    4
+34     Susan                Daughter     F    5
+34     Monica               Daughter     F    1
+128    Nita                 Daughter     F    2
+142    Rakhi                Daughter     F    2
+153    Madhu                Daughter     F    5
+153    Mamta                Daughter     F    4
+&nbsp;
+(9 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The output for this query lists all the columns of the <tt>Dependent</tt> table, but
+                    only the rows <tt>WHERE</tt> the value of the age attribute is less than or equal to <tt>5</tt>
+                    <span class="docEmphasis">and</span> the sex is <tt>female</tt>. The <tt>AND</tt> means that <span
+                        class="docEmphasis">both</span> the criteria, <tt>age &lt;= 5</tt> and <tt>sex = 'F'</tt>, have
+                    to be met for the row to be included in the result set. '<tt>F</tt>' is in single quotes in this
+                    query because sex was defined as character data (<tt>CHAR</tt>) when the table was created. Text or
+                    character data has to be in single quotes in SQL Server . Double quotes would not be acceptable in
+                    SQL Server . Numeric data (e.g., <tt>age &lt;= 5</tt>) should not be in quotes.</P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">An extensive discussion of data types is presented in the
+                                            next chapter.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </P><br>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-2.3"></a>
+                <h4 id="title-IDAND1S5" class="docSection2Title">2.2.3. The OR Operator</H4><a
+                    name="IDX-CHP-2-0094"></a>
+                <a name="IDX-CHP-2-0095"></a>
+                <a name="IDX-CHP-2-0096"></a>
+
+                <p class="docText">The <tt>OR</tt> operator is another way of combining conditions in a <tt>WHERE</tt>
+                    clause. Unlike the <tt>AND</tt> operator, the <tt>OR</tt> operator allows the database engine to
+                    select the row to be included in the result set if <span class="docEmphasis">either</span> of the
+                    conditions in the <tt>WHERE</tt> clause are met. So, although you could also use the <tt>OR</tt>
+                    operator with your <tt>WHERE</tt> clause if you wanted to include more that one condition in your
+                    <tt>WHERE</tt> clause, either of the conditions in the <tt>WHERE</tt> clause can be met for a row to
+                    be included in the result set.</P>
+                <p class="docText">Consider the following query:</p>
+                <pre>
+SELECT *
+FROM   Dependent
+WHERE  age &gt;20
+OR     sex = 'F'
+</pre><br>
+
+                <p class="docText">which produces 23 rows of output (of which we are showing the first 10):</p>
+                <pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+2      Mary                 Daughter     F    9
+2      Beena                Spouse       F    31
+10     Shantu               Daughter     F    5
+14     Rani                              F    3
+17     Susan                Daughter     F    4
+34     Susan                Daughter     F    5
+34     Monica               Daughter     F    1
+62     Tom                  Husband      M    45
+62     Hillary              Daughter     F    16
+62     Phoebe               Daughter     F    12
+.
+.
+.
+&nbsp;
+(23 row(s) affected)
+</pre><br>
+
+                <p class="docText">This output lists of all dependents who are either greater than 20 years of age <span
+                        class="docEmphasis">or</span> are female. The <tt>OR</tt> means that either of the criteria,
+                    <tt>age &gt; 20</tt> or <tt>sex = 'F'</tt>, has to be met for the row to be included in the output.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-2.4"></a>
+                <h4 id="title-IDAOF1S5" class="docSection2Title">2.2.4. The BETWEEN Operator</h4><a
+                    name="IDX-CHP-2-0097"></a>
+                <a name="IDX-CHP-2-0098"></a>
+                <a name="IDX-CHP-2-0099"></a>
+
+                <p class="docText">The <tt>BETWEEN</tt> operator is yet another way of combining filtering conditions in
+                    a <tt>WHERE</tt> clause. In SQL Server , the <tt>BETWEEN</tt> operator allows you to determine
+                    whether a value falls within a given range of values (inclusive). The general syntax of the
+                    <tt>BETWEEN</tt> operator is:</p>
+                <pre>
+SELECT...
+FROM
+WHERE
+BETWEEN value1 AND value2
+</pre><br>
+
+                <p class="docText">For example, if we want to find all the dependents between the ages of 3 and 5, we
+                    would type the following:</P>
+                <pre>
+SELECT  dname, age
+FROM    Dependent
+WHERE   age
+BETWEEN 3 AND 5
+</pre><BR>
+
+                <p class="docText">This query produces the following nine rows of output:</p>
+                <pre>
+dname                age
+-------------------- ------
+Amit                 3
+Shantu               5
+Rani                 3
+Susan                4
+Susan                5
+James                5
+Sebastian            4
+Madhu                5
+Mamta                4
+&nbsp;
+(9 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">In SQL Server , <tt><i>value1</i></tt> in the
+                                            <tt>BETWEEN</tt> clause has to be less than <tt><i>value2</i></tt>. In some
+                                            SQL languages (for example, in Access SQL), <tt><i>value1</I></tt> does not
+                                            have to be less than <tt><i>value2</i></tt>.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><br>
+                <p class="docText">Because the operator is inclusive, the end points of the comparison have been
+                    included in the output; that is, the <tt>BETWEEN</tt> clause takes the values from
+                    <tt><i>value1</i></tt> and <tt><I>value2</I></tt>.</P>
+                <p class="docText">As we will often point out, SQL statements may be written in several ways. For
+                    example, the <tt>BETWEEN</tt> that we illustrated earlier may also be written as follows:</P>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+WHERE  age &gt;=3
+AND    age &lt;=5
+</pre><BR>
+
+                <p class="docText">This query produces the same output as the previous query. So, <tt>BETWEEN</tt> can
+                    be considered shorthand for "greater-than-or-equal-to <tt>AND</tt> less-than-or-equal-to some
+                    value."</p>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-2.5"></a>
+                <H4 id="title-IDAEI1S5" class="docSection2Title">2.2.5. Negating the BETWEEN Operator</h4><a
+                    name="IDX-CHP-2-0100"></a>
+                <a name="IDX-CHP-2-0101"></a>
+                <a name="IDX-CHP-2-0102"></a>
+
+                <p class="docText">The <tt>BETWEEN</tt> operator can be negated by using the keyword <tt>NOT</tt> before
+                    the <tt>BETWEEN</tt> operator. <tt>NOT BETWEEN</tt> allows you to determine whether a value does not
+                    occur within a given range of values. The general syntax of the <tt>NOT BETWEEN</tt> is:</p>
+                <pre>
+SELECT...
+FROM
+WHERE
+NOT BETWEEN value1 AND value2
+</pre><BR>
+
+                <p class="docText">For example, if we want to find all the dependents who are not between the ages of 3
+                    and 15, we would type the following:</P>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+WHERE  age
+NOT BETWEEN 3 AND 15
+</pre><br>
+
+                <p class="docText">which would give us the following 19 rows:</p>
+                <pre>
+dname                age
+-------------------- ------
+Beena                31
+Raju                 1
+Sam                  1
+Monica               1
+Tom                  45
+Hillary              16
+Jon                  2
+Prakash              1
+Mithu                1
+Nita                 2
+Barbara              26
+Rakhi                2
+Susan                22
+Susie                22
+Xi du                22
+Barbara              23
+Jake                 2
+Mahesh               2
+Sally                22
+&nbsp;
+(19 row(s) affected)
+</pre><br>
+
+                <p class="docText">Here the end points of the comparison are <span class="docEmphasis">not</span>
+                    included in the result set. The previous <tt>NOT BETWEEN</tt> query could also be written as
+                    follows:</p>
+                <pre>
+SELECT sname, class
+FROM   Student
+WHERE  class &lt;1
+OR     class &gt;3
+</pre><BR>
+
+                <p class="docText"><tt>NOT BETWEEN</tt> could be considered shorthand for "less-than <tt>OR</tt>
+                    greater-than some value."</p>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

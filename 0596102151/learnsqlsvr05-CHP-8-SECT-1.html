@@ -1,0 +1,101 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 8.1.&nbsp; Subquery with an IN Predicate</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-8-SECT-1"></a>
+<h3 id="title-IDA3KCRL" class="docSection1Title">8.1. Subquery with an IN Predicate</H3><a name="IDX-CHP-8-0432"></a> 
+<a name="IDX-CHP-8-0433"></a> 
+
+<p class="docText">Suppose that a query requests a list of names and numbers of students (which are in the <tt>Student</tt> table in our <tt>Student_course</tt> database) who have made As or Bs in any course (grades are in the <tt>Grade_report</tt> table in our <tt>Student_course</tt> database). You can complete this query as either a subquery or a join. As a subquery with an <tt>IN</tt> predicate, it will take the following form:</p>
+<pre>
+    SELECT Student.sname, Student.stno
+    FROM   Student
+    WHERE  "link to Grade_report"
+       IN  ("link to Student" - subquery involving Grade_report)
+</pre><br>
+
+<p class="docText">In this format, the part of the query that contains:</P>
+<pre>
+    SELECT Student.sname, Student.stno
+    FROM   Student
+    WHERE  "link to Grade_report"
+</pre><br>
+
+<p class="docText">is said to be the <I>outer query</i>. The part of the query that contains:</P>
+<pre>
+    ("link to Student" - subquery involving Grade_report)
+</pre><BR>
+
+<p class="docText">is the <I>inner query</I>.</p>
+<p class="docText">The link between the <tt>Student</tt> table and the <tt>Grade_report</tt> table is the student number. In the <tt>Student</tt> table, the appropriate column is <tt>stno</tt>, and in the <tt>Grade_report</tt> table, it is <tt>student_number</tt>. When linking the tables in the subquery with an <tt>IN</tt> predicate, the linking columns are all that can be mentioned in the <tt>WHERE..IN</tt> and in the result set of the subquery. Thus, the statement with a subquery is as follows:</P>
+<pre>
+    SELECT Student.sname, Student.stno
+    FROM   Student
+    WHERE  Student.stno
+      IN (SELECT   gr.student_number
+          FROM     Grade_report gr
+          WHERE    gr.grade = 'B' OR  gr.grade = 'A')
+    ORDER BY Student.stno
+</pre><BR>
+
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">The part of the query <span class="docEmphasis">before</span> the <tt>IN</tt> is often called the <span class="docEmphasis">outer query</span>. The part of the query <span class="docEmphasis">after</span> the <tt>IN</tt> is called the <span class="docEmphasis">inner query</span>.</P></td></tr></table></TD></TR></table></P><br>
+
+<p class="docText">This query produces the following output (31 rows):</p>
+<pre>
+    sname                stno
+    -------------------- -----
+    Lineas               2
+    Mary                 3
+    Zelda                5
+    Ken                  6
+    Mario                7
+    Brenda               8
+    Richard              10
+    Kelly                13
+    Lujack               14
+    Reva                 15
+    Harley               19
+    Donald               20
+    Chris                24
+    Lynette              34
+    Susan                49
+    Hillary              121
+    Phoebe               122
+    Holly                123
+    Sadie                125
+    Jessica              126
+    Steve                127
+    Cedric               129
+    George               132
+    Jerry                142
+    Cramer               143
+    Fraiser              144
+    Francis              146
+    Smithly              147
+    Sebastian            148
+    Lindsay              155
+    Stephanie            157
+
+    (31 row(s) affected)
+</pre><br>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

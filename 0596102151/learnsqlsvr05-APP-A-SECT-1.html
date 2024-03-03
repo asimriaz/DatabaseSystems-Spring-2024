@@ -1,0 +1,46 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section A.1.&nbsp;</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-A.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-B.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-APP-A-SECT-1"></a>
+<h3 id="599419-978" class="docSection1Title">A.1. </H3>
+<a name="learnsqlsvr05-APP-A-SECT-1.1"></a>
+<h4 id="title-IDA1H25G" class="docSection2Title">A.1.1. Brief English Description of the ER Diagram</h4><a name="IDX-APP-A-0003"></a> 
+<a name="IDX-APP-A-0004"></a> 
+
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docList"><tt>Student</tt> <span class="docEmphasis">may</span> be registered in one or more (M) <tt>Grade_Reports</tt> (<tt>Grade_report</tt> is for a specific course).</p><p class="docList">A <tt>Grade_Report</tt> <span class="docEmphasis">must</span> relate to one and only one (1) <tt>Student</tt>.</P><p class="docList">(Students may be in the database and not registered for any courses, but if a course is recorded in the <tt>Grade_report</tt> table, it must be related to one and only one student).</p></div></LI><LI><div style="font-weight:normal"><p class="docList">A <tt>Section</tt> <span class="docEmphasis">must</span> have one or more (M) <tt>Grade_Reports</tt> (Sections only exist if they have students in them).</P><p class="docList">A <tt>Grade_Report</tt> <span class="docEmphasis">must</span> relate to one and only one (1) <tt>Section</tt>.</P></div></li><LI><div style="font-weight:normal"><p class="docList">A <tt>Section</tt> <span class="docEmphasis">must</span> relate to one and only one (1) <tt>Course</tt>.</P><p class="docList">A <tt>Course</tt> <span class="docEmphasis">may</span> be offered as one or more (M) <tt>Sections</tt>.</p><p class="docList">(Courses may exist where they are not offered in a section, but a section, if offered, must relate to one and only one course).</P></div></LI><li><div style="font-weight:normal"><p class="docList">A <tt>Student</tt> <span class="docEmphasis">may</span> be related to one and only one (1) <tt>Department_to_major</tt> (A student may or may not have declared a major).</p><p class="docList">A <tt>Department_to_major</tt> <span class="docEmphasis">may</span> have one or more (M) <tt>Students</tt> (A department may or may not have student-majors).</p></div></li><LI><div style="font-weight:normal"><p class="docList">A <tt>Course</tt> <span class="docEmphasis">must</span> be related to one and only one (1) <tt>Department_to_major</tt>.</p><p class="docList">A <tt>Department_to_major</tt> <span class="docEmphasis">may</span> offer one or more (M) <tt>Courses</tt>.</p></div></LI><LI><div style="font-weight:normal"><p class="docList">A <tt>Section</tt> <span class="docEmphasis">must</span> be offered in one and only one (1) <tt>Room</tt>.</P><p class="docList">A <tt>Room</tt> <span class="docEmphasis">may</span> host one or more (M) <tt>Sections</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">A <tt>Course</tt> <span class="docEmphasis">may</span> have one or more (M) <tt>Prereq</tt> (A course may have one or more prerequisites).</p><p class="docList">A <tt>Prereq</tt> <span class="docEmphasis">may</span> be a prerequisite for one or more (M) <tt>Courses</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">A <tt>Student</tt> <span class="docEmphasis">may</span> have one or more (M) <tt>Dependent</tt>s.</p><p class="docList">A <tt>Dependent</tt> <span class="docEmphasis">must</span> be related to one or more (N) <tt>Students</tt>.</p></div></li></ol></div>
+<a name="learnsqlsvr05-APP-A-TABLE-2"></a><p><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table A-2. Table definition of other tables that have been used in this book</h5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><td class="docTableCell" align="left"><p class="docText"></P>
+<pre>
+<span class="docEmphStrong">PLANTS
+    COMPANY                  NVARCHAR(20)
+    PLANTLO                  NVARCHAR(15)
+    PRIMARY KEY(COMPANY, PLANTLO)
+&nbsp;
+CAP
+    NAME                     NVARCHAR(9)
+    LANGU                    NVARCHAR(7)
+    PRIMARY KEY(NAME, LANGU)</span>
+</pre><br>
+
+</td></TR></table></p><br>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-A.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-B.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

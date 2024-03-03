@@ -1,0 +1,92 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 11.1.&nbsp; The "Simple" CREATE TABLE</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-2.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-11-SECT-1"></a>
+                <h3 id="title-IDAWFML5" class="docSection1Title">11.1. The "Simple" CREATE TABLE</H3><a
+                    name="IDX-CHP-11-0474"></a>
+
+                <p class="docText">You have seen a "simple" <tt>CREATE TABLE</tt> statement in <a class="docLink"
+                        href="learnsqlsvr05-CHP-3.html#learnsqlsvr05-CHP-3">Chapter 3</a>. To refresh your memory, here
+                    is an example:</p>
+                <pre>
+CREATE TABLE Test1
+  (name            VARCHAR(20),
+   ssn             CHAR(9),
+   dept_number     INT,
+   acct_balance    SMALLMONEY)
+</pre><br>
+
+                <p class="docText">The following are the elements of this <tt>CREATE TABLE</tt> command:</P>
+                <ul>
+                    <LI>
+                        <p class="docList">We created a table called <tt>Test1</tt>.</p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>name</tt> is a variable-length character string with maximum length of 20
+                        </P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>ssn</tt> (Social Security number) is a fixed-length character string of
+                            length 9</P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>dept_number</tt> is an integer (which in SQL Server simply means no
+                            decimals allowed)</P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>acct_balance</tt> is a currency column</p>
+                    </li>
+                </ul>
+                <p class="docText">Beyond choosing data types for columns in tables, you may need to make other choices
+                    to create an effective database. You can create indexes<a name="IDX-CHP-11-0475"></a>
+                    on tables, which then can be used to aid in the enforcement of certain validation rules. You also
+                    can use other "add-ons" called <tt>CONSTRAINT</tt>s, which make you enter <span
+                        class="docEmphasis">good</span> data (or, prevents you from entering invalid data into the
+                    database) and hence maintain the integrity of a database. In the following sections, we explore
+                    indexes and then <tt>CONSTRAINT</tt>s.</P>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-2.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

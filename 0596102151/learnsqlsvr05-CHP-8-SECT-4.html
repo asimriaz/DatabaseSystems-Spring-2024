@@ -1,0 +1,125 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 8.4.&nbsp; More Examples Involving Joins and IN</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-8-SECT-4"></a>
+<h3 id="title-IDA1GPR5" class="docSection1Title">8.4. More Examples Involving Joins and IN</H3><a name="IDX-CHP-8-0436"></a> 
+<a name="IDX-CHP-8-0437"></a> 
+
+<p class="docText">The purpose of this section is to further demonstrate several queries that will and will not allow the use of the subquery. As we have discussed, some joins can be expressed as subqueries whereas others cannot. Further, all subqueries with the <tt>IN</tt> predicate can be re-formed as a join. Whether you can use a subquery depends on the final, outer result set. Some more examples will help clarify this point.</p>
+<a name="learnsqlsvr05-CHP-8-SECT-4.1"></a>
+<h4 id="title-IDAPHPR5" class="docSection2Title">8.4.1. Example 1</H4>
+<p class="docText">Find the names of all the departments that offer a course with <tt>INTRO</tt> in the title. To formulate our query, we need to use the <tt>Course</tt> table (to find the course names) and the <tt>Department_to_major</tt> table (to find the names of the departments).</p>
+<p class="docText">Begin by viewing the column names in the tables.</P>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><TD valign="top"><p class="docText">If you have forgotten how to view the column names of a table, refer to <a class="docLink" href="learnsqlsvr05-CHP-1-SECT-6.html#learnsqlsvr05-CHP-1-FIG-21">Figure 1-21</a>.</P></td></TR></table></TD></tr></table></p><br>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-8-FIG-1">Figure 8-1</a> gives the column names in the <tt>Course</tt> table:</p>
+<a name="learnsqlsvr05-CHP-8-FIG-1"></a><P><center>
+<h5 class="docFigureTitle">Figure 8-1. Column names of the Course table</h5>
+<img border="0" alt="" width="290" height="92" SRC="images/learnsqlsvr05_0801.jpg">
+</center></P><BR>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-8-FIG-2">Figure 8-2</a> gives the column names of the <tt>Department_to_major</tt> table:</P>
+<a name="learnsqlsvr05-CHP-8-FIG-2"></a><p><center>
+<h5 class="docFigureTitle">Figure 8-2. Column names of the Department_to_major table</h5>
+<img border="0" alt="" width="232" height="66" SRC="images/learnsqlsvr05_0802.jpg">
+</center></p><br>
+<p class="docText">Our query needs a department name (<tt>dname</tt>) from the <tt>Department_to_major</tt> table. We also need course information from the <tt>Course</tt> table, because our query depends on a course name; however, no course information appears in the result set. We did not ask for the names of the courses, just that they have <tt>INTRO</tt> in the title. The result set asks only for department names. We can find this result by using a subquery, with the <tt>Department_to_major</tt> table as the outer query, because all the information in the result set is contained in the outer query. The query would be as follows:</p>
+<pre>
+    SELECT d2m.dname
+    FROM   Department_to_major d2m
+    WHERE  d2m.dcode
+      IN (SELECT     Course.offering_dept
+          FROM       Course
+          WHERE      Course.course_name LIKE '%INTRO%')
+</pre><br>
+
+<p class="docText">which produces the following output:</p>
+<pre>
+    dname
+    --------------------
+    Computer Science
+    Political Science
+    Chemistry
+
+    (3 row(s) affected)
+</pre><br>
+
+
+<a name="learnsqlsvr05-CHP-8-SECT-4.2"></a>
+<h4 id="title-IDANKPR5" class="docSection2Title">8.4.2. Example 2</h4>
+<p class="docText">List the student name, student major code, and section identifier of students who earned Cs in courses taught by Professor Hermano (<tt>HERMANO</tt>).</p>
+<p class="docText">First, we determine which tables are needed. We want to find the student name and major code, and a section identifier for courses taken, so we need the <tt>Student</tt> and <tt>Grade_report</tt> tables for the result set. We will need to use the <tt>Section</tt> table for a filter. The instructor does not appear in the result set. Again, it is a good idea to look at the column names in each of the tables first.</p>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-8-FIG-3">Figure 8-3</a> gives the column names of the <tt>Student</tt> table.</p>
+<a name="learnsqlsvr05-CHP-8-FIG-3"></a><p><center>
+<H5 class="docFigureTitle">Figure 8-3. Columns names of the Student table</h5>
+<img border="0" alt="" width="216" height="115" SRC="images/learnsqlsvr05_0803.jpg">
+</center></p><BR>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-8-FIG-4">Figure 8-4</a> gives the column names of the <tt>Grade_report</tt> table.</p>
+<a name="learnsqlsvr05-CHP-8-FIG-4"></a><p><center>
+<H5 class="docFigureTitle">Figure 8-4. Column names of the Grade_report table</h5>
+<img border="0" alt="" width="272" height="82" SRC="images/learnsqlsvr05_0804.jpg">
+</center></p><BR>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-8-FIG-5">Figure 8-5</a> gives the column names of the <tt>Section</tt> table.</p>
+<p class="docText">After we have determined which tables we need, we have to determine where the columns that are needed in the result set are located. We need to get the names and major codes from the <tt>Student</tt> table, and the section identifiers from the <tt>Grade_report</tt> table. So the result set part of the query (the outer query) must contain the <tt>Student</tt> and <tt>Grade_report</tt> tables. The rest of the query can contain any other tables that we need to locate the columns. The resulting query may look like this (a combination of a join and a subquery):</P>
+<a name="learnsqlsvr05-CHP-8-FIG-5"></a><p><center>
+<H5 class="docFigureTitle">Figure 8-5. Column names of the Section table</H5>
+<img border="0" alt="" width="241" height="140" SRC="images/learnsqlsvr05_0805.jpg">
+</center></P><BR>
+<pre>
+    SELECT    s.sname, s.major, g.section_id
+    FROM      Student s, Grade_report g
+    WHERE     g.student_number = s.stno
+    AND          g.grade = 'C'
+    AND          g.section_id IN
+      (SELECT t.section_id
+       FROM   Section t
+       WHERE  t.instructor LIKE 'HERMANO')
+</pre><br>
+
+<p class="docText">which produces the following output:</P>
+<pre>
+    sname                major section_id
+    -------------------- ----- ----------
+    Richard              ENGL  126
+
+    (1 row(s) affected)
+</pre><BR>
+
+<p class="docText">The previous query could also have been done as a three-table join, as follows:</p>
+<pre>
+    SELECT  s.sname, s.major, t.section_id
+    FROM    Student s, Grade_report g, Section t
+    WHERE   s.stno = g.student_number
+    AND       g.section_id =t.section_id
+    AND       g.grade='C'
+    AND       t.instructor LIKE 'HERMANO'
+</pre><BR>
+
+
+<a name="learnsqlsvr05-CHP-8-SECT-4.3"></a>
+<H4 id="title-IDAWNPR5" class="docSection2Title">8.4.3. Example 3</h4>
+<p class="docText">List the name and major code of students who earned Cs in courses taught by Professor King (<tt>KING</tt>).</p>
+<p class="docText">Again, we first need to determine which tables are needed. We need to collect student names and major codes in the result set and we need the <tt>Grade_report</tt> and <tt>Section</tt> tables for filtering conditions. (You viewed the columns available in each of these tables in the preceding example.) Next, we need to determine where the columns that are needed in the result set are located. In this example, they are all in the <tt>Student</tt> table.</p>
+<p class="docText">Because the only table needed in the outer query is the <tt>Student</tt> table, we can structure the query in any of the following ways:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docList"><tt>Student</tt> join <tt>Grade_report</tt> join <tt>Section</tt> <span class="docEmphasis">[three-table join]</span></p></div></li><LI><div style="font-weight:normal"><p class="docList"><tt>Student</tt> subquery (<tt>Grade_report</tt> join <tt>Section</tt>) <span class="docEmphasis">[Student outer, join in subquery]</span></P></div></LI><li><div style="font-weight:normal"><p class="docList"><tt>Student</tt> join <tt>Grade_report</tt> subquery (<tt>Section</tt>) <span class="docEmphasis">[similar to Example 2 but with a different result set]</span></p></div></li><li><div style="font-weight:normal"><p class="docList"><tt>Student</tt> (subquery <tt>Grade_report</tt> (subquery <tt>Section</tt>)) <span class="docEmphasis">[a three-level subquery]</span></p></div></li></ol></div>
+<p class="docText">Each of these queries produces the same result set with different efficiencies. We'll study them further in the exercises at the end of the chapter.</p>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

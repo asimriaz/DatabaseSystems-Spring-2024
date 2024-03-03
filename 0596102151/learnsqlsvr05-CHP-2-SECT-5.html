@@ -1,0 +1,340 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.5.&nbsp; Using Aliases</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-5"></a>
+                <H3 id="title-IDAXW3XD" class="docSection1Title">2.5. Using Aliases</H3>
+                <p class="docText">Column aliases and table aliases are temporary names assigned within a query to
+                    columns and tables respectively. They are created on the fly in a query, and do not exist after the
+                    query is run. In this section, we discuss column aliases<a name="IDX-CHP-2-0111"></a>
+                    <a name="IDX-CHP-2-0112"></a>
+                    and table aliases.
+                </P>
+                <a name="learnsqlsvr05-CHP-2-SECT-5.1"></a>
+                <H4 id="title-IDAJX3XD" class="docSection2Title">2.5.1. Column Aliases</h4>
+                <p class="docText">Column aliases are used to improve the readability of a query and its output. In SQL
+                    Server , a column alias can be declared either before or after the column designation in the
+                    <tt>SELECT</tt> statement.</p>
+                <p class="docText">We will first display a query <span class="docEmphasis">without</span> a column
+                    alias:</p>
+                <pre>
+SELECT dname, age, sex
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><BR>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</P>
+                <pre>
+dname                age    sex
+-------------------- ------ ----
+Matt                 8      M
+Mary                 9      F
+Beena                31     F
+Chris                6      M
+Tom                  45     M
+James                14     M
+Hillary              16     F
+Phoebe               12     F
+Om                   6      M
+Barbara              26     F
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Notice that SQL Server (by default) uses the column names from the <tt>Dependent</tt>
+                    table for the column headings. These column names may not be so explicit or descriptive. For
+                    example, what is <tt>dname</tt>? We would probably assume it's a name of something, but what does
+                    the "d" in front of name stand for? Using more descriptive headings in the output would considerably
+                    increase readability. To use more descriptive column headings, you can include column aliases just
+                    before or after the column name by using <tt>AS</tt> in the <tt>SELECT</tt> statement, as shown next
+                    (in the first few examples, we place the descriptive column headings after the column names):</P>
+                <pre>
+SELECT dname AS Dependent_name, age AS Dependent_age, sex AS Dependent_sex
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><BR>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</p>
+                <pre>
+Dependent_name       Dependent_age Dependent_sex
+-------------------- ------------- -------------
+Matt                 8             M
+Mary                 9             F
+Beena                31            F
+Chris                6             M
+Tom                  45            M
+James                14            M
+Hillary              16            F
+Phoebe               12            F
+Om                   6             M
+Barbara              26            F
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><BR>
+
+                <p class="docText">That output has more descriptive headings.</p>
+                <p class="docText">To embed a blank in the column alias, you have to put the column alias in single or
+                    double quotes, as shown in the following example:</p>
+                <pre>
+SELECT dname AS "Dependent Name", age AS "Dependent Age", sex AS "Dependent Sex"
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><BR>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</P>
+                <pre>
+Dependent Name       Dependent Age Dependent Sex
+-------------------- ------------- -------------
+Matt                 8             M
+Mary                 9             F
+Beena                31            F
+Chris                6             M
+Tom                  45            M
+James                14            M
+Hillary              16            F
+Phoebe               12            F
+Om                   6             M
+Barbara              26            F
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><br>
+
+                <p class="docText">In fact, if you use single quotes in the previous query, you can also omit the
+                    <tt>AS</tt>. That is, typing in the following query gives you the same output as does the previous
+                    query:</p>
+                <pre>
+SELECT dname 'Dependent Name', age 'Dependent Age', sex 'Dependent Sex'
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><br>
+
+                <p class="docText">Column aliases can also be placed in square brackets, as shown in the following
+                    query:</p>
+                <pre>
+SELECT dname AS [Dependent Name], age AS [Dependent Age], sex AS [Dependent Sex]
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><BR>
+
+                <p class="docText">Finally, column aliases can be placed in square brackets before <tt>= column
+                        name</tt>, as shown here:</p>
+                <pre>
+SELECT [Dependent Name] = dname, [Dependent Age] = age, [Dependent Sex] = sex
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><br>
+
+                <p class="docText">These previous two queries produce the same output (and headings) as the query before
+                    them.</p>
+                <p class="docText">If we wish to eliminate the brackets in the previous query, we can use only a
+                    one-word alias before the = column name, as shown:</p>
+                <pre>
+SELECT Name = dname, Age = age, Sex = sex
+FROM   Dependent
+WHERE  age &gt; 5
+</pre><BR>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</P>
+                <pre>
+Name                 Age    Sex
+-------------------- ------ ----
+Matt                 8      M
+Mary                 9      F
+Beena                31     F
+Chris                6      M
+Tom                  45     M
+James                14     M
+Hillary              16     F
+Phoebe               12     F
+Om                   6      M
+Barbara              26     F
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-2-SECT-5.2"></a>
+                <h4 id="title-IDA0Z3XD" class="docSection2Title">2.5.2. Table Aliases</h4>
+                <p class="docText">A table alias, usually used in multi-table queries (we discuss multi-table queries in
+                    <a class="docLink" href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a> onwards),
+                    allows us to use a shorter name for a table when we reference the table in the query. A table alias
+                    is temporary, and does not exist after the query is run. We will explore multi-table queries in
+                    future chapters. Following is an example of the previous query written with a one-letter table
+                    alias:</p>
+                <pre>
+SELECT d.dname
+FROM   Dependent d
+WHERE  d.age &gt; 5
+</pre><br>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</p>
+                <pre>
+dname
+--------------------
+Matt
+Mary
+Beena
+Chris
+Tom
+James
+Hillary
+Phoebe
+Om
+Barbara
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this query, the table alias is the letter d <span class="docEmphasis">after</span>
+                    the table name, <tt>Dependent</tt>. A table alias can also be defined by a short, meaningful word or
+                    expression after the table name, rather than a one-letter table alias, but the one-letter table
+                    alias is commonly used by SQL programmers. Once a table alias has been defined in a query, it can be
+                    used in place of the table name. So, <tt>d</tt> could be used in place of <tt>Dependent</tt> if the
+                    table name needed to be used again in this particular query, but it is not reusable in multiple
+                    queries within the same batch. Again note that the table alias is not valid outside this query (or,
+                    after this query is executed). That is, if you type <tt>SELECT * from d</tt>, you will get an error
+                    message. There is no such table as <tt>d</tt> (<tt>d</tt> was locally defined as the table alias for
+                    that particular query, and is valid only in that particular query).</p>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-5.3"></a>
+                <h4 id="title-IDAB13XD" class="docSection2Title">2.5.3. Table Aliases Used as Table Qualifiers</h4><a
+                    name="IDX-CHP-2-0113"></a>
+                <a name="IDX-CHP-2-0114"></a>
+                <a name="IDX-CHP-2-0115"></a>
+                <a name="IDX-CHP-2-0116"></a>
+
+                <p class="docText">In the previous example, the construction <tt>d.dname</tt> contains a table qualifier
+                    (the <tt>d.</tt> part). Table qualifiers are needed when the same column name has been used in more
+                    than one table. Table qualifiers before the column names determine which table the column is from.
+                    For example, if <tt>TableA</tt> has a column called Field1 and <tt>TableB</tt> also has a column
+                    Field1, if we do not use a table qualifier in a multi-table query, there is no way that the query
+                    engine can know which Field1 the query is referring to. To correctly handle this situation, we would
+                    have to use a table qualifier in the form <tt>Table1.FieldA</tt>, where <tt>Table1</tt> is the table
+                    qualifier (this is also an alias, in a way).</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Once again, multi-table queries will be discussed from <a
+                                                class="docLink"
+                                                href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a>
+                                            onward.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">Following is an example of a query with a table qualifier used for the age column:
+                </p>
+                <pre>
+SELECT *
+FROM   Dependent
+WHERE  Dependent.age &gt; 5
+</pre><BR>
+
+                <p class="docText">This query produces 17 rows of output (of which we show the first 10 rows):</P>
+                <pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+2      Matt                 Son          M    8
+2      Mary                 Daughter     F    9
+2      Beena                Spouse       F    31
+20     Chris                Son          M    6
+62     Tom                  Husband      M    45
+62     James                Son          M    14
+62     Hillary              Daughter     F    16
+62     Phoebe               Daughter     F    12
+126    Om                   Son          M    6
+128    Barbara              Wife         F    26
+.
+.
+.
+&nbsp;
+(17 row(s) affected)
+</pre><BR>
+
+                <p class="docText">It is also very common in SQL to alias a table and then also use the table alias as a
+                    table qualifier, as illustrated here:</P>
+                <pre>
+SELECT *
+FROM   Dependent d
+WHERE  d.age &gt; 5
+</pre><BR>
+
+                <p class="docText">The output of this query will be the same as the output of the previous query.</p>
+                <p class="docText">In this query, <tt>d</tt> (the table alias) is also the table qualifier. Not only is
+                    a construction like this very common, but it also helps to circumvent typing errors when writing
+                    commands.</P>
+                <p class="docText">The advantages of using table qualifiers and table aliases may not be so apparent in
+                    the examples presented in this chapter, because we are working only with single tables here. As we
+                    start working with multiple tables (from <a class="docLink"
+                        href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a> onwards), their advantages
+                    will become more obvious.</p>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

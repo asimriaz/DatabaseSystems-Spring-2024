@@ -1,0 +1,91 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 10.1.&nbsp; Noncorrelated Subqueries</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-10-SECT-1"></a>
+<h3 id="title-IDAOLRTD" class="docSection1Title">10.1. Noncorrelated Subqueries</H3><a name="IDX-CHP-10-0460"></a> 
+
+<p class="docText">A <span class="docEmphasis">noncorrelated subquery</span> is a subquery that is independent of the outer query. In other words, the subquery could be executed on its own. The following is an example of a query that is <span class="docEmphasis">not</span> correlated:</p>
+<pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+             (SELECT gr.student_number
+             FROM    Grade_report gr
+             WHERE   gr.grade = 'A')
+</pre><br>
+
+<p class="docText">The first part of the preceding query (the first three lines) is the main, outer query, and the second part (the part in parentheses) is the subquery (also referred to as an <span class="docEmphasis">inner</span>, <span class="docEmphasis">nested</span>, or <span class="docEmphasis">embedded query</span>). To demonstrate that this subquery is an independent entity, you could run it by itself:</P>
+<pre>
+SELECT   gr.student_number
+ FROM    Grade_report gr
+ WHERE   gr.grade = 'A'
+</pre><br>
+
+<p class="docText">which would produce the following output (17 rows):</P>
+<pre>
+student_number
+--------------
+2
+3
+8
+8
+10
+14
+20
+129
+142
+129
+34
+49
+123
+125
+126
+127
+142
+&nbsp;
+(17 row(s) affected)
+</pre><br>
+
+<p class="docText">The preceding subquery is thought of as being evaluated first, creating the set of student numbers who have As. Then, the subquery's result set is used to determine which rows (tuples) in the main query will be <tt>SELECT</tt>ed. So, the full query results in the following output (14 rows):</P>
+<pre>
+sname
+--------------------
+Lineas
+Mary
+Brenda
+Richard
+Lujack
+Donald
+Lynette
+Susan
+Holly
+Sadie
+Jessica
+Steve
+Cedric
+Jerry
+&nbsp;
+(14 row(s) affected)
+</pre><BR>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

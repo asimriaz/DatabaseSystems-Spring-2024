@@ -1,0 +1,425 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.2.&nbsp; Row-Level Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-5-SECT-2"></a>
+                <H3 id="title-IDAPFGRHB" class="docSection1Title">5.2. Row-Level Functions</H3>
+                <p class="docText">Whereas aggregate functions operate on multiple rows for a result, row-level
+                    functions<a name="IDX-CHP-5-0271"></a>
+                    <a name="IDX-CHP-5-0272"></a>
+                    operate on values in single rows, one row at a time. In this section, we look at row-level functions
+                    that are used in calculationsfor example, row-level functions that are used to add a number to a
+                    column, the <tt>ROUND</tt> function, the <tt>ISNULL</tt> function, and others.
+                </P>
+                <a name="learnsqlsvr05-CHP-5-SECT-2.1"></a>
+                <H4 id="title-IDAFGGRHB" class="docSection2Title">5.2.1. Arithmetic Operations on a Column</h4>
+                <p class="docText">A row-level "function" can be used to perform an arithmetic operation on a column.
+                </p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">Strictly speaking a row-level "function" is not a function,
+                                            but an operation performed in a result set. But the use of arithmetic
+                                            operations in result sets behaves like functions.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">For example, in the <tt>Employee</tt> table, if we wanted to display every person's
+                    wage plus 5, we could type the following:</p>
+                <pre>
+    SELECT wage, (wage + 5) AS [wage + 5]
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">In this query, from the <tt>Employee</tt> table, first the wage is displayed, then
+                    the <tt>wage</tt> is incremented by five with <tt>(wage + 5)</tt>, and displayed.</P>
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    wage         wage + 5
+    ------------ ------------
+    10.0000      15.0000
+    15.0000      20.0000
+    18.0000      23.0000
+    NULL         NULL
+    20.0000      25.0000
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Similarly, values can be subtracted (with the <tt>-
+                                                operator), multiplied (with the *</tt> operator), and divided (with the
+                                            <tt>/</tt> operator) to and from columns.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">Once again, note that <tt>(wage + 5)</tt> is only a "read-only" or "display-only"
+                    function, because we are using it in a <tt>SELECT</tt> statement. The wage in the <tt>Employee</tt>
+                    table is not actually changing. We are only displaying what the wage + 5 is. To actually increase
+                    the wage in the <tt>Employee</tt> table by 5, we would have to use the <tt>UPDATE</tt> command. Any
+                    other arithmetic operation may be performed on numeric data.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.2"></a>
+                <h4 id="title-IDA4HGRHB" class="docSection2Title">5.2.2. The ROUND Function</h4><a
+                    name="IDX-CHP-5-0273"></a>
+                <a name="IDX-CHP-5-0274"></a>
+                <a name="IDX-CHP-5-0275"></a>
+
+                <p class="docText">The <tt>ROUND</tt> function rounds numbers to a specified number of decimal places.
+                    For example, in the <tt>Employee</tt> table, if you wanted to divide every person's <tt>wage</tt> by
+                    <tt>3</tt> (a third of the wage), you would type <tt>(wage/3)</tt>. Then, to round this, you could
+                    use <tt>ROUND(wage/3)</tt>, and include the precision (number of decimal places) after the comma. In
+                    query form, this would be:</p>
+                <pre>
+    SELECT names, wage, ROUND((wage/3), 2) AS [wage/3]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    names                wage                  wage/3
+    -------------------- --------------------- ---------------------
+    Sumon Bagui          10.00                 3.33
+    Sudip Bagui          15.00                 5.00
+    Priyashi Saha        18.00                 6.00
+    Ed Evans             NULL                  NULL
+    Genny George         20.00                 6.67
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this example, the values of <tt>(wage/3)</tt> are rounded up to two decimal places
+                    because of the "2" after the comma after <tt>ROUND(wage/3)</tt>.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.3"></a>
+                <H4 id="title-IDASJGRHB" class="docSection2Title">5.2.3. Other Common Numeric Functions</H4><a
+                    name="IDX-CHP-5-0276"></a>
+                <a name="IDX-CHP-5-0277"></a>
+
+                <p class="docText">Other very common numeric<a name="IDX-CHP-5-0278"></a>
+                    functions include:</P>
+                <UL>
+                    <LI>
+                        <p class="docList"><tt>CEILING(attribute)</tt>, which returns the next larger integer value when
+                            a number contains decimal places.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>FLOOR(attribute)</tt>, which returns the next lower integer value when a
+                            number contains decimal places.</P>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>SQRT(attribute)</tt>, which returns the square root of positive numeric
+                            values.</P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>ABS(attribute)</tt>, which returns the absolute value of any numeric
+                            value.</P>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>SQUARE(attribute)</tt>, which returns a number squared.</P>
+                    </LI>
+                </ul>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.4"></a>
+                <h4 id="title-IDAELGRHB" class="docSection2Title">5.2.4. The ISNULL Function</h4><a
+                    name="IDX-CHP-5-0279"></a>
+                <a name="IDX-CHP-5-0280"></a>
+
+                <p class="docText">The results of the queries in the preceding sections show not only that nulls are
+                    ignored, but that if a null is contained in a calculation on a row, the result is always null. We
+                    will illustrate, with a couple of examples, how to handle this <tt>NULL</tt> issue.</p>
+                <a name="learnsqlsvr05-CHP-5-SECT-2.4.1"></a>
+                <H5 id="title-IDAZLGRHB" class="docSection3Title">5.2.4.1. Example 1</h5>
+                <p class="docText">In the first example, we will illustrate how to handle the <tt>NULL</tt> problem and
+                    also illustrate how to create variables on the fly. SQL Server allows you to create variables on the
+                    fly using a <tt>DECLARE</tt> statement followed by a <tt>@</tt>, the variable name (<tt>a</tt> or
+                    <tt>b</tt>, in our example) and then data type of the variable (both declared as <tt>FLOAT</tt> in
+                    our example). Variables are assigned values using the <tt>SET</tt> statement. And variables can be
+                    added in the <tt>SELECT</tt> statement.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">A variable is a special place in memory used to hold data
+                                            temporarily.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">So, type the following sequence to declare the variables (<tt>a</tt> and <tt>b</tt>),
+                    assign values to them, and then add them together:</p>
+                <pre>
+    DECLARE @a FLOAT, @b FLOAT
+    SET @a = 3
+    SET @b = 2
+    SELECT @a + @b AS 'A + B = '
+</pre><br>
+
+                <p class="docText">This query gives the result:</p>
+                <pre>
+    A + B =
+    ----------------
+    5
+
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">SQL Server allows the use of <tt>SELECT</tt> with no <tt>FROM</tt> clause for such
+                    calculations as we have illustrated.</P>
+                <p class="docText">Now, if you set the variable <tt>a</tt> to <tt>null</tt>, as follows:</p>
+                <pre>
+    DECLARE @a FLOAT, @b FLOAT
+    SET @a = NULL
+    SET @b = 2
+    SELECT @a + @b AS 'A + B = '
+</pre><br>
+
+                <p class="docText">You get this:</p>
+                <pre>
+    A + B =
+    ----------------
+    NULL
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To handle the null issue, SQL Server provides a row-level function, <tt>ISNULL</tt>,
+                    which returns a value if a table value is null. The <tt>ISNULL</tt> function has the following form:
+                </P>
+                <pre>
+    ISNULL(expression1, ValueIfNull)
+</pre><BR>
+
+                <p class="docText">The <tt>ISNULL</tt> function says that if the expression (or column value) <span
+                        class="docEmphasis">is not</span> null, return the value, but if the value <span
+                        class="docEmphasis">is</span> null, return <tt>ValueIfNull</tt>. Note that the
+                    <tt>ValueIfNull</tt> must be compatible with the data type. For example, if you wanted to use a
+                    default value of zero for a null in the previous example, you could type this:</P>
+                <pre>
+    DECLARE @a FLOAT, @b FLOAT
+    SET @a = NULL
+    SET @b = 2
+    SELECT ISNULL(@a, 0) + ISNULL(@b, 0) AS 'A + B = '
+</pre><BR>
+
+                <p class="docText">Which would give:</p>
+                <pre>
+    A + B =
+    -----------------
+    2
+
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Here, <tt>@b</tt> is unaffected, but <tt>@a</tt> is set to zero for the result set as
+                    a result of the <tt>ISNULL</tt> function. <tt>@a</tt> is not actually changed, it is replaced for
+                    the purposes of the query.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.4.2"></a>
+                <H5 id="title-IDAAPGRHB" class="docSection3Title">5.2.4.2. Example 2</H5><a name="IDX-CHP-5-0281"></a>
+
+                <p class="docText">For the second example we will use the <tt>Employee</tt> table. To multiply the
+                    <tt>wage</tt> by <tt>hours</tt> and avoid the null-result problem by making the nulls act like
+                    zeros, a query could read:</P>
+                <pre>
+    SELECT names, wage, hours, ISNULL(wage, 0)*ISNULL(hours,0) AS [wage*hours]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query would produce the following output:</P>
+                <pre>
+    names           wage         hours       wage*hours
+    --------------- ------------ ----------- ------------
+    Sumon Bagui     10.00         40          400.00
+    Sudip Bagui     15.00         30          450.00
+    Priyashi Saha   18.00         NULL        0.00
+    Ed Evans        NULL          10          0.00
+    Genny George    20.00         40          800.00
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText"><tt>ISNULL</tt> does not have to have a <tt>ValueIfNull</tt> equal to zero. For
+                    example, if you want to assume that the number of <tt>hours</tt> is 40 if the value for
+                    <tt>hours</tt> is null, then you could use the following expression:</P>
+                <pre>
+    SELECT names, wage, new_wage = ISNULL(wage, 40)
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names           wage         new_wage
+    --------------- ------------ ------------
+    Sumon Bagui     10.00        10.00
+    Sudip Bagui     15.00        15.00
+    Priyashi Saha   18.00        18.00
+    Ed Evans        NULL         40.00
+    Genny George    20.00        20.00
+
+    (5 row(s) affected)
+</pre><BR>
+
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.5"></a>
+                <H4 id="title-IDANQGRHB" class="docSection2Title">5.2.5. The NULLIF Function</h4><a
+                    name="IDX-CHP-5-0282"></a>
+                <a name="IDX-CHP-5-0283"></a>
+
+                <p class="docText">SQL Server also has a <tt>NULLIF</tt> function, which returns a <tt>NULL</tt> if
+                    <tt><i>expression1</i></tt> <tt>=</tt> <tt><i>expression2</I></tt>. If the expressions are not
+                    equal, then <tt><i>expression1</i></tt> is returned. The <tt>NULLIF</tt> function has the following
+                    form:</p>
+                <pre>
+    NULLIF(<tt><i>expression1</I></tt>, <tt><I>expression2</i></tt>)
+</pre><br>
+
+                <p class="docText">For example, if we want to see whether the wage is 0, we would type:</p>
+                <pre>
+    SELECT names, wage, new_wage = NULLIF(wage, 0)
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names           wage         new_wage
+    --------------- ------------ ------------
+    Sumon Bagui     10.00        10.00
+    Sudip Bagui     15.00        15.00
+    Priyashi Saha   18.00        18.00
+    Ed Evans        NULL         NULL
+    Genny George    20.00        20.00
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">From these results we can see that because none of the wages are equal to 0, the wage
+                    (<tt><i>expression1</i></tt>) is returned in every case. Even the <tt>NULL</tt> wage (Ed Evans's
+                    wage) is not equal to 0, but <tt>NULL</tt> is returned anyway, as the value in question is
+                    <tt>NULL</tt>.</p>
+                <p class="docText">If, for example, a wage 15 was unacceptable for some reason, you could null out the
+                    value of 15 using the <tt>NULLIF</tt> function like this:</p>
+                <pre>
+    SELECT names, wage,
+           new_wage = NULLIF(wage, 15)
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names           wage         new_wage
+    --------------- ------------ ------------
+    Sumon Bagui     10.00        10.00
+    Sudip Bagui     15.00        NULL
+    Priyashi Saha   18.00        18.00
+    Ed Evans        NULL         NULL
+    Genny George    20.00        20.00
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Again, as can be noted from the previous set of results, you have to be very careful
+                    about the interpretation of the output obtained from a <tt>NULLIF</tt> function if there were
+                    already nulls present in the columns being tested. Ed Evans's wage was not equal to15, but had a
+                    <tt>NULL</tt> originally (and this may be wrongly interpreted when the <tt>NULLIF</tt> function is
+                    being used).</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-2.6"></a>
+                <H4 id="title-IDA3SGRHB" class="docSection2Title">5.2.6. Other Row-Level Functions</h4>
+                <p class="docText">Other row-level functions in SQL Server include <tt>ABS</tt>, which returns the
+                    absolute value of a numeric expression. For example, if we wanted to find the absolute value of
+                    -999.99, we could type the following:</p>
+                <pre>
+    SELECT ABS(-999.99) AS [Absolute Value]
+</pre><br>
+
+                <p class="docText">This query would produce the following output:</P>
+                <pre>
+    Absolute Value
+    --------------
+    999.99
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">There are also several other row-level trigonometric functions available in Server
+                    SQL 2005, including <tt>SIN</tt>, <tt>COS</tt>, <tt>TAN</tt>, <tt>LOG</tt>, and so forth. But, as
+                    these functions are less commonly used, we will not discuss them.</P>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

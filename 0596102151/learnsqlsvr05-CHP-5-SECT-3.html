@@ -1,0 +1,428 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.3.&nbsp; Other Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-5-SECT-3"></a>
+                <H3 id="title-IDAYV3AAB" class="docSection1Title">5.3. Other Functions</H3><a name="IDX-CHP-5-0284"></a>
+
+                <p class="docText">This section discusses some other useful functions, such as <tt>TOP</tt>,<a
+                        name="IDX-CHP-5-0285"></a>
+                    <a name="IDX-CHP-5-0286"></a>
+                    <tt>TOP</tt> with <tt>PERCENT</tt>, and <tt>DISTINCT</tt>. These functions help us in selecting rows
+                    from a larger set of rows.
+                </P>
+                <a name="learnsqlsvr05-CHP-5-SECT-3.1"></a>
+                <H4 id="title-IDAXW3AAB" class="docSection2Title">5.3.1. The TOP Function</h4>
+                <p class="docText">This function returns a certain number of rows. Often, the <tt>TOP</tt> function is
+                    used to display or return from a result set the rows that fall at the top of a range specified by an
+                    <tt>ORDER BY</tt> clause. Suppose you want the names of the "top 2" (first two) employees with the
+                    lowest wages from the <tt>Employee</tt> table (<tt>top 2</tt> refers to the results in the first two
+                    rows). You would type:</p>
+                <pre>
+    SELECT TOP 2 names, wage
+    FROM   Employee
+    ORDER  BY wage ASC
+</pre><br>
+
+
+                <p class="docText">This query would produce the following output:</P>
+                <pre>
+    names           wage
+    --------------- ------------
+    Ed Evans        NULL
+    Sumon Bagui     10.00
+
+    (2 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To get this output, first the <tt>wage</tt> column was ordered in ascending order,
+                    and then the "top" two wages were selected from that ordered result set. The columns with the null
+                    wages are placed first with the ascending (<tt>ASC</tt>) command.</P>
+                <p class="docText">With the <tt>TOP</tt> command, if you do not include the <tt>ORDER BY</tt> clause
+                    (and the table has no primary key), the query will return rows based on the order in which the rows
+                    appear in the table (probably, but not guaranteed to be, the order in which the rows were entered in
+                    the table). For example, the following query does not include the <tt>ORDER BY</tt> clause:</P>
+                <pre>
+    SELECT TOP 2 names, wage
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">And this query returns the following output:</p>
+                <pre>
+    names           wage
+    --------------- ------------
+    Sumon Bagui     10.00
+    Sudip Bagui     15.00
+
+    (2 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Remember that in relational database, you can never depend on where rows in a table
+                    are. Tables are sets of rows and at times the database engines may insert rows in unoccupied
+                    physical spaces. You should never count on retrieving rows in some order and always use <tt>ORDER
+                        BY</tt> if you desire an ordering.</p>
+                <a name="learnsqlsvr05-CHP-5-SECT-3.1.1"></a>
+                <h5 id="title-IDAMY3AAB" class="docSection3Title">5.3.1.1. Handling the "BOTTOM"</H5>
+                <p class="docText">Since there is only a <tt>TOP</tt> command, and no similar <tt>BOTTOM</tt> command,
+                    if you want to get the "bottom" two employees meaning, the employees with the highest wages (the
+                    values in the last two ordered rows) instead of the top two employees from the <tt>Employee</tt>
+                    table, the top two employees (the highest wages) would have to be selected from the table ordered in
+                    descending order, as follows:</P>
+                <pre>
+    SELECT TOP 2 names, wage
+    FROM   Employee
+    ORDER  BY wage DESC
+</pre><br>
+
+                <p class="docText">This query would produce the following output:</p>
+                <pre>
+    names           wage
+    --------------- ------------
+    Genny George    20.00
+    Priyashi Saha   18.00
+
+    (2 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-3.1.2"></a>
+                <h5 id="title-IDACZ3AAB" class="docSection3Title">5.3.1.2. Handling a tie</H5>
+                <p class="docText">This section answers an interesting questionwhat if there is a tie? For example, what
+                    if you are looking for the top two wages, and two employees have the same amount in the
+                    <tt>wage</tt> column? To handle ties, SQL Server has a <tt>WITH TIES</tt> option that can be used
+                    with the <tt>TOP</tt> function.</p>
+                <p class="docText">To demonstrate <tt>WITH TIES</tt>, make one change in the data in your
+                    <tt>Employee</tt> table, so that the value in the <tt>wage</tt> column of <tt>Sudip Bagui</tt> is
+                    also 10, as shown here:</p>
+                <pre>
+    names           wage         hours
+    --------------- ------------ ------------
+    Sumon Bagui     10.0000      40
+    Sudip Bagui     <b>10.0000</b>      30
+    Priyashi Saha   18.0000      NULL
+    Ed Evans        NULL         10
+    Genny George    20.0000      40
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">You can use the following <tt>UPDATE</tt> statement to make the change in the
+                    <tt>Employee</tt> table:</P>
+                <pre>
+    UPDATE Employee
+    SET WAGE = 10
+    WHERE names LIKE '%Sudip%'
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">The <tt>LIKE</tt> operator is explained later in the chapter.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">You can also make this change in the <tt>Employee</tt> table
+                                            by right-clicking on the table from your Object Explorer and selecting Open
+                                            Table and changing the data.</P>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">Now type the following query:</P>
+                <pre>
+    SELECT TOP<a name="IDX-CHP-5-0287"></a> 
+ 2 WITH TIES names, wage
+    FROM   Employee
+    ORDER  BY wage ASC
+</pre><BR>
+
+                <p class="docText">Although you requested only the <tt>TOP</tt> 2 employees, this query produced three
+                    rows, because there was a tie in the column that you were looking for (and you used with the
+                    <tt>WITH TIES</tt> option), as shown by the following output:</P>
+                <pre>
+    names           wage
+    --------------- ------------
+    Ed Evans        NULL
+    Sumon Bagui     10.00
+    Sudip Bagui     10.00
+
+    (3 row(s) affected)
+</pre><br>
+
+                <p class="docText">The <tt>WITH TIES</tt> option is not allowed without a corresponding <tt>ORDER
+                        BY</tt> clause.</P>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Remember to change the data in your <tt>Employee</tt> table
+                                            back to its original state if you are doing the exercises as you read the
+                                            material.</p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><BR>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-3.2"></a>
+                <H4 id="title-IDA513AAB" class="docSection2Title">5.3.2. The TOP Function with PERCENT</h4><a
+                    name="IDX-CHP-5-0288"></a>
+                <a name="IDX-CHP-5-0289"></a>
+
+                <p class="docText"><tt>PERCENT</tt> returns a certain percentage of rows that fall at the top of a
+                    specified range. For example, the following query returns the top 10 percent (by count) of the
+                    student names from the <tt>Student</tt> table based on the order of names:</p>
+                <pre>
+    SELECT TOP 10 PERCENT sname
+    FROM   Student
+    ORDER  BY sname ASC
+</pre><br>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    sname
+    --------------------
+    Alan
+    Benny
+    Bill
+    Brad
+    Brenda
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Again, there is no <tt>BOTTOM PERCENT</tt> function, so in order to get the bottom 10
+                    percent, you would have to order the <tt>sname</tt> column in descending order and then select the
+                    top 10 percent, as follows:</p>
+                <pre>
+    SELECT TOP 10 PERCENT sname
+    FROM   Student
+    ORDER  BY sname DESC
+</pre><br>
+
+                <p class="docText">This query would produce the following output:</p>
+                <pre>
+    sname
+    --------------------
+    Zelda
+    Thornton
+    Susan
+    Steve
+    Stephanie
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Note that the query can be used without the <tt>ORDER BY</tt>, but because the rows
+                    are unordered, the result is simply a sample of the first 10 percent of the data drawn from the
+                    table. Here is the same query without the use of the <tt>ORDER BY</tt>:</p>
+                <pre>
+    SELECT TOP 10 PERCENT sname
+    FROM   Student
+</pre><br>
+
+                <p class="docText">As output, this query returns the first 10 percent of the names based on the number
+                    of rows. But, as the rows are unordered (and there is no primary key in this table), your output
+                    would depend on where in the database these rows reside:</p>
+                <pre>
+    sname
+    --------------------
+    Lineas
+    Mary
+    Zelda
+    Ken
+    Mario
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Once again, ties in this section could be handled in the same way as they were
+                    handled in the preceding section, with the <tt>WITH TIES</tt> option as shown:</p>
+                <pre>
+    SELECT TOP 10 PERCENT WITH TIES sname
+    FROM   Student
+    ORDER  BY sname DESC
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">The <tt>WITH TIES</tt> option cannot be used without a
+                                            corresponding <tt>ORDER BY</tt> clause.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </P><BR>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-3.3"></a>
+                <H4 id="title-IDAH43AAB" class="docSection2Title">5.3.3. The DISTINCT Function</H4><a
+                    name="IDX-CHP-5-0290"></a>
+                <a name="IDX-CHP-5-0291"></a>
+
+                <p class="docText">The <tt>DISTINCT</tt> function omits rows in the result set that contain duplicate
+                    data in the selected columns. For example, to <tt>SELECT</tt> all grades from the
+                    <tt>Grade_report</tt> table, you could type:</p>
+                <pre>
+    SELECT grade
+    FROM   Grade_report
+</pre><BR>
+
+                <p class="docText">This query results in 209 rows, all the grades in the <tt>Grade_report</tt> table.
+                </p>
+                <p class="docText">To <tt>SELECT</tt> all <span class="docEmphasis">distinct</span> grades from the
+                    <tt>Grade_report</tt> table, you would type:</p>
+                <pre>
+    SELECT DISTINCT grade
+    FROM   Grade_report
+</pre><BR>
+
+                <p class="docText">The result set would look like this:</P>
+                <pre>
+    grade
+    -----
+    NULL
+    A
+    B
+    C
+    D
+    F
+
+    (6 row(s) affected)
+</pre><br>
+
+                <p class="docText">Observe that the syntax requires you to put the word <tt>DISTINCT</tt> first in the
+                    string of attributes, because <tt>DISTINCT</tt> implies distinct rows in the result set. The
+                    preceding statement also produces a row for null grades (regarded here as a <tt>DISTINCT</tt>
+                    grade). Note also that the result set is sorted (ordered). The fact that the result set is sorted
+                    could cause some response inefficiency in larger table queries.</p>
+                <a name="learnsqlsvr05-CHP-5-SECT-3.3.1"></a>
+                <h5 id="title-IDACA4AAB" class="docSection3Title">5.3.3.1. Using DISTINCT with other aggregate functions
+                </h5><a name="IDX-CHP-5-0292"></a>
+
+                <p class="docText">In SQL Server , <tt>DISTINCT</tt> can also be used as an option with aggregate
+                    functions like <tt>COUNT</tt>, <tt>SUM</tt> and <tt>AVG</tt>. For example, to count the distinct
+                    grades from the <tt>Grade_report</tt> table, we can type:</P>
+                <pre>
+    SELECT "Count of distinct grades" = COUNT(DISTINCT(grade))
+    FROM    Grade_report
+</pre><br>
+
+                <p class="docText">This query will give:</p>
+                <pre>
+    Count of distinct grades
+    -----------------------
+    5
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Because an aggregate function, <tt>COUNT</tt>, is being used here with an argument,
+                    <tt>NULL</tt> values are not included in this result set.</p>
+                <p class="docText">As another example, to sum the distinct wages from the <tt>Employee</tt> table, we
+                    can type:</P>
+                <pre>
+    SELECT "Sum of distinct wages" = SUM(DISTINCT(wage))
+    FROM    Employee
+</pre><BR>
+
+                <p class="docText">This query will give:</p>
+                <pre>
+    Sum of distinct wages
+    ---------------------
+    63.00
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+
+    (1 row(s) affected)
+</pre><br>
+
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

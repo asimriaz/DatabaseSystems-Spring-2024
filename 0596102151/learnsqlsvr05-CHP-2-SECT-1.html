@@ -1,0 +1,801 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.1.&nbsp; Displaying Data with the SELECT Statement</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-1"></a>
+                <H3 id="title-IDA5SRC0" class="docSection1Title">2.1. Displaying Data with the SELECT Statement</H3><a
+                    name="IDX-CHP-2-0071"></a>
+                <a name="IDX-CHP-2-0072"></a>
+
+                <p class="docText">One of the very first things that you would usually want to do with a set of tables
+                    (or a database) is to see what information the tables contain. To display the information in a table
+                    using a query, you use a <tt>SELECT</tt> command on the table. <tt>SELECT</tt> is <span
+                        class="docEmphasis">usually</span> the first word in a SQL statement or query. The
+                    <tt>SELECT</tt> statement returns information from a table (or a set of tables, the database) as a
+                    set of records, or a <span class="docEmphasis">result set</span>. The result set is a tabular
+                    arrangement of data, composed of rows and columns. The <tt>SELECT</tt> statement shows the output on
+                    the computer screen (as shown in <a class="docLink"
+                        href="learnsqlsvr05-CHP-1-SECT-14.html#learnsqlsvr05-CHP-1-FIG-26">Figures 1-26</a> and <a
+                        class="docLink" href="learnsqlsvr05-CHP-1-SECT-14.html#learnsqlsvr05-CHP-1-FIG-28">1-28</a> of
+                    <a class="docLink" href="learnsqlsvr05-CHP-1.html#learnsqlsvr05-CHP-1">Chapter 1</a>). It does not
+                    save the results. The simplest and most commonly used form of the <tt>SELECT</tt> syntax is:</P>
+                <pre>
+SELECT fields <I>(a.k.a. columns or attributes)</i>
+FROM Table
+</pre><br>
+
+                <p class="docText">Here, <tt>Table</tt> is the name of the table from which the data will be displayed,
+                    and <tt>fields</tt> are the columns (attributes) that you chose to display from the named table. If
+                    you did not know the name of the columns in the table, or you wanted to display all the columns in
+                    the table, you would use an asterisk (<tt>*</tt>) in place of <tt>fields</tt>; substituting an
+                    asterisk (<tt>*</tt>) in place of <tt>fields</tt> would list all the columns in the table.</p>
+                <p class="docText">So, the <tt>SELECT</tt> statement gives us a result set that is composed of the data
+                    from columns of a table.</P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">SQL commands in SQL Server do not have to be terminated by a
+                                            semicolon, as is true in several other SQL languages.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">But, before we use the <tt>SELECT</tt> statement, we have to make sure that the right
+                    database is open. To open a database that you want to use, type the following in the query editor
+                    screen (the query editor screen is shown in <a class="docLink"
+                        href="learnsqlsvr05-CHP-1-SECT-3.html#learnsqlsvr05-CHP-1-FIG-12">Figure 1-12</a> of <a
+                        class="docLink" href="learnsqlsvr05-CHP-1.html#learnsqlsvr05-CHP-1">Chapter 1</a>):</P>
+                <pre>
+USE Student_course
+</pre><br>
+
+                <p class="docText">and then click the Execute button.</p>
+                <p class="docText"><tt>Student_course</tt> is the name of the database that we would like to open. The
+                    <tt>Student_course</tt> database should now be active.</p>
+                <p class="docText">Once the <tt>Student_course</tt> database is active, to display all the data from a
+                    table called <tt>Dependent</tt> from our database (<tt>Student_course</tt> database), type the
+                    following in the query editor screen:</p>
+                <pre>
+SELECT *
+FROM      Dependent
+</pre><BR>
+
+                <p class="docText">The <tt>*</tt> means all columns of the <tt>Dependent</tt> table. Now click the
+                    Execute button to execute this query. Your results will display in the result pane.</P>
+                <a name="learnsqlsvr05-CHP-2-SECT-1.1"></a>
+                <h4 id="title-IDA0WRC0" class="docSection2Title">2.1.1. SELECT without the FROM</h4><a
+                    name="IDX-CHP-2-0073"></a>
+                <a name="IDX-CHP-2-0074"></a>
+
+                <p class="docText">Most SQL languages require a <tt>FROM</tt> in a query. But, <tt>SELECT</tt>
+                    statements in SQL Server do not need to be from a table. SQL Server allows us to write some special
+                    queries without <tt>FROM</tt>. For example, using a special function, <tt>GEtdATE</tt>, we may type
+                    this:</p>
+                <pre>
+SELECT GETDATE(  )
+</pre><br>
+
+                <p class="docText">and the query will return the date and time as defined by the host computer:</p>
+                <pre>
+-----------------------
+2006-01-12 21:55:30.107
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Note that these columns do not have any headings.</p>
+                <p class="docText">In SQL Server , a <tt>SELECT</tt> statement can also be used to make an assignment.
+                    For example, the following example assigns 100 to col1, and 200 to col2:</p>
+                <pre>
+SELECT col1=100, col2=200
+</pre><br>
+
+                <p class="docText">with the results:</p>
+                <pre>
+col1        col2
+----------- -----------
+100         200
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">"col1" and "col2" are column aliases. Column aliases are
+                                            discussed in detail later in this chapter.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </p><br>
+                <pre>
+SELECT 'A', 'B'
+</pre><BR>
+
+                <p class="docText">produces:</P>
+                <pre>
+---- ----
+A    B
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Note that this output has no headings either.</P>
+                <pre>
+SELECT 4+3, 4-3, 4*3, 4/3
+</pre><BR>
+
+                <p class="docText">produces:</p>
+                <pre>
+----------- ----------- ----------- -----------
+7           1           12          1
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To include meaningful column headings here, we can type:</p>
+                <pre>
+SELECT Additions=4+3, Subtractions=4-3, Multiplications=4*3, Divisions=4/3
+</pre><br>
+
+                <p class="docText">which results in:</P>
+                <pre>
+Additions   Subtractions Multiplications Divisions
+----------- ------------ --------------- -----------
+7           1            12              1
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">"/" gives the whole-number quotient of a division.</p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.2"></a>
+                <h4 id="title-IDAKBSC0" class="docSection2Title">2.1.2. Displaying or Selecting Columns from a Table
+                </h4>
+                <p class="docText">Using a <tt>SELECT</tt> statement, you do not have to display or return all the
+                    columns from a table. You may choose to display only certain relevant columns from a table, provided
+                    you know the names of the columns in the table. In this section, we show you how to display or
+                    return one column from a table, more than one column from a table, and then how to display or return
+                    all columns from a table. Then we introduce the <tt>ORDER BY</tt> clause and also show you how to
+                    order the output in ascending or descending order by adding the <tt>ASC</tt> or <tt>DESC</tt>
+                    commands, respectively, to the <tt>ORDER BY</tt> clause.</p>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.3"></a>
+                <h4 id="title-IDA4BSC0" class="docSection2Title">2.1.3. Displaying or SELECTing One Column from a Table
+                </h4>
+                <p class="docText">To be able to display or return particular fields or columns from a table, you need
+                    to know the column names in the table. To view the column names that a table contains, you will have
+                    to go to the Table Definition of a table. <a class="docLink"
+                        href="learnsqlsvr05-CHP-1.html#learnsqlsvr05-CHP-1">Chapter 1</a> (<a class="docLink"
+                        href="learnsqlsvr05-CHP-1-SECT-6.html#learnsqlsvr05-CHP-1-FIG-20">Figure 1-20</a>) shows you how
+                    to view the table definitions of tables.</p>
+                <p class="docText">You may find it odd that a someone working with a database might not know the column
+                    names. However, when creating a table, one has great latitude with naming columns. If you knew, for
+                    example, that a table called <tt>Customer</tt> contained a name and address, you'd have to know the
+                    exact name of the column. If the table creator called the customer's name CustName, then to retrieve
+                    the data from that column, you'd have to use CustName and not any variation of it (like CustomerName
+                    or Name or anything else).</p>
+                <p class="docText">Select the table for which you want to see the definition by right clickingon the
+                    table from the Object Explorer, and then clicking on Columns. Now, right-click on the
+                    <tt>Dependent</tt> table and click Columns, and you will see the table definition of the
+                    <tt>Dependent</tt> table.</p>
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-2-FIG-1">Figure 2-1</a> shows the
+                    definition of the <tt>Dependent</tt> table. The table definition provides the exact column names,
+                    the data types of the columns, the field sizes and information on whether the fields can hold nulls.
+                    The data type allows you to enter only a particular kind of data in the columns. The field sizes
+                    allow you to enter only up to a certain number of characters in a field. <tt>null</tt> or <tt>not
+                        null</tt> tells you whether the field will allow for nulls.</p>
+                <p class="docText">The <tt>Dependent</tt> table in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-2-FIG-1">Figure 2-1</a> has columns PNO (short for parent_number) of
+                    data type SMALLINT (small integers), DNAME (short for dependent name) of data type NVARCHAR (a
+                    varying number of characters), RELATIONSHIP (for relationship to parent or Student) of data type
+                    NVARCHAR, SEX of data type CHAR (one character), and AGE of data type SMALLINT. The only field in
+                    the <tt>Dependent</tt> table that cannot be null is STNO.</p>
+                <a name="learnsqlsvr05-CHP-2-FIG-1"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 2-1. Definition of the Dependent table</h5>
+                        <img border="0" alt="" width="246" height="117" SRC="images/learnsqlsvr05_0201.jpg">
+                    </center>
+                </p><br>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Data types are discussed in detail in the next chapter</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><br>
+                <p class="docText">Once you know what columns a table contains, you may choose to view or display
+                    particular columns of the table. Following is the general syntax to display or <tt>SELECT</tt> the
+                    data from one field or column of a table:</P>
+                <pre>
+SELECT field_name
+FROM table
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Refer to Appendix A for a complete list of tables and columns
+                                            in the <tt>Student_course</tt> database.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">For example, to display or <tt>SELECT</tt> data for a column called <tt>dname</tt>
+                    from the <tt>Dependent</tt> table, you type the following query in the query editor:</p>
+                <pre>
+SELECT dname
+FROM   Dependent
+</pre><br>
+
+                <p class="docText">This query returns a result set containing 39 records or rows (of which the first 10
+                    rows are shown):</p>
+                <pre>
+dname
+--------------------
+Matt
+Mary
+Beena
+Amit
+Shantu
+Raju
+Rani
+Susan
+Sam
+Donald II
+.
+.
+.
+(39 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.4"></a>
+                <h4 id="title-IDAIFSC0" class="docSection2Title">2.1.4. Displaying or SELECTing More than One Column
+                    from a Table</h4>
+                <p class="docText">To display or <tt>SELECT</tt> (or return) data for more than one column of the table,
+                    the column names have to be separated by commas. For example, to display the data from the dname and
+                    relationship columns in the <tt>Dependent</tt> table, type the following query:</p>
+                <pre>
+SELECT dname, relationship
+FROM   Dependent
+</pre><br>
+
+                <p class="docText">This query also produces 39 rows of output (we show the first 12 rows here):</p>
+                <pre>
+dname                relationship
+-------------------- ------------
+Matt                 Son
+Mary                 Daughter
+Beena                Spouse
+Amit                 Son
+Shantu               Daughter
+Raju                 Son
+Rani
+Susan                Daughter
+Sam                  Son
+Donald II            Son
+Chris                Son
+Susan                Daughter
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this example, we see a row where dname (dependent name) is Rani, but no
+                    relationship has been assigned or entered. This is a very typical problem in any databasedata is
+                    missing or unknown, also known as NULL. Therefore, preferably, when data is entered into a table,
+                    all columns should be valued. In this case probably an empty string was entered, otherwise SQL
+                    Server assigns a NULL value.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">The concept of NULLs is introduced later in this chapter.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.5"></a>
+                <h4 id="title-IDADGSC0" class="docSection2Title">2.1.5. Displaying or SELECTing All Columns of a Table
+                </H4>
+                <p class="docText">There are times when you will want to display or select all the columns of a table.
+                    To do so, as illustrated previously, you use a <tt>*</tt> in place of the column names. For example,
+                    the following produces an output of 39 rows and all the columns in the <tt>Dependent</tt> table:</P>
+                <pre>
+SELECT *
+FROM   Dependent
+</pre><BR>
+
+                <p class="docText">This query also produces 39 rows of output (of which we show the first 15 rows here):
+                </P>
+                <pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+2      Matt                 Son          M    8
+2      Mary                 Daughter     F    9
+2      Beena                Spouse       F    31
+10     Amit                 Son          M    3
+10     Shantu               Daughter     F    5
+14     Raju                 Son          M    1
+14     Rani                              F    3
+17     Susan                Daughter     F    4
+17     Sam                  Son          M    1
+20     Donald II            Son          M    NULL
+20     Chris                Son          M    6
+34     Susan                Daughter     F    5
+34     Monica               Daughter     F    1
+62     Tom                  Husband      M    45
+62     James                Son          M    14
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.6"></a>
+                <h4 id="title-IDAXGSC0" class="docSection2Title">2.1.6. ORDER BY</H4><a name="IDX-CHP-2-0075"></a>
+
+                <p class="docText">A table maintains the data in the order that the system stores it in, which is
+                    unpredictable. Remember that a relational database contains sets of rows of data and sets are not
+                    ordered. If you wish to display the contents of a table in a predictable manner, you may use the
+                    ORDER BY clause<a name="IDX-CHP-2-0076"></a>
+                    in the SELECT statement. For example, to order the <tt>Dependent</tt> table by field age, you would
+                    type the following:</p>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+ORDER  BY age
+</pre><br>
+
+                <p class="docText">This produces the following 39 rows of output, ordered by age (of which the first 20
+                    rows are shown below):</P>
+                <pre>
+dname                age
+-------------------- ------
+Donald II            NULL
+Mita                 NULL
+Losmith              NULL
+Prakash              1
+Mithu                1
+Raju                 1
+Sam                  1
+Monica               1
+Jon                  2
+Rakhi                2
+Jake                 2
+Nita                 2
+Mahesh               2
+Rani                 3
+Amit                 3
+Susan                4
+Sebastian            4
+Mamta                4
+Madhu                5
+Shantu               5
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The <tt>ORDER BY</tt> does not actually change the order of the data in the table. It
+                    only displays or returns the data (output) in a particular order.</p>
+                <p class="docText">When using an <tt>ORDER BY</tt> in a <tt>SELECT</tt> statement, you do not have to
+                    have the column that you are ordering by in the <tt>SELECT</tt> statement. For example, you may
+                    display only the dependent name and age while ordering by sex, as follows:</p>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+ORDER  BY sex
+</pre><br>
+
+                <p class="docText">This would produce 39 rows of output, of which we are showing the first 5 rows (the
+                    females are shown first, because it is ordered alphabetically):</p>
+                <pre>
+dname                age
+-------------------- ------
+Mary                 9
+Beena                31
+Shantu               5
+Rani                 3
+Susan                4
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Although the previous output is not wrong, it is may appear to be randomly ordered by
+                    someone who does not know what was used in the <tt>ORDER BY</tt> statement. Therefore, it is
+                    generally better to display the column that you are ordering by also, as follows:</p>
+                <pre>
+SELECT dname, age, sex
+FROM   Dependent
+ORDER  BY sex
+</pre><br>
+
+                <p class="docText">This query would once again produce 39 rows, of which we are showing the first 5
+                    rows:</p>
+                <pre>
+dname                age    sex
+-------------------- ------ ----
+Mary                 9      F
+Beena                31     F
+Shantu               5      F
+Rani                 3      F
+Susan                4      F
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><br>
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.6.1"></a>
+                <H5 id="title-IDASQSC0" class="docSection3Title">2.1.6.1. ORDER BY and NULLs</H5><a
+                    name="IDX-CHP-2-0077"></a>
+                <a name="IDX-CHP-2-0078"></a>
+
+                <p class="docText">When data has not been entered for a particular column of a particular row, this cell
+                    gets a NULL value. Null means that data is missing or unavailable, so the cell has no value.</p>
+                <p class="docText">If the field that you choose to <tt>ORDER BY</tt> contains nulls, the fields that
+                    have null values assigned to them are placed at the top of the displayed list of output. This is
+                    because of the way SQL Server stores null values internally. Look at the output of the following
+                    query:</p>
+                <pre>
+SELECT dname, age
+FROM    Dependent
+ORDER  BY age
+</pre><br>
+
+                <p class="docText">which produces 39 rows of output, of which we are showing the first 16 rows:</p>
+                <pre>
+dname                age
+-------------------- ------
+Donald II            NULL
+Mita                 NULL
+Losmith              NULL
+Prakash              1
+Mithu                1
+Raju                 1
+Sam                  1
+Monica               1
+Jon                  2
+Rakhi                2
+Jake                 2
+Nita                 2
+Mahesh               2
+Rani                 3
+Amit                 3
+Susan                4
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><br>
+
+                <p class="docText">If nothing was entered in a column (an empty string was entered), the column behaves
+                    just like a <tt>NULL</tt> field when using the <tt>ORDER BY</tt> clause. For example, if we type in
+                    the following query:</p>
+                <pre>
+SELECT dname, relationship
+FROM   Dependent
+ORDER  BY relationship
+</pre><br>
+
+                <p class="docText">we get 39 rows of output, of which we are showing the first 8 rows:</p>
+                <pre>
+dname                relationship
+-------------------- ------------
+Rani
+Susan                Daughter
+Mary                 Daughter
+Susan                Daughter
+Monica               Daughter
+Hillary              Daughter
+Phoebe               Daughter
+Shantu               Daughter
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this table, nothing (an empty string) was entered in the relationship column for
+                    the dependent Rani.</p>
+
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.7"></a>
+                <h4 id="title-IDAASSC0" class="docSection2Title">2.1.7. Ascending and Descending Order</h4><a
+                    name="IDX-CHP-2-0079"></a>
+                <a name="IDX-CHP-2-0080"></a>
+
+                <p class="docText">In SQL Server, the default order of an <tt>ORDER BY</tt> is ascending. To display or
+                    order output in descending order, the keyword <tt>DESC</tt> has to be appended to the <tt>ORDER
+                        BY</tt> clause. And, in order to display or order output in ascending order, the keyword
+                    <tt>ASC</tt> can be appended to the <tt>ORDER BY</tt> clause.</p>
+                <p class="docText">So, unless you specify otherwise, the following two queries will give you the same
+                    output:</p>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+ORDER  BY age
+</pre><BR>
+
+                <p class="docText">and:</p>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+ORDER  BY age ASC
+</pre><br>
+
+                <p class="docText">The top query returns a result set ordered in ascending order by age by default. The
+                    second query has the keyword <tt>ASC</tt> appended to the <tt>ORDER BY</tt> clause, so it also
+                    orders in ascending order by age (the output for these queries has been shown previously).</p>
+                <p class="docText">In order to display or order output in descending order, the keyword <tt>DESC</tt>
+                    can be appended to the <tt>ORDER BY</tt> clause, as follows:</P>
+                <pre>
+SELECT dname, age
+FROM   Dependent
+ORDER  BY age DESC
+</pre><BR>
+
+                <p class="docText">This produces 39 rows of output in descending order of age (of which the first 10
+                    rows are shown here):</P>
+                <pre>
+dname                age
+-------------------- ------
+Tom                  45
+Beena                31
+Barbara              26
+Barbara              23
+Susan                22
+Susie                22
+Xi du                22
+Sally                22
+Hillary              16
+James                14
+.
+.
+.
+&nbsp;
+(39 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-2-SECT-1.8"></a>
+                <H4 id="title-IDA0TSC0" class="docSection2Title">2.1.8. Ordering Within an Order</h4><a
+                    name="IDX-CHP-2-0081"></a>
+                <a name="IDX-CHP-2-0082"></a>
+
+                <p class="docText">There will be times when you will want to sort groups within an order by another
+                    order. SQL Server syntax allows you to do this. For example, using the <tt>Dependent</tt> table, if
+                    you want to order all the dependents by sex, and within sex you want to order by age in descending
+                    order, would you type the following query:</p>
+                <pre>
+SELECT dname, sex, age
+FROM   Dependent
+ORDER  BY sex, age DESC
+</pre><br>
+
+                <p class="docText">This query would produce the following 39 rows of output:</P>
+                <pre>
+dname                sex  age
+-------------------- ---- ------
+Beena                F    31
+Barbara              F    26
+Barbara              F    23
+Susan                F    22
+Susie                F    22
+Xi du                F    22
+Sally                F    22
+Hillary              F    16
+Phoebe               F    12
+Mary                 F    9
+Mona                 F    7
+Rekha                F    6
+Madhu                F    5
+Shantu               F    5
+Susan                F    5
+Susan                F    4
+Mamta                F    4
+Rani                 F    3
+Rakhi                F    2
+Nita                 F    2
+Monica               F    1
+Mita                 F    NULL
+Tom                  M    45
+James                M    14
+Matt                 M    8
+Chris                M    6
+Om                   M    6
+James                M    5
+Sebastian            M    4
+Amit                 M    3
+Jon                  M    2
+Jake                 M    2
+Mahesh               M    2
+Prakash              M    1
+Mithu                M    1
+Sam                  M    1
+Raju                 M    1
+Donald II            M    NULL
+Losmith              M    NULL
+&nbsp;
+(39 row(s) affected)
+</pre><BR>
+
+                <p class="docText">You could also order by descending order of sex, and descending order of age, as
+                    follows:</P>
+                <pre>
+SELECT dname, sex, age
+FROM   Dependent
+ORDER  BY sex DESC, age DESC
+</pre><BR>
+
+                <p class="docText">This query would give the following 39 rows of output:</P>
+                <pre>
+dname                sex  age
+-------------------- ---- ------
+Tom                  M    45
+James                M    14
+Matt                 M    8
+Chris                M    6
+Om                   M    6
+James                M    5
+Sebastian            M    4
+Amit                 M    3
+Jake                 M    2
+Jon                  M    2
+Mahesh               M    2
+Prakash              M    1
+Mithu                M    1
+Raju                 M    1
+Sam                  M    1
+Donald II            M    NULL
+Losmith              M    NULL
+Beena                F    31
+Barbara              F    26
+Barbara              F    23
+Sally                F    22
+Susan                F    22
+Susie                F    22
+Xi du                F    22
+Hillary              F    16
+Phoebe               F    12
+Mary                 F    9
+Mona                 F    7
+Rekha                F    6
+Madhu                F    5
+Shantu               F    5
+Susan                F    5
+Susan                F    4
+Mamta                F    4
+Rani                 F    3
+Nita                 F    2
+Rakhi                F    2
+Monica               F    1
+Mita                 F    NULL
+&nbsp;
+(39 row(s) affected)
+</pre><br>
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

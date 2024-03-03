@@ -1,0 +1,43 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 6.7.&nbsp; Exercises</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-6-SECT-7"></a>
+<h3 id="599419-846" class="docSection1Title">6.7. Exercises</H3>
+<p class="docText">Unless specified otherwise, use the <tt>Student_course</tt> database to answer the following questions. Also, use appropriate column headings when displaying your output.</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">Develop and execute a query to find the names of students who had <tt>HERMANO</tt> as an instructor and earned a grade of B or better in the class. Develop the query by first finding sections where <tt>HERMANO</tt> was the instructor. Save this query. Edit the query and modify it to join the <tt>Section</tt> table with the <tt>Grade_report</tt> table. Add the <tt>grade</tt> constraint.</P></div></li><LI><div style="font-weight:normal"><p class="docList">Using the <tt>Student</tt> table, create a duplicate table called <tt>Stutab</tt> that contains all rows from the <tt>Student</tt> table. Hint: Look at the design of the <tt>Student</tt> table to see the columns and their definitions. Create the <tt>Stutab</tt> table with a <tt>CREATE TABLE</tt> command. Insert data into <tt>Stutab</tt> using the <tt>INSERT INTO .. SELECT</tt> option.</p><p class="docList">Using the newly created <tt>Stutab</tt> table:</P><div style="font-weight:bold"><ol class="docList" type="a"><LI><div style="font-weight:normal"><p class="docList">List student names and majors of the juniors and seniors.</P></div></LI><li><div style="font-weight:normal"><p class="docList">List student names of the COSC majors.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Create a view (call it <tt>vstu</tt>) that contains student names and majors for the COSC majors.</P></div></LI><li><div style="font-weight:normal"><p class="docList">List the student names and majors from <tt>vstu</tt> in descending order by name.</p></div></li><li><div style="font-weight:normal"><p class="docList">Modify a row in your view of your table so that a student changes his or her major.</P></div></li><li><div style="font-weight:normal"><p class="docList">Display of the view. Did modifying the view, <tt>vstu</tt>, also change the parent table, <tt>Stutab</tt>?</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Try to modify the view again, but this time, change the major to <tt>COMPSC</tt>--an obviously invalid column in the <tt>Stutab</tt> table, because the column was defined as four characters. Can you do it? What happens?</p></div></li><li><div style="font-weight:normal"><p class="docList">Using <tt>Stutab</tt>, create a local temporary table (call it <tt>#stutemp</tt>) that contains student names and majors for the COSC majors.</p></div></li><li><div style="font-weight:normal"><p class="docList">List the student names and majors from <tt>#stutemp</tt> in ascending order by name.</p></div></li><li><div style="font-weight:normal"><p class="docList">Modify a row in <tt>#stutemp</tt> so that a student changes his or her major.</p></div></li><li><div style="font-weight:normal"><p class="docList">Display the local temporary table. Did modifying your temporary table, <tt>#stutemp</tt>, also change the parent table, <tt>Stutab</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">Try to modify the local temporary table again, but this time change the major to <tt>COMPSC</tt>--again, an obviously invalid field in <tt>Stutab</tt>, because the field was defined as four characters. Can you do it? What happens?</P></div></li><li><div style="font-weight:normal"><p class="docList">Using <tt>Stutab</tt>, create a global temporary table (call it <tt>##gstutemp</tt>) that contains student names and majors for the COSC majors.</P></div></li><li><div style="font-weight:normal"><p class="docList">List the student names and majors from <tt>##gstutemp</tt> in ascending order by name.</P></div></li><li><div style="font-weight:normal"><p class="docList">Modify a row in <tt>##gstutemp</tt> so that a student changes his or her major.</P></div></li><LI><div style="font-weight:normal"><p class="docList">Display the global temporary table. Did modifying your temporary table, <tt>##gstutemp</tt>, also change the parent table, <tt>Stutab</tt>.</p></div></LI><LI><div style="font-weight:normal"><p class="docList">Try to modify the global temporary table again, but this time change the major to <tt>COMPSC</tt>--again, an obviously invalid field in <tt>Stutab</tt>, because the field was defined as four characters. Can you do it? What happens?</P></div></LI><li><div style="font-weight:normal"><p class="docList">Create an inline view (call it <tt>invstu</tt>) that contains student names and majors for COSC majors.</P></div></LI></ol></div></div></li><LI><div style="font-weight:normal"><p class="docList">Perform an experiment to determine the precedence in a query with three conditions linked by <tt>AND</tt> and <tt>OR</tt>. Which precedence is followed: <tt>AND</tt>, <tt>OR</tt>, or left-to-right?</P><p class="docList">Run this query:</p><pre>
+    SELECT *
+    FROM   Student
+    WHERE  stno &lt; 100 AND major = 'COSC' OR major = 'ACCT'
+</pre><br>
+<p class="docList">Then run the following two queries and determine which one gives you the same output as the preceding non parenthesized statement:</p><pre>
+    SELECT *
+    FROM   Student
+    WHERE  (stno &lt; 100 AND major = 'COSC') OR major = 'ACCT'
+</pre><br>
+<p class="docList">or:</P><pre>
+    SELECT *
+    FROM   Student
+    WHERE  stno &lt; 100 AND (major = 'COSC' OR major = 'ACCT')
+</pre><br>
+<p class="docList">What happens if you put the <tt>OR</tt> first instead of the <tt>AND</tt> and run the query without parentheses?</p></div></LI><LI><div style="font-weight:normal"><p class="docList">Develop a query to find the instructor name and course name for computer science courses (use the <tt>Section</tt> table).</P><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">Convert your query into a view.</p></div></li><li><div style="font-weight:normal"><p class="docList">Convert the query into an inline view with column aliases and test it.</p></div></li><li><div style="font-weight:normal"><p class="docList">Include an <tt>ORDER BY</tt> clause outside of the inline view in the main query and run your query again.</p></div></li></ol></div></div></li></ol></div>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

@@ -1,0 +1,123 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 9.3.&nbsp; The HAVING Clause</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-9-SECT-3"></a>
+<h3 id="599419-921" class="docSection1Title">9.3. The HAVING Clause</H3>
+<p class="docText">The <tt>GROUP BY</tt> and <tt>HAVING</tt> clauses are used together. The <tt>HAVING</tt> clause is used as a final filter (rather than as a conditional filter) on the aggregate column values in the result set of a <tt>SELECT</tt> statement. In other words, the query has to be grouped before the <tt>HAVING</tt> clause can be applied. For example, consider the following statement, which displays the count of students in various classes (classes of students = 1, 2, 3, 4, corresponding to freshman, sophomore, and so on):</p>
+<pre>
+SELECT       class, COUNT(*) AS [count]
+FROM         Student
+GROUP BY  class
+</pre><br>
+
+<p class="docText">This query produces the following output:</P>
+<pre>
+class count
+----- -----------
+NULL  10
+1     11
+2     10
+3     7
+4     10
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+<p class="docText">If you are interested only in classes that have more than a certain number of students in them, you could use the following statement:</P>
+<pre>
+SELECT      class, COUNT(*) AS [count]
+FROM        Student
+GROUP BY class
+HAVING COUNT(*) &gt; 9
+</pre><br>
+
+<p class="docText">which produces the following four rows of output:</P>
+<pre>
+class count
+----- -----------
+NULL  10
+1     11
+2     10
+4     10
+&nbsp;
+(4 row(s) affected)
+</pre><BR>
+
+<a name="learnsqlsvr05-CHP-9-SECT-3.1"></a>
+<H4 id="title-IDAHS1LE" class="docSection2Title">9.3.1. HAVING and WHERE</H4><a name="IDX-CHP-9-0449"></a> 
+
+<p class="docText">Whereas <tt>HAVING</tt> is a final filter in a <tt>SELECT</tt> statement, the <tt>WHERE</tt> clause, which excludes rows from a result set, is a conditional filter. <tt>HAVING</tt> is used to filter based on aggregate values, <tt>WHERE</tt> cannot do that. Consider the following two queries:</p>
+<pre>
+SELECT       class, COUNT(*) AS [count]
+FROM         Student
+GROUP BY     class
+HAVING       class = 3
+&nbsp;
+&nbsp;
+&nbsp;
+SELECT       class, COUNT(*) AS [count]
+FROM         Student
+WHERE        class = 3
+GROUP BY     class
+</pre><BR>
+
+<p class="docText">Both queries produce the following output:</P>
+<pre>
+class count
+----- -----------
+3     7
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText">In a typical implementation, the first of these two queries is less efficient because the query engine has to complete the query before removing rows <tt>WHERE class = 3</tt> from the result. In the second version, the rows <tt>WHERE class = 3</tt> are removed before the grouping takes place. <tt>WHERE</tt> is not always a substitute for <tt>HAVING</tt>, but when it can be used instead of <tt>HAVING</tt>, it should be. Notice that in the example:</P>
+<pre>
+SELECT      class, COUNT(*) AS [count]
+FROM        Student
+GROUP BY class
+HAVING COUNT(*) &gt; 9
+</pre><BR>
+
+<p class="docText"><tt>HAVING</tt> and <tt>WHERE</tt> are not interchangeable because the grouping has to take place before the <tt>HAVING</tt> could have an effect. You cannot know in advance what the counts for each class are until they are counted.</p>
+<p class="docText">Consider the following query, its meaning, and the processing that is required to finalize the result set:</p>
+<pre>
+SELECT       class, major, COUNT(*) AS [count]
+FROM         Student
+WHERE        major = 'COSC'
+GROUP BY   class, major
+HAVING COUNT(*) &gt; 2
+</pre><br>
+
+<p class="docText">This query produces the following output:</p>
+<pre>
+class major count
+----- ----- -----------
+1     COSC  4
+4     COSC  3
+&nbsp;
+(2 row(s) affected)
+</pre><BR>
+
+<p class="docText">In this example, all computer science (<tt>COSC</tt>) majors (per the <tt>WHERE</tt> clause) will be grouped and <tt>COUNT</tt>ed and then displayed only if <tt>COUNT(*) &gt; 2</tt>. The query might erroneously be interpreted as "Group and count all COSC majors by class, but only if there are more than two in a class." This interpretation is wrong, because SQL applies the <tt>WHERE</tt>, then applies the <tt>GROUP BY</tt>, and, finally, filters with the <tt>HAVING</tt> criterion.</p>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

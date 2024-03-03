@@ -1,0 +1,259 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 9.2.&nbsp; The GROUP BY Clause</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-9-SECT-2"></a>
+<h3 id="title-IDA3AYX5" class="docSection1Title">9.2. The GROUP BY Clause</H3>
+<p class="docText"><tt>GROUP BY</tt> is used in conjunction with aggregate functions to group data on the basis of the same values in a column. <tt>GROUP BY</tt> returns one row for each <span class="docEmphasis">value</span> of the column(s) that is grouped. You can use <tt>GROUP BY</tt> to group by one column or multiple columns.</p>
+<p class="docText">As an example of how to group by one column, the following statement shows how you can use the aggregate <tt>COUNT</tt> to extract the number of <tt>class</tt> groups (number of students in each class) from the <tt>Student</tt> table:</p>
+<pre>
+SELECT       class, COUNT(*) AS [count]
+FROM         Student
+GROUP BY  class
+</pre><BR>
+
+<p class="docText">This query produces the following five rows of output, which is grouped by one column, <tt>class</tt>:</p>
+<pre>
+class count
+----- -----------
+NULL  10
+1     11
+2     10
+3     7
+4     10
+&nbsp;
+(5 row(s) affected)
+</pre><BR>
+
+<p class="docText">This type of statement gives you a new way to retrieve and organize aggregate data. Other aggregate functions would have a similar syntax.</p>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><TD valign="top"><p class="docText">You have to group by at least the attributes/expressions you are aggregating.</p></TD></TR></table></td></tr></table></p><br>
+<p class="docText">If a <tt>GROUP BY</tt> clause contains a two-column specification, the result is aggregated and grouped by two columns. For example, the following is <tt>COUNT</tt> of <tt>class</tt> and <tt>major</tt> from the <tt>Student</tt> table:</P>
+<pre>
+SELECT       class, major, COUNT(*)  AS [count]
+FROM         Student
+GROUP BY  class, major
+</pre><br>
+
+<p class="docText">This query produces the following output (24 rows), which is grouped by <tt>class</tt> within <tt>major</tt>:</p>
+<pre>
+class major   count
+----- -----   -----------
+NULL  NULL    3
+2     ACCT    1
+4     ACCT    4
+3     ART     1
+3     CHEM    1
+4     CHEM    1
+NULL  COSC    1
+1     COSC    4
+2     COSC    2
+4     COSC    3
+NULL  ENGL    1
+1     ENGL    3
+2     ENGL    2
+3     ENGL    4
+NULL  MATH    2
+2     MATH    3
+3     MATH    1
+4     MATH    1
+NULL  POLY    2
+1     POLY    3
+2     POLY    2
+4     POLY    1
+NULL  UNKN    1
+1     UNKN    1
+&nbsp;
+(24 row(s) affected)
+</pre><BR>
+
+<p class="docText">The sequence of the columns in a <tt>GROUP BY</tt> clause has the effect of ordering the output. If we change the order of the <tt>GROUP BY</tt> like this:</P>
+<pre>
+SELECT      class, major, COUNT(*)  AS [count]
+FROM        Student
+GROUP BY major, class
+</pre><BR>
+
+<p class="docText">our result will look like this:</p>
+<pre>
+class major count
+----- ----- -----------
+NULL  NULL  3
+NULL  COSC  1
+NULL  ENGL  1
+NULL  MATH  2
+NULL  POLY  2
+NULL  UNKN  1
+1     COSC  4
+1     ENGL  3
+1     POLY  3
+1     UNKN  1
+2     ACCT  1
+2     COSC  2
+2     ENGL  2
+2     MATH  3
+2     POLY  2
+3     ART   1
+3     CHEM  1
+3     ENGL  4
+3     MATH  1
+4     ACCT  4
+4     CHEM  1
+4     COSC  3
+4     MATH  1
+4     POLY  1
+&nbsp;
+(24 row(s) affected)
+</pre><br>
+
+<p class="docText">Here the output is grouped by <tt>major</tt> within <tt>class</tt>.</p>
+<p class="docText">A statement like the following will cause a syntax error, because it says that you are to count both <tt>class</tt> and <tt>major</tt>, but <tt>GROUP BY class</tt> only:</p>
+<pre>
+SELECT       class, major, COUNT(*)
+FROM         Student
+GROUP BY  class
+</pre><br>
+
+<p class="docText">This query results in the following error message:</p>
+<pre>
+Msg 8120, Level 16, State 1, Line 1
+Column 'Student.MAJOR' is invalid in the select list because it is not contained in either
+ an aggregate function or the GROUP BY clause.
+</pre><br>
+
+<p class="docText">To be syntactically and logically correct, you must have all the non aggregate columns of the result set in the <tt>GROUP BY</tt> clause. For example, let's take a look at the data of <a class="docLink" href="#learnsqlsvr05-CHP-9-TABLE-1">Table 9-1</a>.</p>
+<a name="learnsqlsvr05-CHP-9-TABLE-1"></a><p><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table 9-1. Room table</h5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><td class="docTableCell" align="left"><p class="docText"></p>
+<pre>
+BLDG  ROOM  CAPACITY OHEAD
+----- ----- -------- -----
+13    101   85       Y
+36    123   35       N
+58    114   60       NULL
+79    179   35       Y
+79    174   22       Y
+58    112   40       NULL
+36    122   25       N
+36    121   25       N
+36    120   25       N
+58    110   NULL     Y
+&nbsp;
+(10 row(s) affected)
+</pre><br>
+
+</TD></tr></table></p><BR>
+<p class="docText">The following query would be improper, because you must <tt>GROUP BY</tt> "<tt>ohead</tt>" to <tt>SUM</tt> capacities for each <tt>ohead</tt> value:</p>
+<pre>
+SELECT  ohead, SUM(capacity)
+FROM    Room
+</pre><br>
+
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><td valign="top"><p class="docText"><tt>ohead</tt>, an attribute in the <tt>Room</tt> table (in our <tt>Student_Course</tt> database), is short for rooms with overhead projectors.</P></TD></TR></table></TD></tr></table></P><BR>
+<p class="docText">This query would produce an error message similar to what we saw previously:</p>
+<pre>
+Msg 8120, Level 16, State 1, Line 1
+Column 'Room.OHEAD' is invalid in the select list because it is not contained in either an
+ aggregate function or the GROUP BY clause.
+</pre><BR>
+
+<p class="docText">If you <tt>SELECT</tt> columns <span class="docEmphasis">and</span> use an aggregate function, you must <tt>GROUP BY</tt> the non aggregate attributes. The correct version of the last statement is as follows:</P>
+<pre>
+SELECT       ohead, SUM(capacity) AS [sum]
+FROM         Room
+GROUP BY  ohead
+</pre><br>
+
+<p class="docText">which produces the following three rows of output:</p>
+<pre>
+ohead sum
+----- -----------
+NULL  100
+N     110
+Y     142
+&nbsp;
+Warning: Null value is eliminated by an aggregate or other SET operation.
+&nbsp;
+(3 row(s) affected)
+</pre><br>
+
+<p class="docText">This is the sum of room capacities for rooms that have no overhead projectors (<tt>N</tt>), rooms that have overhead projectors (<tt>Y</tt>), and rooms in which the overhead projector capacity is unknown (null).</p>
+<p class="docText">Observe that in the <tt>Room</tt> table, some rooms have null values for <tt>ohead</tt>, and the null rows are summed and grouped along with the non-null rows.</P>
+<a name="learnsqlsvr05-CHP-9-SECT-2.1"></a>
+<h4 id="title-IDADHYX5" class="docSection2Title">9.2.1. GROUP BY and ORDER BY</h4><a name="IDX-CHP-9-0443"></a> 
+<a name="IDX-CHP-9-0444"></a> 
+<a name="IDX-CHP-9-0445"></a> 
+
+<p class="docText">To enhance the display of a <tt>GROUP BY</tt> clause, you can combine it with an <tt>ORDER BY</tt> clause. Consider the following example:</P>
+<pre>
+SELECT      class, major, COUNT(*) AS [count]
+FROM        Student
+GROUP BY class, major
+</pre><BR>
+
+<p class="docText">The output for this query was presented earlier in the chapter.</P>
+<p class="docText">This result set can also be ordered by any other column from the result set using the <tt>ORDER BY</tt>. For instance, the following example orders the output in descending order by <tt>COUNT(*)</tt>:</p>
+<pre>
+SELECT class, major, COUNT(*)  AS [count]
+FROM   Student
+GROUP BY class, major
+ORDER BY COUNT(*) DESC
+</pre><br>
+
+<p class="docText">This query produces the following output (24 rows):</p>
+<pre>
+class  major count
+------ ----- -----------
+4      ACCT  4
+1      COSC  4
+3      ENGL  4
+2      MATH  3
+4      COSC  3
+1      ENGL  3
+NULL   NULL  3
+1      POLY  3
+2      POLY  2
+NULL   POLY  2
+2      COSC  2
+2      ENGL  2
+NULL   MATH  2
+3      MATH  1
+4      MATH  1
+NULL   ENGL  1
+2      ACCT  1
+3      ART   1
+3      CHEM  1
+4      CHEM  1
+NULL   COSC  1
+4      POLY  1
+NULL   UNKN  1
+1      UNKN  1
+&nbsp;
+(24 row(s) affected)
+</pre><br>
+
+
+<a name="learnsqlsvr05-CHP-9-SECT-2.2"></a>
+<h4 id="title-IDAVIYX5" class="docSection2Title">9.2.2. GROUP BY and DISTINCT</h4><a name="IDX-CHP-9-0446"></a> 
+<a name="IDX-CHP-9-0447"></a> 
+<a name="IDX-CHP-9-0448"></a> 
+
+<p class="docText">When a <tt>SELECT</tt> clause includes all the columns specified in a <tt>GROUP BY</tt> clause, the use of the <tt>DISTINCT</tt> function is unnecessary and inefficient, because the <tt>GROUP BY</tt> clause groups rows in such a way that the column(s) that are grouped will not have duplicate values.</p>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

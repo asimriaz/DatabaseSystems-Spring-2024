@@ -1,0 +1,57 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 7.11.&nbsp; Exercises</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-12.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-11"></a>
+<h3 id="599419-805" class="docSection1Title">7.11. Exercises</H3>
+<p class="docText">Unless specified otherwise, use the <tt>Student_course</tt> database to answer the following questions. Also, use appropriate column headings when displaying your output.</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">In this exercise, you'll test the <tt>UNION</tt> statement. Having seen how the <tt>UNION</tt> statement works, demonstrate some permutations to see what will work "legally" and what won't. First, create two tables as follows:</P><p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="90%"><colgroup span="2"><col><col></colgroup><thead><TR><th class="thead" scope="col" align="left"><p class="docText">Table 1</p></th><th class="thead" scope="col">&nbsp;</th></TR></thead><TR><TD class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">A</span></P></td><TD class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">B</span></P></td></TR><TR><td class="docTableCell" align="left"><p class="docText">x1</p></td><td class="docTableCell" align="left"><p class="docText">y1</P></td></tr><TR><TD class="docTableCell" align="left"><p class="docText">r1</P></td><td class="docTableCell" align="left"><p class="docText">s1</p></td></tr></table></p><br><p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="90%"><colgroup span="4"><col><col><col><col></colgroup><thead><tr><th class="thead" scope="col" align="left" colspan="4"><p class="docText">Table 2</p></th></tr></thead><tr><td class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">A</span></p></td><TD class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">B</span></p></td><TD class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">C</span></p></td><TD class="docTableCell" align="left"><p class="docText"><span class="docEmphStrong">D</span></p></td></TR><tr><TD class="docTableCell" align="left"><p class="docText">x2</p></TD><TD class="docTableCell" align="left"><p class="docText">y2</P></TD><td class="docTableCell" align="left"><p class="docText">z2</P></TD><td class="docTableCell" align="left"><p class="docText">w2</P></TD></tr><tr><td class="docTableCell" align="left"><p class="docText">r2</p></TD><td class="docTableCell" align="left"><p class="docText">s2</p></TD><TD class="docTableCell" align="left"><p class="docText">t2</P></td><td class="docTableCell" align="left"><p class="docText">u2</p></td></tr></table></p><br><p class="docList">Make the type of As and Bs <tt>CHAR(2)</tt>. Let the type of C in <tt>Table2</tt> be <tt>VARCHAR(2)</tt> and D in <tt>Table2</tt> be <tt>VARCHAR(3)</tt>.</p><p class="docList">Try the following statements and note the results:</p><pre>
+    SELECT * FROM Table1 UNION SELECT * FROM Table2
+    SELECT * FROM Table1 UNION SELECT A,B FROM Table2
+    SELECT * FROM Table1 UNION SELECT B,A FROM Table1
+    SELECT * FROM Table1 UNION SELECT A,C FROM Table2
+    SELECT * FROM Table1 UNION SELECT A,D FROM Table2
+    CREATE VIEW viewx AS
+    SELECT A,B
+    FROM Table2
+    SELECT *
+    FROM Table1
+      UNION
+    SELECT *
+    FROM viewx
+</pre><br>
+<p class="docList">Feel free to experiment with any other combinations that you deem appropriate or that you wonder about.</p></div></li><li><div style="font-weight:normal"><p class="docList">Create and print the result of a query that generates the names, class, and course numbers of students who have earned Bs in computer science courses. Store this query as Q7_2. Then, revise Q7_2 to delete from the result set those students who are sophomores (class = 2). Use <tt>NOT..IN</tt> to select those students who are sophomores.</p></div></li><LI><div style="font-weight:normal"><p class="docList">Find the names, grades, and course numbers of students who have earned As in computer science or math courses. Join the <tt>Section</tt> and <tt>Grade_report</tt> tables (be careful to not create the Cartesian product). Then, <tt>UNION</tt> the set of "course numbers COSC% and A" with the set of "course number MATH% and A."</p><p class="docList">Hint: Start with the query to get names, grades, and course numbers for COSC% and A, and then turn this into a view. Do the same for MATH% and A, and then execute the <tt>UNION</tt> statement as follows (using your view names):</p><pre>
+    SELECT *
+    FROM view1a
+      UNION
+    SELECT *
+    FROM view1b
+</pre><BR>
+</div></li><li><div style="font-weight:normal"><p class="docList">Find the names and majors of students who have made a C in any course. Make the "who have made a C in any course" a subquery for which you use <tt>IN</tt>.</P></div></li><li><div style="font-weight:normal"><p class="docList">A less-obvious example of a difference query is to find a difference that is not based on simple, easy-to-get sets. Suppose that set A is the set of student names who have made As and Bs in computer science (COSC) courses. Suppose further that set B is the set of students who have taken math courses (regardless of what grade they earned).</P><p class="docList">Then, set A minus set B would contain names of students who have made As or Bs in computer science courses, less those who have taken math courses. Similarly, set B minus set A would be the set of students who took math courses, less those who took COSC courses and made an A or a B in some COSC course.</p><p class="docList">Build these queries into set difference queries as views based on student numbers and execute them, as follows:</P><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">Write a query that gives the student number, name, course, and grade for each set. Save each query as Q7_5a and Q7_5b.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Reconstruct each query into a view of just student numbers, verify that it works, and then create views to create set A and set B. Verify that you have the same number of tuples in set A as you have in Q7_5a, and the same number of tuples in set B as you have in Q7_5b.</P></div></li><LI><div style="font-weight:normal"><p class="docList">Display the student numbers of students in each set differenceshow (set A minus set B) and (set B minus set A). Look at the original queries, Q7_5a and Q7_5b, to verify your result.</P></div></li></ol></div></div></LI><LI><div style="font-weight:normal"><p class="docList">Create two tables, <tt>T1</tt> and <tt>T2</tt>, that contain a <tt>name</tt> and a <tt>salary</tt> column. In the first table, order the columns by <tt>name</tt>, and then by <tt>salary</tt>. In the second table, order the columns by <tt>salary</tt>, and then by <tt>name</tt>. Use the same data types for each <tt>- VARCHAR(20)</tt>, <tt>NUMBER</tt>, for example. Populate the tables with two tuples each.</p></div></li><li><div style="font-weight:normal"><p class="docList">Can you <tt>UNION</tt> the two tables in the preceding question with the following query?</p><pre>
+    SELECT *
+    FROM T1
+      UNION
+    SELECT *
+    FROM T2
+</pre><BR>
+<p class="docList">Why or why not? If not, can you force the union of the two tables? Illustrate how. Be sure to <tt>DROP</tt> the tables when you are finished.</p></div></li><LI><div style="font-weight:normal"><p class="docList">Using the <tt>Instructor</tt> table you created in this chapter (as well as the tables supplied in the <tt>Student_course</tt> database), find the following (use the <tt>UNION</tt> or <tt>INTERSECT</tt> operator if you feel it is appropriate):</P><div style="font-weight:bold"><ol class="docList" type="a"><LI><div style="font-weight:normal"><p class="docList">All departments that have instructors. First do this using an <tt>IN</tt> predicate, and then using a regular join.</p></div></li><li><div style="font-weight:normal"><p class="docList">Find all students who are also instructors.</p></div></li><li><div style="font-weight:normal"><p class="docList">Find all instructors who are not students.</p></div></li><li><div style="font-weight:normal"><p class="docList">Find all students who are not instructors.</p></div></li><li><div style="font-weight:normal"><p class="docList">Find all students as well as instructors.</p></div></li></ol></div></div></li><LI><div style="font-weight:normal"><p class="docList">Using the <tt>Student</tt> table, find all the students who major in math and are seniors. Hint: Use the <tt>INTERSECT</tt> operator for this.</p></div></li></ol></div>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-12.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

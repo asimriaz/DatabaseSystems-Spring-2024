@@ -1,0 +1,611 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 7.5.&nbsp; The IN and NOT..IN Predicates</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-5"></a>
+                <h3 id="title-IDAPTDRL" class="docSection1Title">7.5. The IN and NOT..IN Predicates</H3><a
+                    name="IDX-CHP-7-0419"></a>
+                <a name="IDX-CHP-7-0420"></a>
+
+                <p class="docText">Although SQL Server does not have the <tt>MINUS</tt> (difference) operator, it does
+                    have an <tt>IN</tt> predicate and its negation, the <tt>NOT..IN</tt>, which enables us to create
+                    differences. Let us look at this predicate from a set point of view. If we find the objects from set
+                    A that are not in set B, we have found the difference of set A and B (A - B).</p>
+                <a name="learnsqlsvr05-CHP-7-SECT-5.1"></a>
+                <h4 id="title-IDAHUDRL" class="docSection2Title">7.5.1. Using IN</H4>
+                <p class="docText">The following is a simple example of an <tt>IN</tt> predicate with constants in a
+                    <tt>SELECT</tt> statement:</p>
+                <pre>
+    SELECT  sname, class
+    FROM    Student
+    WHERE   class IN (3,4)
+</pre><BR>
+
+                <p class="docText">In this example, <tt>IN (3,4)</tt> is called a <span
+                        class="docEmphasis">subquery-set</span>, where (3, 4) is the set in which we are testing
+                    membership. This query says: "Find all student names from the <tt>Student</tt> table where the
+                    <tt>class</tt> is in the set (3, 4)." It produces the following 17 rows of output:</p>
+                <pre>
+    sname                class
+    -------------------- ------
+    Mary                 4
+    Kelly                4
+    Donald               4
+    Chris                4
+    Jake                 4
+    Susan                3
+    Monica               3
+    Phoebe               3
+    Holly                4
+    Rachel               3
+    Jerry                4
+    Cramer               3
+    Harrison             4
+    Francis              4
+    Losmith              3
+    Gus                  3
+    Benny                4
+
+    (17 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The preceding query produces the same output as the following query:</P>
+                <pre>
+    SELECT  sname, class
+    FROM    Student
+    WHERE   class = 3 OR class = 4
+</pre><BR>
+
+                <p class="docText">In other words, the <tt>IN(3,4)</tt> means belonging to either set (3) OR set (4), as
+                    shown by the <tt>WHERE class = 3 OR class = 4</tt>.</P>
+                <a name="learnsqlsvr05-CHP-7-SECT-5.1.1"></a>
+                <h5 id="title-IDAOVDRL" class="docSection3Title">7.5.1.1. Using IN as a subquery</H5>
+                <p class="docText">We can expand the <tt>IN</tt> predicate's subquery-set part to be an actual query.
+                    For example, consider the following query:</P>
+                <pre>
+    SELECT Student.sname
+    FROM   Student
+    WHERE  Student.stno IN
+      (SELECT  g.student_number
+       FROM    Grade_report g
+       WHERE   g.grade = 'A')
+</pre><br>
+
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">Subqueries will be discussed at length in the next chapter.
+                                        </p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">Note the following about this query:</p>
+                <ul>
+                    <li>
+                        <p class="docList"><tt>WHERE Student.stno</tt> references the name of the column in the
+                            <tt>Student</tt> table.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>g.student_number</tt> is the column name in the <tt>Grade_report</tt>
+                            table.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>stno</tt> in the <tt>Student</tt> table and <tt>student_number</tt> in
+                            the <tt>Grade_report</tt> table have the same domain.</p>
+                    </li>
+                </ul>
+                <p class="docText">Note also that you must retrieve the information from the same domains for purposes
+                    of union compatibility.</p>
+                <p class="docText">The preceding query produces the following 14 rows of output:</P>
+                <pre>
+    sname
+    --------------------
+    Lineas
+    Mary
+    Brenda
+    Richard
+    Lujack
+    Donald
+    Lynette
+    Susan
+    Holly
+    Sadie
+    Jessica
+    Steve
+    Cedric
+    Jerry
+
+    (14 row(s) affected)
+</pre><br>
+
+                <p class="docText">You could view the preceding query as a result derived from the <span
+                        class="docEmphasis">intersection</span> of the sets A and B, where set A is the set of student
+                    numbers in the student set (from the <tt>Student</tt> table) and set B is the set of student numbers
+                    in the grade set (from the <tt>Grade_report</tt> table) that have As.</p>
+                <p class="docText">To make this command behave like a set operator (as if it were an <tt>INTERSECT</tt>
+                    operator), you can add the qualifier <tt>DISTINCT</tt> to the result set as follows:</P>
+                <pre>
+    SELECT DISTINCT (Student.sname)
+    FROM  Student
+    WHERE Student.stno IN
+      (SELECT DISTINCT (g.student_number)
+       FROM Grade_report g
+       WHERE g.grade = 'A')
+</pre><br>
+
+                <p class="docText">This query produces the following 14 rows of output:</p>
+                <pre>
+    sname
+    --------------------
+    Brenda
+    Cedric
+    Donald
+    Holly
+    Jerry
+    Jessica
+    Lineas
+    Lujack
+    Lynette
+    Mary
+    Richard
+    Sadie
+    Steve
+    Susan
+
+    (14 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Here, SQL Server sorts the results for you and does not return duplicates.</p>
+
+
+                <a name="learnsqlsvr05-CHP-7-SECT-5.2"></a>
+                <h4 id="title-IDA3XDRL" class="docSection2Title">7.5.2. The INTERSECT Operator</H4><a
+                    name="IDX-CHP-7-0421"></a>
+                <a name="IDX-CHP-7-0422"></a>
+
+                <p class="docText">From a set point of view, an <tt>INTERSECT</tt> means if we find objects from set A
+                    that are also in set B (and vice versa), we have found the intersection of sets A and B. SQL Server
+                    has an <tt>INTERSECT</tt> operator.</p>
+                <p class="docText">The following query is the previous query written using an <tt>INTERSECT</tt> (but we
+                    displayed student numbers instead of student names):</P>
+                <pre>
+    SELECT s.stno
+    FROM Student s
+    INTERSECT
+    SELECT g.student_number
+    FROM Grade_report g
+    WHERE g.grade = 'A'
+</pre><br>
+
+                <p class="docText">This query gives the following 14 rows of output:</P>
+                <pre>
+    stno
+    -------------
+    2
+    3
+    8
+    10
+    14
+    20
+    34
+    49
+    123
+    125
+    126
+    127
+    129
+    142
+
+    (14 row(s) affected)
+</pre><BR>
+
+                <p class="docText">In this query, we had to display student numbers (<tt>stno</tt>) instead of the
+                    student names (<tt>sname</tt>) because of the set compatibility issue discussed earlier.
+                    <tt>INTERSECT</tt> is a set operator, so the two sets being intersected have to have the same number
+                    of columns and the columns have to have compatible data types.</P>
+                <p class="docText">Another example of the use of the <tt>INTERSECT</tt> operator would be, for example,
+                    if we wanted to find all the students who had dependents, in which case we could type:</P>
+                <pre>
+    SELECT s.stno
+    FROM Student s
+    INTERSECT
+    SELECT d.pno
+    FROM Dependent d
+</pre><br>
+
+                <p class="docText">This query would give the following 19 rows of output:</P>
+                <pre>
+    stno
+    ------------------
+    2
+    10
+    14
+    17
+    20
+    34
+    62
+    123
+    126
+    128
+    132
+    142
+    143
+    144
+    145
+    146
+    147
+    153
+    158
+
+    (19 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Though the <tt>INTERSECT</tt> operator gives us the right answer, in some ways the
+                    <tt>IN</tt> as a subquery (discussed earlier) is better to use, because when SQL Server performs the
+                    <tt>INTERSECT</tt>, it selects sets based on what is mentioned in the <tt>SELECT</tt> statements.
+                    So, for example, if we wanted the student names in addition to the student numbers, and we typed:
+                </p>
+                <pre>
+    SELECT s.stno, s.sname
+    FROM Student s
+    INTERSECT
+    SELECT d.pno, relationship
+    FROM Dependent d
+</pre><BR>
+
+                <p class="docText">The query would not work.</P>
+                <p class="docText">Here we would have to use an <tt>IN</tt> with a subquery as discussed earlier:</p>
+                <pre>
+    SELECT s.stno, s.sname
+    FROM Student AS s
+    WHERE (s.stno IN
+    (SELECT pno
+    FROM Dependent AS d))
+</pre><br>
+
+                <p class="docText">giving us the following 19 rows of output:</p>
+                <pre>
+    stno    sname
+    ----    ------------------
+    2       Lineas
+    10      Richard
+    14      Lujack
+    17      Elainie
+    20      Donald
+    34      Lynette
+    62      Monica
+    123     Holly
+    126     Jessica
+    128     Brad
+    132     George
+    142     Jerry
+    143     Cramer
+    144     Fraiser
+    145     Harrison
+    146     Francis
+    147     Smithly
+    153     Genevieve
+    158     Thornton
+
+    (19 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-7-SECT-5.3"></a>
+                <H4 id="title-IDAP0DRL" class="docSection2Title">7.5.3. Using NOT..IN</h4><a name="IDX-CHP-7-0423"></a>
+                <a name="IDX-CHP-7-0424"></a>
+
+                <p class="docText">The <tt>NOT..IN</tt> is really a negated <tt>IN</tt> predicate. If you use the
+                    <tt>NOT..IN</tt> in your query, your query may perform poorly. The reason is that when
+                    <tt>NOT..IN</tt> is used, no indexing can be used, because the <tt>NOT..IN</tt> part of the query
+                    has to test the set with <span class="docEmphasis">all</span> values to find out what is <span
+                        class="docEmphasis">not</span> in the set. For smaller tables, no difference in performance will
+                    likely be detected. Nonetheless, we discuss how to use <tt>NOT..IN</tt> in this section, to
+                    demonstrate the logical negative of the <tt>IN</tt> predicate, which will help to complete your
+                    overall understanding of the SQL language. Instead of using <tt>NOT..IN</tt>, it is often preferable
+                    to use <tt>NOT EXISTS</tt> or outer join techniques, both of which are discussed later on.</p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Indexing is discussed in detail in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-11.html#learnsqlsvr05-CHP-11">Chapter 11</a>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">Sometimes the <tt>NOT..IN</tt> may seem to more easily describe the desired outcome
+                    or may be used for a set difference. For a simple example, consider the following query:</p>
+                <pre>
+    SELECT sname, class
+    FROM   Student
+    WHERE  class IN (1,3,4)
+</pre><br>
+
+                <p class="docText">This query produces the following 28 rows of output:</p>
+                <pre>
+    sname                class
+    -------------------- ------
+    Lineas               1
+    Mary                 4
+    Richard              1
+    Kelly                4
+    Lujack               1
+    Elainie              1
+    Donald               4
+    Chris                4
+    Jake                 4
+    Lynette              1
+    Susan                3
+    Monica               3
+    Hillary              1
+    Phoebe               3
+    Holly                4
+    Steve                1
+    Brad                 1
+    Rachel               3
+    George               1
+    Jerry                4
+    Cramer               3
+    Fraiser              1
+    Harrison             4
+    Francis              4
+    Losmith              3
+    Lindsay              1
+    Gus                  3
+    Benny                4
+
+    (28 row(s) affected)
+</pre><br>
+
+                <p class="docText">Contrast the preceding query to the following query:</P>
+                <pre>
+    SELECT sname, class
+    FROM   Student
+    WHERE  class NOT IN (2)
+</pre><br>
+
+                <p class="docText">The output in this case is the same as the preceding output because the
+                    <tt>Student</tt> table only has classes 1, 2, 3, and 4. If counts (results) did not "add up," this
+                    would show that some value of <tt>class</tt> was not 1, 2, 3, or 4.</p>
+                <p class="docText">As another example, suppose that you want the names of students who are not computer
+                    science (COSC) or math (<tt>MATH</tt>) majors. The query would be:</P>
+                <pre>
+    SELECT sname, major
+    FROM   Student
+    WHERE  major NOT IN ('COSC','MATH')
+</pre><br>
+
+                <p class="docText">which produces the following output (28 rows):</p>
+                <pre>
+    sname                major
+    -------------------- -----
+    Lineas               ENGL
+    Ken                  POLY
+    Romona               ENGL
+    Richard              ENGL
+    Harley               POLY
+    Donald               ACCT
+    Chris                ACCT
+    Lynette              POLY
+    Susan                ENGL
+    Bill                 POLY
+    Phoebe               ENGL
+    Holly                POLY
+    Jessica              POLY
+    Steve                ENGL
+    Cedric               ENGL
+    Rachel               ENGL
+    George               POLY
+    Cramer               ENGL
+    Fraiser              POLY
+    Harrison             ACCT
+    Francis              ACCT
+    Smithly              ENGL
+    Sebastian            ACCT
+    Losmith              CHEM
+    Genevieve            UNKN
+    Lindsay              UNKN
+    Gus                  ART
+    Benny                CHEM
+
+    (28 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The example output gave all majors other than <tt>COSC</tt> and <tt>MATH</tt>. But
+                    you must be very careful with the <tt>NOT..IN</tt> predicate, because if nulls are present in the
+                    data, you may get odd answers with <tt>NOT..IN</tt>.</p>
+                <p class="docText">As an example, consider the following table called <tt>Stumajor</tt>:</p>
+                <pre>
+    name                 major
+    -------------------- --------------------
+    Mary                 Biology
+    Sam                  Chemistry
+    Alice                Art
+    Tom                  NULL
+
+    (4 row(s) affected)
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">The table <tt>Stumajor</tt> has not been created for you in
+                                            the <tt>Student_course</tt> database. You have to create it, insert the
+                                            records shown, and then run the queries that follow.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </P><br>
+                <p class="docText">If you perform the following query:</p>
+                <pre>
+    SELECT *
+    FROM Stumajor
+    WHERE major IN ('Chemistry','Biology')
+</pre><br>
+
+                <p class="docText">It produces the following output:</p>
+                <pre>
+    name                 major
+    -------------------- --------------------
+    Mary                 Biology
+    Sam                  Chemistry
+
+    (2 row(s) affected)
+</pre><BR>
+
+                <p class="docText">If you perform the following query:</p>
+                <pre>
+    SELECT *
+    FROM Stumajor
+    WHERE major NOT IN ('Chemistry','Biology')
+</pre><br>
+
+                <p class="docText">It produces the following output:</P>
+                <pre>
+    name                 major
+    -------------------- --------------------
+    Alice                Art
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The value, null, is not equal to anything. You might expect that <tt>NOT..IN</tt>
+                    would give you <tt>&lt;Tom,null&gt;</tt>, but it does not. Why? Because nulls in the selection
+                    column (here, <tt>major</tt>) are not matched with a <tt>NOT..IN</tt>.</P>
+                <a name="learnsqlsvr05-CHP-7-SECT-5.3.1"></a>
+                <h5 id="title-IDA04DRL" class="docSection3Title">7.5.3.1. Using NOT..IN in a subquery</h5>
+                <p class="docText">A <tt>NOT..IN</tt> can also be used in a subquery. For example, assume that we have
+                    another table called <tt>Instructor</tt>, as shown here:</p>
+                <pre>
+    iname                teaches
+    -------------------- --------------------
+    Richard              COSC
+    Subhash              MATH
+    Tapan                BIOCHEM
+
+    (3 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">The <tt>Instructor</tt> table has not been created for you in
+                                            the <tt>Student_course</tt> database. You have to create it, insert the
+                                            records shown, and then run the queries that follow.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">Now, if we want to find all the departments that do not have instructors, we could
+                    type the following query:</P>
+                <pre>
+    SELECT *
+    FROM department_to_major d
+    WHERE d.dcode NOT IN
+      (SELECT dcode
+      FROM department_to_major d, instructor i
+      WHERE d.dcode=i.teaches)
+</pre><br>
+
+                <p class="docText">This query produces the following output (6 rows):</p>
+                <pre>
+    Dcode DNAME
+    ----- --------------------
+    ACCT  Accounting
+    ART   Art
+    CHEM  Chemistry
+    ENGL  English
+    POLY  Political Science
+    UNKN  NULL
+
+    (6 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Note that in this case, the <tt>NOT..IN</tt> "behaved" correctly and reported the
+                    <tt>NULL</tt> value for <tt>DNAME</tt>!</p>
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

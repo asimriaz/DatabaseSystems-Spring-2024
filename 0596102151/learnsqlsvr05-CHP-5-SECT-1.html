@@ -1,0 +1,249 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 5.1.&nbsp; Aggregate Functions</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-5-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-5-SECT-1"></a>
+<H3 id="588026-810" class="docSection1Title">5.1. Aggregate Functions</H3><a name="IDX-CHP-5-0253"></a> 
+
+<p class="docText">An <I>aggregate function</I> (or <i>group function</i>) is a function that returns a result (one number) after calculations based on multiple rows. We use the term "aggregate" (instead of "group"), because it avoids confusion later in the book (we discuss other <tt>GROUP</tt> functions in <a class="docLink" href="learnsqlsvr05-CHP-9.html#learnsqlsvr05-CHP-9">Chapter 9</a>). An aggregate function basically combines multiple rows into a single number. Aggregate functions can be used to count the number of rows, find the sum or average of all the values in a given numeric column, and find the largest or smallest of the entries in a given column. In SQL, these aggregate functions are: <tt>COUNT</tt>,<a name="IDX-CHP-5-0254"></a> 
+<a name="IDX-CHP-5-0255"></a> 
+ <tt>SUM</tt>, <tt>AVG</tt>, <tt>MAX</tt>, and <tt>MIN</tt>, respectively. In this section, we examine several of these aggregate functions.</p>
+<a name="learnsqlsvr05-CHP-5-SECT-1.1"></a>
+<H4 id="title-IDAT4245" class="docSection2Title">5.1.1. The COUNT Function</H4>
+<p class="docText">The <tt>COUNT</tt> function is used to count how many (rows) of something there are, or the number of rows in a result set. Following is the general syntax for the <tt>COUNT</tt> function.</P>
+<pre>
+    SELECT COUNT(*)
+    FROM   Table-name(s)
+</pre><BR>
+
+<p class="docText"><tt>COUNT(*)</tt> returns a count of the number of rows in the table(s).</P>
+<p class="docText">The following query counts the number of rows in the table, <tt>Grade_report</tt>:</p>
+<pre>
+    SELECT COUNT(*) AS [Count]
+    FROM   Grade_report
+</pre><BR>
+
+<p class="docText">The following is its output:</p>
+<pre>
+    Count
+    -----------
+    209
+
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText"><tt>COUNT(*)</tt> counts all rows, including rows that have some (or even all) null values in some columns.</P>
+<p class="docText">In <a class="docLink" href="#learnsqlsvr05-CHP-5-FIG-1">Figure 5-1</a>, we present the table definition of the <tt>Grade_report</tt> table to remind you of the columns available in the <tt>Grade_report</tt> table.</P>
+<a name="learnsqlsvr05-CHP-5-FIG-1"></a><p><center>
+<h5 class="docFigureTitle">Figure 5-1. Table definition of the Grade_report table</h5>
+<img border="0" alt="" id="217066145005" width="272" height="76" SRC="images/learnsqlsvr05_0501.jpg">
+</center></p><BR>
+<p class="docText">Sometimes we want to count how many items we have in a specific column. The general syntax for counting the number of items in a specific column is:</p>
+<pre>
+    SELECT COUNT(attribute_name)
+    FROM   Table-name(s)
+</pre><br>
+
+<p class="docText">For example, to count the number of grades in the <tt>grade</tt> column of the <tt>Grade_report</tt> table, we could type the following:</p>
+<pre>
+    SELECT COUNT(grade) AS [Count of Grade]
+    FROM   Grade_report
+</pre><br>
+
+<p class="docText">This produces the following output:</P>
+<pre>
+    Count of Grade
+    --------------
+    114
+
+    (1 row(s) affected)
+</pre><BR>
+
+<p class="docText"><tt>COUNT(column)</tt> counts only non null columns. Although the <tt>Grade_report</tt> table has 209 rows, you get a count of 114 grades rather than 209 grades, because there are some null grades in the <tt>grade</tt> column.</p>
+<p class="docText">The <tt>COUNT</tt> feature can be quite useful because it can save you from unexpectedly long results. Also, you can use it to answer "how many" queries without looking at the row-values themselves. In <a class="docLink" href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a>, which showed how Cartesian products are generated, you learned that SQL does not prevent programmers from asking questions that have very long or even meaningless answers. Thus, when dealing with larger tables, it is good to first ask the question, "How many rows can I expect in my answer?" This question may be vital if a printout is involved. For example, consider the question, "How many rows are there in the Cartesian product of the <tt>Student</tt>, <tt>Section</tt>, and <tt>Grade_report</tt> tables in our database?" This is answered by the query:</p>
+<pre>
+    SELECT COUNT(*) AS Count
+    FROM   Student, Section, Grade_report
+</pre><br>
+
+<p class="docText">The following output shows the count from this query, which will be equal to the product of the table sizes of the three tables (the Cartesian product of the three tables). Obviously, in this example, it would be a good idea to first find out the number of rows in this result set before printing it.</p>
+<pre>
+    Count
+    -----------
+    321024
+
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText">Contrast the previous <tt>COUNT</tt>ing-query and its Cartesian product result to this query:</p>
+<pre>
+    SELECT  COUNT(*) AS [Count]
+    FROM    Student, Grade_report, Section
+    WHERE   Student.stno = Grade_report.student_number
+    AND     Grade_report.section_id  = Section.section_id
+</pre><br>
+
+<p class="docText">The following is the result of this query:</p>
+<pre>
+    Count
+    -----------
+    209
+
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText">What is requested here is a count of a three-way equi-join rather than a three-way Cartesian product, the result of which is something you probably would be much more willing to work with. Note also that you expect a count of about 209 from the sizes of the tables involved: <tt>Student</tt> (48 rows), <tt>Grade_report</tt> (209 rows), and <tt>Section</tt> (32 rows). The expected count of a join operation is of the order of magnitude of the larger number of rows in the tables.</p>
+<p class="docText">SQL syntax will <span class="docEmphasis">not</span> allow you to count two or more columns at the same time. The following query will not work:</p>
+<pre>
+    SELECT COUNT (grade, section_id)
+    FROM   Grade_report
+</pre><br>
+
+<p class="docText">You will get the following error message:</p>
+<pre>
+    Msg 174, Level 15, State 1, Line 2
+    The COUNT function requires 1 argument(s).
+</pre><br>
+
+
+<a name="learnsqlsvr05-CHP-5-SECT-1.2"></a>
+<H4 id="title-IDAAD345" class="docSection2Title">5.1.2. The SUM Function</h4><a name="IDX-CHP-5-0256"></a> 
+<a name="IDX-CHP-5-0257"></a> 
+<a name="IDX-CHP-5-0258"></a> 
+<a name="IDX-CHP-5-0259"></a> 
+<a name="IDX-CHP-5-0260"></a> 
+<a name="IDX-CHP-5-0261"></a> 
+<a name="IDX-CHP-5-0262"></a> 
+<a name="IDX-CHP-5-0263"></a> 
+<a name="IDX-CHP-5-0264"></a> 
+<a name="IDX-CHP-5-0265"></a> 
+<a name="IDX-CHP-5-0266"></a> 
+<a name="IDX-CHP-5-0267"></a> 
+
+<p class="docText">The <tt>SUM</tt> function totals the values in a numeric column. For example, suppose you have another table called <tt>Employee</tt> that looks like this:</p>
+<pre>
+    names           wage         hours
+    --------------- ------------ -----------
+    Sumon Bagui     10.0000      40
+    Sudip Bagui     15.0000      30
+    Priyashi Saha   18.0000      NULL
+    Ed Evans        NULL         10
+    Genny George    20.0000      40
+
+    (5 row(s) affected)
+</pre><br>
+
+<p class="docText">In this <tt>Employee</tt> table, <tt>names</tt> is defined as a <tt>NVARCHAR</tt> column, <tt>wage</tt> is defined as a <tt>SMALLMONEY</tt> column, and <tt>hours</tt> is defined as <tt>SMALLINT</tt>.</P>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">This <tt>Employee</tt> table has not been created for you in the <tt>Student_course</tt> database. You have to create and insert rows into it in order to run the following queries.</P></TD></TR></table></TD></TR></table></p><BR>
+<p class="docText">To find the sum of hours worked, use the <tt>SUM</tt> function like this:</p>
+<pre>
+    SELECT SUM(Hours) AS [Total hours]
+    FROM   Employee
+</pre><br>
+
+<p class="docText">This query produces the following output:</P>
+<pre>
+    Total hours
+    ---------------------
+    120
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+    (1 row(s) affected)
+</pre><BR>
+
+<p class="docText">Columns that contain null values are not included in the <tt>SUM</tt> function (and not in any aggregate numeric functions except <tt>COUNT(*)</tt>).</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText"><tt>AS [Total hours]</tt> is an illustration of an alternative way of giving a title to a column.</p></TD></TR></table></td></tr></table></p><br>
+
+<a name="learnsqlsvr05-CHP-5-SECT-1.3"></a>
+<h4 id="title-IDA5G345" class="docSection2Title">5.1.3. The AVG Function</h4><a name="IDX-CHP-5-0268"></a> 
+<a name="IDX-CHP-5-0269"></a> 
+<a name="IDX-CHP-5-0270"></a> 
+
+<p class="docText">The <tt>AVG</tt> function calculates the arithmetic mean (the sum of non null values divided by the number of non null values) of a set of values contained in a numeric column (or attribute) in the result set of a query. For example, if you want to find the average hours worked from the <tt>Employee</tt> table, type:</p>
+<pre>
+    SELECT AVG(hours) AS [Average hours]
+    FROM   Employee
+</pre><br>
+
+<p class="docText">This produces the following output:</p>
+<pre>
+    Average hours
+    ---------------------
+    30
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText">Again, note that the null value is ignored (not used) in the calculation of the average, so the total hours (120) is divided by 4 rather than 5.</p>
+
+<a name="learnsqlsvr05-CHP-5-SECT-1.4"></a>
+<h4 id="title-IDAHQ345" class="docSection2Title">5.1.4. The MIN and MAX Functions</h4>
+<p class="docText">The <tt>MIN</tt> function finds the minimum value from a column, and the <tt>MAX</tt> function finds the maximum value (once again, nulls are ignored). For example, to find the minimum and maximum wage from the <tt>Employee</tt> table, you could type the following:</p>
+<pre>
+    SELECT MIN(wage) AS [Minimum Wage], MAX(wage) AS [Maximum Wage]
+    FROM   Employee
+</pre><BR>
+
+<p class="docText">This query produces the following output:</p>
+<pre>
+    Minimum Wage Maximum Wage
+    ------------ ------------
+    20.0000
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText">The <tt>MIN</tt> and <tt>MAX</tt> functions also work with character and datetime columns. For example, if we type:</p>
+<pre>
+    SELECT "First name in alphabetical order" = MIN(names)
+    FROM   Employee
+</pre><BR>
+
+<p class="docText">We will get:</P>
+<pre>
+    First name in alphabetical order
+    --------------------------------
+    Ed Evans
+
+    (1 row(s) affected)
+</pre><BR>
+
+<p class="docText">And, if we type:</P>
+<pre>
+    SELECT "Last name in alphabetical order" = MAX(names)
+    FROM   Employee
+</pre><BR>
+
+<p class="docText">We will get:</p>
+<pre>
+    Last name in alphabetical order
+    -------------------------------
+    Sumon Bagui
+
+    (1 row(s) affected)
+</pre><br>
+
+<p class="docText">In the case of strings, the <tt>MIN</tt> and <tt>MAX</tt> are related to the collating sequence of the letters in the string. Internally, the column that we are trying to determine the <tt>MIN</tt> or <tt>MAX</tt> of is sorted alphabetically. Then, <tt>MIN</tt> returns the first (top) of the alphabetical list, and <tt>MAX</tt> returns the last (bottom) of the alphabetical list.</p>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-5-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

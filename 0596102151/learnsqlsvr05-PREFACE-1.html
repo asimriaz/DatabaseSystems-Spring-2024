@@ -1,0 +1,184 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Learning SQL on SQL Server </title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=toc.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle"
+                            alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-DEDICATION.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-PREFACE-1"></a>
+                <H2 id="title-IDAWU1G5" class="docPrefaceTitle">Learning SQL on SQL Server </H2>
+                <p class="docText">Learning SQL on SQL Server </P>
+                <p class="docText">by Sikha Saha Bagui and Richard Walsh Earp</P>
+                <p class="docText">Copyright &#169; 2006 O'Reilly Media, Inc. All rights reserved.</p>
+                <p class="docText">Printed in the United States of America.</p>
+                <p class="docText">Published by O'Reilly Media, Inc., 1005 Gravenstein Highway North, Sebastopol, CA
+                    95472.</p>
+                <p class="docText">O'Reilly books may be purchased for educational, business, or sales promotional use.
+                    Online editions are also available for most titles (<a class="docLink" target="_blank"
+                        href="http://safari.oreilly.com">safari.oreilly.com</a>). For more information, contact our
+                    corporate/institutional sales department: (800) 998-9938 or <a class="docLink"
+                        href="mailto:corporate@oreilly.com">corporate@oreilly.com</a>.</P>
+                <P>
+                <table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%">
+                    <colgroup span="2">
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead></thead>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Editor:</span></P>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Jeff Pepper</p>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Production Editor:</span></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Philip Dangler</P>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Copyeditor:</span></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Nancy Wolfe Kotary</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Indexer:</span></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Johnna VanHoose Dinse</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Cover Designer:</span></P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Karen Montgomery</p>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Interior Designer:</span></P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">David Futato</p>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Cover Illustration:</span></P>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Dover Pictoral Archive</p>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Illustrators:</span></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Robert Romano and Jessamyn Read</P>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <P>
+                <table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%">
+                    <colgroup span="2">
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead></thead>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><span class="docEmphStrong">Printing History:</span></p>
+                        </td>
+                        <td class="docTableCell">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">April 2006:</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">First Edition.</p>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <p class="docText">Nutshell Handbook, the Nutshell Handbook logo, and the O'Reilly logo are registered
+                    trademarks of O'Reilly Media, Inc. <span class="docEmphasis">Learning SQL on SQL Server </span>, the
+                    image of a ribbed newt, and related trade dress are trademarks of O'Reilly Media, Inc.</p>
+                <p class="docText">Adapted with permission from <span class="docEmphasis">Learning SQL: Step-by-Step GD
+                        Using Oracle</span> by Bagui and Earp, pp. 48-61, 69-70, 85, 89-93, 105-108, 109-110, 114-120,
+                    122-129, 131-133, 135-152,153-166, 167-183, 185-213, Appendix 3, and Glossary of Terms, &#169; 2003
+                    Pearson Education, Inc. Reprinted by permission of Pearson Education, Inc., Publishing as Pearson
+                    Addison-Wesley. All rights reserved.</p>
+                <p class="docText">Adaptated with permission from, <span class="docEmphasis">Learning SQL: Step-by-Step
+                        GD Using Access</span> by Bagui and Earp, pp. 64-77, &#169; 2003 Pearson Education, Inc.
+                    Reproduced by permission of Pearson Education, Inc. Publishing as Pearson Addison Wesley. All rights
+                    reserved.</P>
+                <p class="docText">Oracle&#174; and all Oracle-based trademarks and logos are trademarks or registered
+                    trademarks of Oracle Corporation, Inc. in the United States and other countries. O'Reilly Media,
+                    Inc. is independent of Oracle Corporation.</P>
+                <p class="docText">Many of the designations used by manufacturers and sellers to distinguish their
+                    products are claimed as trademarks. Where those designations appear in this book, and O'Reilly
+                    Media, Inc. was aware of a trademark claim, the designations have been printed in caps or initial
+                    caps.</P>
+                <p class="docText">While every precaution has been taken in the preparation of this book, the publisher
+                    and authors assume no responsibility for errors or omissions, or for damages resulting from the use
+                    of the information contained herein.</P>
+
+                <p class="docText">ISBN: 0-596-10215-1</P>
+                <p class="docText">[M]</p>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=toc.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle"
+                            alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-DEDICATION.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

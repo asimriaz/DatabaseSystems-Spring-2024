@@ -1,0 +1,492 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 3.3.&nbsp; Inserting Values into a Table</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-3"></a>
+                <H3 id="title-IDAHXEK" class="docSection1Title">3.3. Inserting Values into a Table</H3><a
+                    name="IDX-CHP-3-0181"></a>
+                <a name="IDX-CHP-3-0182"></a>
+
+                <p class="docText">There are several ways to insert values into a table using SQL in SQL Server . We
+                    will illustrate the two most commonly used ways: using <tt>INSERT INTO .. VALUES</tt> and using
+                    <tt>INSERT INTO .. SELECT</tt>.</P>
+                <a name="learnsqlsvr05-CHP-3-SECT-3.1"></a>
+                <H4 id="title-IDA2XEK" class="docSection2Title">3.3.1. Using INSERT INTO .. VALUES</h4>
+                <p class="docText">One way to insert values into <span class="docEmphasis">one</span> row of a table is
+                    to use the <tt>INSERT INTO</tt> command with the <tt>VALUES</tt> option. The <tt>INSERT INTO ..
+                        VALUES</tt> option needs the column list and all the columns in the correct order.</p>
+                <p class="docText">The general syntax for the <tt>INSERT INTO .. VALUES</tt> option is:</p>
+                <pre>
+INSERT INTO TableName
+VALUES ('character_attribute_value', numeric_attribute_value, ...)
+</pre><BR>
+
+                <p class="docText">We will first illustrate inserting data with the <tt>INSERT INTO .. VALUES</tt>
+                    option using the <tt>Names</tt> table we created in the preceding section. So, type the following in
+                    the query editor:</P>
+                <pre>
+INSERT INTO Names
+VALUES ('Joe Smith')
+</pre><BR>
+
+                <p class="docText">where:</P>
+                <UL>
+                    <li>
+                        <p class="docList"><tt>INSERT</tt> is the SQL command to insert data</P>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>INTO</tt> is a necessary keyword</P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>Names</tt> is the name of an existing table</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>VALUES</tt> is another necessary keyword</P>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>'Joe Smith'</tt> is a string of letters corresponding to the
+                            <tt>VARCHAR</tt> data type</p>
+                    </li>
+                </UL>
+                <p class="docText">Then click the Execute button. You will get a message that will tell you how many
+                    rows were inserted by the query:</P>
+                <pre>
+(1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Now, if you type the following SQL query:</p>
+                <pre>
+SELECT *
+FROM    Names
+</pre><br>
+
+                <p class="docText">You will get:</p>
+                <pre>
+fullname
+--------------------
+Joe Smith
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+                <p class="docText">The <tt>INSERT INTO .. VALUES</tt> option appends rows to a table (that is, rows are
+                    added to the end of the table). So, if you use the <tt>INSERT INTO .. VALUES</tt> option again as
+                    follows:</p>
+                <pre>
+INSERT INTO Names
+VALUES ('Sudip Kumar')
+</pre><br>
+
+                <p class="docText">And then type:</p>
+                <pre>
+SELECT *
+FROM    Names
+</pre><br>
+
+                <p class="docText">You get this result:</p>
+                <pre>
+fullname
+--------------------
+Joe Smith
+Sudip Kumar
+&nbsp;
+(2 row(s) affected)
+</pre><br>
+
+                <p class="docText">If you created a table with <tt><i>n</i></tt> attributes (columns), you usually would
+                    have <tt><i>n</I></tt> values in the <tt>INSERT INTO .. VALUES</tt> statement, in the order of the
+                    definition of the columns in the table. For example, to insert into the <tt>Employee</tt> table that
+                    you created earlier, the <tt>INSERT INTO .. VALUES</tt> statement to insert a row would have to
+                    match column for column and would look like this:</p>
+                <pre>
+INSERT INTO Employee
+VALUES ('Joe Smith', '123 4th St.', 101, 2500)
+</pre><br>
+
+                <p class="docText">Note that character data is entered with single quotes around it. Numeric data does
+                    not use quotes (as shown by 101 and 2500).</p>
+                <p class="docText">Now if you type:</P>
+                <pre>
+SELECT *
+FROM    Employee
+</pre><BR>
+
+                <p class="docText">You get the following:</P>
+                <pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">An <tt>INSERT</tt> that looks like the following is incorrect, because it does not
+                    include all four columns of the <tt>Employee</tt> table:</P>
+                <pre>
+INSERT INTO Employee
+VALUES ('Joe Smith', '123 4th St.')
+</pre><br>
+
+                <p class="docText">You may <tt>INSERT</tt> a row with less than all the columns by naming the columns
+                    you want to insert into, like this:</p>
+                <pre>
+INSERT INTO Employee (names, address)
+VALUES ('Joe Smith', '123 4th St.')
+</pre><br>
+
+                <p class="docText">In this case, the row will contain nulls or default values for the values left out,
+                    which you will see if you type:</P>
+                <pre>
+SELECT *
+FROM Employee
+</pre><BR>
+
+                <p class="docText">This will give:</P>
+                <pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+Joe Smith            123 4th St.          NULL            NULL
+&nbsp;
+(2 row(s) affected)
+</pre><BR>
+
+                <p class="docText">An <tt>INSERT</tt> that looks like the following is incorrect, because it does not
+                    have the values in the same order as the definition of the table:</P>
+                <pre>
+INSERT INTO Employee
+VALUES (2500, 'Joe Smith', 101, '123 4th St.')
+</pre><br>
+
+                <p class="docText">If for some reason the data had to be entered in this order, the previous statement
+                    could be corrected by specifying the column names, as shown here:</P>
+                <pre>
+INSERT INTO Employee (salary, names, employee_number, address)
+VALUES (2500, 'Joe Smith', 101, '123 4th St.')
+</pre><br>
+
+                <p class="docText">At this point, typing:</p>
+                <pre>
+SELECT *
+FROM Employee
+</pre><BR>
+
+                <p class="docText">would give us the following output:</P>
+                <pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+Joe Smith            123 4th St.          NULL            NULL
+Joe Smith            123 4th St.          101             2500.00
+&nbsp;
+(3 row(s) affected)
+</pre><br>
+
+                <p class="docText">You may actually include the keyword, null, if the <tt>address</tt> and the
+                    <tt>salary</tt> were unknown:</p>
+                <pre>
+INSERT INTO Employee
+VALUES ('Joe Smith', null, 101, null)
+</pre><br>
+
+                <p class="docText">Now having added four rows to our table, type:</p>
+                <pre>
+SELECT *
+FROM Employee
+</pre><BR>
+
+                <p class="docText">This query will give the following output:</p>
+                <pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+Joe Smith            123 4th St.          NULL            NULL
+Joe Smith            123 4th St.          101             2500.00
+Joe Smith            NULL                 101             NULL
+&nbsp;
+(4 row(s) affected)
+</pre><br>
+
+                <p class="docText">To delete all the rows in the <tt>Employee</tt> table as well as in the
+                    <tt>Names</tt> table, type:</p>
+                <pre>
+DELETE FROM Employee
+</pre><br>
+
+                <p class="docText">Then:</P>
+                <pre>
+DELETE FROM Names
+</pre><BR>
+
+                <p class="docText">We will revisit the <tt>DELETE</tt> command later in the chapter.</p>
+                <p class="docText">For the rest of this chapter, we will set up our <tt>Employee</tt> table with more
+                    meaningful data. Suppose we deleted all the test rows from the previous examples with a
+                    <tt>DELETE</tt> statement and then suppose we used the <tt>INSERT INTO .. VALUES</tt> option to
+                    insert valid data into the <tt>Employee</tt> table, making it look like this:</p>
+                <pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+Pradeep Saha         27 Shillingford      103             3300.00
+Sumit Kumar          95 Oxford Rd         105             1200.00
+Joya Das             23 Pesterfield Cr    114             2290.00
+Terry Livingstone    465 Easter Ave       95              3309.00
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">More than one <tt>INSERT INTO .. VALUES</tt> command can be
+                                            typed in on one screen in SQL Server .</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-3.2"></a>
+                <h4 id="title-IDAZ4DK4" class="docSection2Title">3.3.2. Using INSERT INTO .. SELECT</H4><a
+                    name="IDX-CHP-3-0183"></a>
+                <a name="IDX-CHP-3-0184"></a>
+
+                <p class="docText">With the <tt>INSERT INTO .. VALUES</tt> option, you insert only one row at a time
+                    into a table. With the <tt>INSERT INTO .. SELECT</tt> option, you may (and usually do) insert <span
+                        class="docEmphasis">many</span> rows into a table at one time.</P>
+                <p class="docText">The general syntax for the <tt>INSERT INTO .. SELECT</tt> option is:</P>
+                <pre>
+INSERT INTO target_table(column1, column2, column3, ...)
+ "SELECT clause"
+</pre><BR>
+
+                <p class="docText">We will first illustrate inserting with the <tt>INSERT INTO .. SELECT</tt> by
+                    populating the <tt>Names</tt> table (the one that you created earlier in this chapter and then
+                    removed all rows from with a <tt>DELETE FROM Names</tt>). To copy all the names from the
+                    <tt>Employee</tt> table into the <tt>Names</tt> table, type the following:</P>
+                <pre>
+INSERT INTO Names(fullname)
+  SELECT  names
+  FROM    Employee
+</pre><br>
+
+                <p class="docText">And now if you type:</p>
+                <pre>
+SELECT *
+FROM   Names
+</pre><br>
+
+                <p class="docText">you will get the following five rows of output:</P>
+                <pre>
+fullname
+--------------------
+Joe Smith
+Pradeep Saha
+Sumit Kumar
+Joya Das
+Terry Livingstone
+&nbsp;
+(5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">We do not have to copy all the names from the <tt>Employee</tt> table to the
+                    <tt>Names</tt> table. For example, we could restrict the <tt>INSERT .. SELECT</tt> like this:</P>
+                <pre>
+INSERT INTO Names(fullname)
+  SELECT names
+  FROM   Employee
+  WHERE  salary &gt; 2600
+</pre><BR>
+
+                <p class="docText">This would give us only the following two rows in <tt>Names</tt>:</P>
+                <pre>
+fullname
+--------------------
+Pradeep Saha
+Terry Livingstone
+&nbsp;
+(2 row(s) affected)
+</pre><br>
+
+                <p class="docText">As with the <tt>INSERT INTO .. VALUES</tt> option, if you create a table with
+                    <tt><I>n</i></tt> columns, you usually would have <tt><i>n</I></tt> values in the <tt>INSERT INTO ..
+                        SELECT</tt> option in the order of the table definition, or you would have to name the columns
+                    you are inserting. For example, suppose we have a table called <tt>Emp1</tt>, created with three
+                    columns:</P>
+                <pre>
+Emp1 (addr, sal, empno)
+</pre><br>
+
+                <p class="docText">The columns, <tt>addr</tt>, <tt>sal</tt>, <tt>empno</tt>, stand for address, salary,
+                    and employee number, respectively.</p>
+                <p class="docText">Now suppose that we want to load the existing empty table called <tt>Emp1</tt> from
+                    the <tt>Employee</tt> table with the appropriate columns.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">As with the <tt>INSERT INTO .. VALUES</tt> option, the
+                                            <tt>INSERT INTO .. SELECT</tt> option has to match column for column.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">An <tt>INSERT INTO .. SELECT</tt> statement would look like this:</p>
+                <pre>
+INSERT INTO Emp1(addr, sal, empno)
+  SELECT address, salary, employee_number
+  FROM   Employee
+</pre><br>
+
+                <p class="docText">The <tt>Emp1</tt> table would now have the following five rows:</p>
+                <pre>
+addr                 sal          empno
+-------------------- ------------ -----------
+123 4th St.          2500.00        101
+27 Shillingford      3300.00        103
+95 Oxford Rd         1200.00        105
+23 Pesterfield Cr    2290.00        114
+465 Easter Ave       3309.00        95
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+                <p class="docText">If we created a table, <tt>Emp2</tt>, with identical columns (or attributes) as
+                    <tt>Emp1</tt>, we could use the following <tt>INSERT</tt> to load data from table <tt>Emp1</tt> to
+                    <tt>Emp2</tt>:</p>
+                <pre>
+INSERT INTO Emp2
+   SELECT *
+      FROM Emp1
+</pre><br>
+
+                <p class="docText">The <tt>Emp2</tt> table would now have the same data as the <tt>Emp1</tt> table. This
+                    is one way of creating a backup table.</p>
+                <p class="docText">Again, note that the <tt>Emp2</tt> table has to exist (be created with the same
+                    columns and types) before loading it with the <tt>INSERT INTO .. SELECT</tt> option.</p>
+                <p class="docText">One caution must be pointed out, however. An erroneous <tt>INSERT INTO .. SELECT</tt>
+                    could succeed if the data types of the <tt>SELECT</tt> match the data types of the columns in the
+                    table to which we are inserting. For example, say we execute the following statement (remember that
+                    both <tt>sal</tt> and <tt>empno</tt> are numeric types):</P>
+                <pre>
+INSERT INTO Emp1 (addr, sal, empno)
+  SELECT address, employee_number, salary
+  FROM   Employee
+</pre><br>
+
+                <p class="docText">This <tt>INSERT</tt> will succeed because the data types match. The following output
+                    results after executing the previous <tt>INSERT</tt> statement:</p>
+                <pre>
+addr                 sal          empno
+-------------------- ------------ -----------
+123 4th St.          101.00        2500
+27 Shillingford      103.00        3300
+95 Oxford Rd         105.00        1200
+23 Pesterfield Cr    114.00        2290
+465 Easter Ave       95.00         3309
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+                <p class="docText">The wrong information has been inserted in <tt>Emp1</tt>'s columns. The
+                    <tt>employee_number</tt> from <tt>Employee</tt> has been inserted into the <tt>sal</tt> column in
+                    <tt>Emp1</tt>, and the <tt>salary</tt> of <tt>Employee</tt> has been inserted into the
+                    <tt>empno</tt> column of <tt>Emp1</tt>. So, be careful and line up or match up the columns
+                    (attributes) in the <tt>INSERT INTO</tt> and <tt>SELECT</tt> statements when using an <tt>INSERT
+                        INTO .. SELECT</tt>.</P>
+                <p class="docText">As you might have already guessed from the <tt>INSERT INTO .. VALUES</tt> section,
+                    you do not have to insert the whole row with an <tt>INSERT INTO..SELECT</tt>. You may load fewer
+                    columns than a whole row of <tt>Employee</tt> with <tt>INSERT .. SELECT</tt>. Once again, if we
+                    delete all rows from <tt>Emp1</tt>, and then execute a statement like this:</P>
+                <pre>
+INSERT INTO Emp1 (addr, sal)
+  SELECT  address, salary
+  FROM    Employee
+</pre><BR>
+
+                <p class="docText">This <tt>INSERT</tt> would leave the other column, <tt>empno</tt> (of the
+                    <tt>Emp1</tt> table), with nulls as shown here:</P>
+                <pre>
+SELECT *
+FROM   Emp1
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+addr                 sal          empno
+-------------------- ------------ -----------
+123 4th St.          2500.00      NULL
+27 Shillingford      3300.00      NULL
+95 Oxford Rd         1200.00      NULL
+23 Pesterfield Cr    2290.00      NULL
+465 Easter Ave       3309.00      NULL
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+                <p class="docText">In conclusion, you must be careful with the <tt>INSERT INTO .. SELECT</tt> option,
+                    because, unlike the <tt>INSERT INTO .. VALUES</tt> option (which inserts one row at a time), you
+                    almost always insert multiple rows, and if types match, the insert will take place whether it makes
+                    sense or not.</p>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

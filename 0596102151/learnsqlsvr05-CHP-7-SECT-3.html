@@ -1,0 +1,64 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 7.3.&nbsp; The UNION ALL Operation</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-3"></a>
+<h3 id="title-IDA3SEGAB" class="docSection1Title">7.3. The UNION ALL Operation</H3><a name="IDX-CHP-7-0411"></a> 
+
+<p class="docText"><tt>UNION ALL</tt> works exactly like <tt>UNION</tt>, but does not expunge duplicates or sort the results. <tt>UNION ALL</tt> is more efficient in execution (because <tt>UNION ALL</tt> does not have to expunge the duplicates), and occasionally you may need to keep duplicates (just to keep all occurrences or records), in which case you can use <tt>UNION ALL</tt>.</p>
+<p class="docText">The following is the same query previously shown for <tt>UNION</tt>, but using <tt>UNION ALL</tt> instead of <tt>UNION</tt>:</p>
+<pre>
+    SELECT sname
+    FROM Student
+    WHERE major = 'COSC'
+      UNION ALL
+    SELECT sname
+    FROM Student
+    WHERE major = 'MATH'
+</pre><BR>
+
+<p class="docText">This query results in 17 unsorted rows, including one duplicate, Jake; using <tt>UNION</tt> produced 16 rows with no duplicates:</p>
+<pre>
+    sname
+    --------------------
+    Mary
+    Zelda
+    Brenda
+    Lujack
+    Elainie
+    Jake
+    Hillary
+    Brad
+    Alan
+    Jerry
+    Mario
+    Kelly
+    Reva
+    Monica
+    Sadie
+    Stephanie
+    Jake
+
+    (17 row(s) affected)
+</pre><BR>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

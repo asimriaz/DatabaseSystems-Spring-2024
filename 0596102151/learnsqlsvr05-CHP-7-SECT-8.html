@@ -1,0 +1,138 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 7.8.&nbsp; A UNION Used to Implement a Full Outer Join</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-7.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-9.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-8"></a>
+                <h3 id="title-IDA2WX53" class="docSection1Title">7.8. A UNION Used to Implement a Full Outer Join</H3>
+                <p class="docText">In <a class="docLink" href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter
+                        4</a>, you read that the outer join adds rows to the result set that would otherwise be dropped
+                    from an inner join of both tables due to the join condition. Remember that an inner join (also known
+                    as an equi-join, ordinary join or regular join) combines two tables by finding common values on some
+                    column(s) common to the two tables. In an outer join, we are saying, "we want all the rows from one
+                    table and only the joined rows from the other." In SQL Server , the outer joins are in two
+                    classesleft and right, depending on how the query is written. A full outer join means that we want
+                    all rows from both tables being joined, and "fill in those rows where a join does not produce a
+                    result with nulls." In SQL Server , a <tt>UNION</tt> can also be used to achieve this full outer
+                    join.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Some SQL languages do not directly support the full outer
+                                            join, but SQL Server directly supports it.</P>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><BR>
+                <p class="docText">In SQL Server , you can create a full outer join by writing a union of the left outer
+                    join and the right outer join, like this:</P>
+                <pre>
+    SELECT with right outer join
+    UNION
+    SELECT with left outer join
+</pre><br>
+
+                <p class="docText">The order of the left outer join and the right outer join does not matter and can be
+                    reversed. To illustrate the workings of the <tt>UNION</tt> version of the full outer join, let us
+                    again use the table called <tt>Instructor</tt>, created earlier in this chapter:</p>
+                <pre>
+    iname                teaches
+    -------------------- --------------------
+    Richard              COSC
+    Subhash              MATH
+    Tapan                BIOCHEM
+</pre><br>
+
+                <p class="docText">If we want to get a listing of all instructors and the names of the departments for
+                    which they teach (which will be done by a regular equi-join) plus a listing of the rest of the
+                    instructors, regardless of whether they belong to a department, plus a listing of the rest of the
+                    departments, regardless of whether they have instructors, we would write the following query to
+                    achieve the full outer join effect with a <tt>UNION</tt>:</p>
+                <pre>
+    SELECT *
+    FROM Department_to_major AS d LEFT JOIN Instructor AS I
+    ON d.dcode=i.teaches
+        UNION
+    SELECT *
+    FROM Department_to_major AS d RIGHT JOIN Instructor AS I
+    ON d.dcode=i.teaches
+</pre><BR>
+
+                <p class="docText">This query produces the following output (9 rows):</p>
+                <pre>
+    Dcode DNAME                iname                teaches
+    ----- -------------------- -------------------- --------------------
+    NULL  NULL                 Tapan                BIOCHEM
+    ACCT  Accounting           NULL                 NULL
+    ART   Art                  NULL                 NULL
+    CHEM  Chemistry            NULL                 NULL
+    COSC  Computer Science     Richard              COSC
+    ENGL  English              NULL                 NULL
+    MATH  Mathematics          Subhash              MATH
+    POLY  Political Science    NULL                 NULL
+    UNKN                       NULL                 NULL
+
+    (9 row(s) affected)
+</pre><br>
+
+                <p class="docText">First, the <tt>LEFT JOIN</tt> was done, outer joining the
+                    <tt>department_to_major</tt> table and the <tt>Instructor</tt> table (so that all the rows of the
+                    <tt>department_to_major</tt> table were added to the result set). Then, a <tt>RIGHT JOIN</tt> was
+                    done, again joining the <tt>department_to_major</tt> table to the <tt>Instructor</tt> table (but
+                    this time all the rows of the <tt>Instructor</tt> table were added to the result set). Finally, a
+                    <tt>UNION</tt> of the two results sets was performed, creating the effect of a full outer join
+                    (where the rows from both the tables were added back after the join).</P>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-7.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-9.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

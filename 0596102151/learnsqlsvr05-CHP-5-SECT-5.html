@@ -1,0 +1,186 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.5.&nbsp; CONVERSION Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-5-SECT-5"></a>
+                <h3 id="599419-811" class="docSection1Title">5.5. CONVERSION Functions</H3><a name="IDX-CHP-5-0330"></a>
+
+                <p class="docText">Sometimes data in a table is stored in a particular data type, but you need to have
+                    the data in another data type. For example, let us suppose that <tt>columnA</tt> of <tt>TableA</tt>
+                    is of character data type, but you need to use this column as a numeric column in order to do some
+                    mathematical operations. Similarly, there are times where you have a table with numeric data types
+                    and you need characters. What do you do? SQL Server provides three functions for converting data
+                    types--<tt>CAST</tt>,<a name="IDX-CHP-5-0331"></a>
+                    <a name="IDX-CHP-5-0332"></a>
+                    <tt>CONVERT</tt>, and <tt>STR</tt>. In the following subsections, we discuss each of these
+                    functions.
+                </p>
+                <a name="learnsqlsvr05-CHP-5-SECT-5.1"></a>
+                <h4 id="title-IDALX1O5" class="docSection2Title">5.5.1. The CAST Function</H4>
+                <p class="docText">The <tt>CAST</tt> function is a very useful SQL Server function that allows you to
+                    change a data type of a column. The <tt>CAST</tt> result can then be used for:</p>
+                <UL>
+                    <li>
+                        <p class="docList">Concatenating strings</P>
+                    </LI>
+                    <LI>
+                        <p class="docList">Joining columns that were not envisioned as related</P>
+                    </li>
+                    <LI>
+                        <p class="docList">Performing unions of tables (unions are discussed in <a class="docLink"
+                                href="learnsqlsvr05-CHP-7.html#learnsqlsvr05-CHP-7">Chapter 7</a>)</P>
+                    </li>
+                    <LI>
+                        <p class="docList">Performing mathematical operations on columns that were defined as character
+                            but which actually contain numbers that need to be calculated.</P>
+                    </li>
+                </ul>
+                <p class="docText">Some conversions are automatic and implicit, so using <tt>CAST</tt> is not necessary.
+                    For example, converting between numbers with types <tt>INT</tt>, <tt>SMALLINT</tt>,
+                    <tt>TINYINT</tt>, <tt>FLOAT</tt>, <tt>NUMERIC</tt>, and so on is done automatically and implicitly
+                    as long as an overflow does not occur. But, converting numbers with decimal places to integer data
+                    types truncates values to the right of the decimal place without a warning, so you should use
+                    <tt>CAST</tt> if a loss of precision is possible.</p>
+                <p class="docText">The general form of the syntax for the <tt>CAST</tt> function is:</p>
+                <pre>
+    CAST (original_expression AS desired_datatype)
+</pre><BR>
+
+                <p class="docText">To illustrate the <tt>CAST</tt> function, we will use the <tt>Employee</tt> table
+                    that we created earlier in this chapter. In this table, <tt>names</tt> was defined as a
+                    <tt>NVARCHAR</tt> column, <tt>wage</tt> was defined as a <tt>SMALLMONEY</tt> column, and
+                    <tt>hours</tt> was defined as a <tt>SMALLINT</tt> column. We will use <tt>CAST</tt> to change the
+                    display of the <tt>hours</tt> column to a character column so that we can concatenate a string to
+                    it, as shown in the following query:</p>
+                <pre>
+    SELECT names, wage, hours = CAST(hours AS CHAR(2)) + ' hours worked per week'
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query will give us:</P>
+                <pre>
+    names                wage         hours
+    -------------------- ------------ ------------------------
+    Sumon Bagui          10.0000      40 hours worked per week
+    Sudip Bagui          15.0000      30 hours worked per week
+    Priyashi Saha        18.0000      NULL
+    Ed Evans             NULL         10 hours worked per week
+    Genny George         20.0000      40 hours worked per week
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText"><tt>CAST</tt> will truncate the value or column if the character length is smaller
+                    than the size required for full display.</P>
+                <p class="docText"><tt>CAST</tt> is a subset of the <tt>CONVERT</tt> function, and was added to SQL
+                    Server to comply with ANSI-92 specifications.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-5.2"></a>
+                <h4 id="title-IDAR01O5" class="docSection2Title">5.5.2. The STR Function</h4><a
+                    name="IDX-CHP-5-0333"></a>
+                <a name="IDX-CHP-5-0334"></a>
+                <a name="IDX-CHP-5-0335"></a>
+
+                <p class="docText"><tt>STR</tt> is a specialized conversion function that always converts from a number
+                    (for example, float or numeric) to a character data type. It allows you to explicitly specify the
+                    length and number of decimal places that should be formatted for the character string.</p>
+                <p class="docText">The general form of the syntax for the <tt>STR</tt> function is:</p>
+                <pre>
+    STR(<tt><i>float_expression</i></tt>, <tt><i>character_length</i></tt>, <tt><i>number_of_decimal_places</i></tt>)
+</pre><br>
+
+                <p class="docText"><tt><i>character_length</i></tt> <tt>and</tt>
+                    <tt><i>number_of_decimal_places</I></tt> are optional arguments.</p>
+                <p class="docText"><tt><i>character_length</I></tt> must include room for a decimal place and a negative
+                    sign. <tt>STR</tt> rounds a value to the number of decimal places requested.</p>
+                <p class="docText">We will illustrate the use of the <tt>STR</tt> function using the <tt>Employee</tt>
+                    table that we created earlier in this chapter. In this table, the <tt>hours</tt> column is a
+                    <tt>SMALLINT</tt> column. To format it to two decimal places, we can use <tt>STR</tt>. Note that we
+                    have to make the character length 5 in this case in order to accommodate the <tt>.00</tt> (the
+                    decimal point and zeros). Following is the query showing this:</p>
+                <pre>
+    SELECT names, wage, hours = STR(hours, 5, 2)
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">which produces:</p>
+                <pre>
+    names                wage                  hours
+    -------------------- --------------------- -----
+    Sumon Bagui          10.00                 40.00
+    Sudip Bagui          15.00                 30.00
+    Priyashi Saha        18.00                 NULL
+    Ed Evans             NULL                  10.00
+    Genny George         20.00                 40.00
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-5.3"></a>
+                <H4 id="title-IDA121O5" class="docSection2Title">5.5.3. The CONVERT Function</h4><a
+                    name="IDX-CHP-5-0336"></a>
+                <a name="IDX-CHP-5-0337"></a>
+                <a name="IDX-CHP-5-0338"></a>
+
+                <p class="docText">Just like the <tt>CAST</tt> function, the <tt>CONVERT</tt> function is also used to
+                    explicitly convert to a given data type. But, the <tt>CONVERT</tt> function has additional limited
+                    formatting capabilities.</P>
+                <p class="docText">The general syntax for the <tt>CONVERT</tt> function is:</p>
+                <pre>
+    CONVERT(<tt><I>desired_datatype</I></tt>[(<tt><I>length</I></tt>)], <tt><i>original_expression</I></tt> [, <tt><I>style</i></tt>])
+</pre><BR>
+
+                <p class="docText"><tt>CONVERT</tt> has an optional third parameter, <tt>style</tt>, which is used for
+                    formatting. If <tt>style</tt> is not specified, it will use the default style. Because the
+                    <tt>CONVERT</tt> function has formatting capabilities, it is widely used when displaying dates in a
+                    particular format. Examples of the use of the <tt>CONVERT</tt> function are presented in the
+                    section, "<a class="docLink"
+                        href="learnsqlsvr05-CHP-5-SECT-6.html#learnsqlsvr05-CHP-5-SECT-6.2">Default Date Formats and
+                        Changing Date Formats</a>" later in this chapter.</P>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

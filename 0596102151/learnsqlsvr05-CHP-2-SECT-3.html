@@ -1,0 +1,124 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 2.3.&nbsp; The COUNT Function</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-3"></a>
+<H3 id="title-IDAT1OSIB" class="docSection1Title">2.3. The COUNT Function</H3><a name="IDX-CHP-2-0103"></a> 
+<a name="IDX-CHP-2-0104"></a> 
+
+<p class="docText">The <tt>COUNT</tt> function is used to return a count of the number of rows that the output will produce, without actually displaying all of the output (rows) themselves. This function often comes in handy when you have large tables, or you expect a large output. In such situations, it is desirable to determine the number of rows of output that you will be getting before actually displaying the output. In this section, we introduce the <tt>COUNT</tt> function and we also take another look at the concept of null values.</P>
+<p class="docText">If you type the following command:</P>
+<pre>
+SELECT *
+FROM   Dependent
+</pre><br>
+
+<p class="docText">you will get an output that includes all the rows of the <tt>Dependent</tt> table plus all the values for all columns in those rows. If you want to know only the <span class="docEmphasis">number</span> of rows in the output (rather than view the actual rows themselves), type the following:</p>
+<pre>
+SELECT COUNT(*)
+FROM   Dependent
+</pre><br>
+
+<p class="docText">This query produces the following output:</P>
+<pre>
+-----------
+39
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+<p class="docText">This output says that there are 39 rows in the <tt>Dependent</tt> table. Note that the actual rows themselves are not displayed.</P>
+<p class="docText">It is often useful to count the occurrence of column values that have a value. For example, suppose we want to find how many nonnull rows are in a particular column. With this query:</P>
+<pre>
+SELECT COUNT(age)
+FROM   Dependent
+</pre><BR>
+
+<p class="docText">we get:</p>
+<pre>
+-----------
+36
+&nbsp;
+Warning: Null value is eliminated by an aggregate or other SET operation.
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+<p class="docText"><tt>COUNT(age)</tt> counts only the rows in which age is not null, meaning that it counts only the rows that have a defined value. Therefore, the preceding output is 36 rows rather than 39 rows because the age column in the <tt>Dependent</tt> table includes 3 null values. If you want <tt>COUNT</tt> to count rows and include rows that have fields with null values, you would use <tt>COUNT(*)</tt>. In the next section, we discuss null values in more detail.</p>
+<a name="learnsqlsvr05-CHP-2-SECT-3.1"></a>
+<h4 id="title-IDAR3OSIB" class="docSection2Title">2.3.1. IS NULL</H4><a name="IDX-CHP-2-0105"></a> 
+<a name="IDX-CHP-2-0106"></a> 
+<a name="IDX-CHP-2-0107"></a> 
+<a name="IDX-CHP-2-0108"></a> 
+
+<p class="docText">Null values are used to designate missing data in columns. The <tt>IS NULL</tt> condition is the only condition that directly tests for nulls. Null values are unmatched by all other conditions in <tt>WHERE</tt> clauses. Rows with null values cannot be retrieved by using <tt>= NULL</tt> in a <tt>WHERE</tt> clause, because <tt>NULL</tt> signifies a missing value. No value is considered to be equal to, greater than, or less than <tt>NULL</tt>. Even a space is not considered to be a <tt>NULL</tt>, and a null is not considered to be a space. Nulls are not considered like any other value in a table either, since nulls do not have data types. Also, because nulls do not have data types, there is no distinction between nulls in numeric columns and nulls in text columns or date columns.</P>
+<p class="docText">The following query provides dependent names and the ages of dependents (from the <tt>Dependent</tt> table) that have null values for their age columns:</p>
+<pre>
+SELECT dname, age
+FROM   Dependent
+WHERE  age IS NULL
+</pre><br>
+
+<p class="docText">This produces the following three rows of output:</p>
+<pre>
+dname                age
+-------------------- ------
+Donald II            NULL
+Mita                 NULL
+Losmith              NULL
+&nbsp;
+(3 row(s) affected)
+</pre><br>
+
+
+<a name="learnsqlsvr05-CHP-2-SECT-3.2"></a>
+<H4 id="title-IDAF5OSIB" class="docSection2Title">2.3.2. IS NOT NULL</h4>
+<p class="docText">To retrieve all rows that are not nulls, <tt>IS NOT NULL</tt> can be used. The following query will give all the rows that are not nullsthe remaining 36 rows of the table (of which we show the first 10 rows):</p>
+<pre>
+SELECT dname, age
+FROM   Dependent
+WHERE  age IS NOT NULL
+</pre><br>
+
+<p class="docText">which produces 36 rows of output (of which the first 10 rows are shown):</p>
+<pre>
+dname                age
+-------------------- ------
+Matt                 8
+Mary                 9
+Beena                31
+Amit                 3
+Shantu               5
+Raju                 1
+Rani                 3
+Susan                4
+Sam                  1
+Chris                6
+.
+.
+.
+&nbsp;
+(36 row(s) affected)
+</pre><BR>
+
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

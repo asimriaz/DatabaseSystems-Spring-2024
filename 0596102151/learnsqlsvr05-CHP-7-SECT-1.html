@@ -1,0 +1,172 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 7.1.&nbsp; Introducing Set Operations</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-1"></a>
+                <h3 id="title-IDAM51OC" class="docSection1Title">7.1. Introducing Set Operations</H3><a
+                    name="IDX-CHP-7-0399"></a>
+                <a name="IDX-CHP-7-0400"></a>
+                <a name="IDX-CHP-7-0401"></a>
+
+                <p class="docText">A <span class="docEmphasis">set</span> is a collection of objects. In relational
+                    databases, a table can be regarded as a set of rows. Elements in a set do not have to be ordered. In
+                    relational databases, rows do not have to be ordered as they are entered or stored. <span
+                        class="docEmphasis">Set operations</span> are used in SQL to retrieve data from multiple sets,<a
+                        name="IDX-CHP-7-0402"></a>
+                    and include a binary union, binary intersection<a name="IDX-CHP-7-0403"></a>
+                    <a name="IDX-CHP-7-0404"></a>
+                    and binary set difference<a name="IDX-CHP-7-0405"></a>
+                    . A result set is obtained in SQL from the result of a <tt>SELECT</tt>.
+                </p>
+                <p class="docText">A <span class="docEmphasis">binary union</span> is a set operation on two sets, the
+                    result of which contains all the elements of both sets. A <span class="docEmphasis">binary
+                        intersection</span> generates values in common between two sets. And, a <span
+                        class="docEmphasis">binary set difference</span> generates values in one set less those
+                    contained in another set.</p>
+                <p class="docText">Three explicit set operations are used in SQL: <tt>UNION</tt>, <tt>INTERSECT</tt>,
+                    and <tt>MINUS</tt> (for set difference). SQL Server allows the explicit use of the <tt>UNION</tt>
+                    and <tt>INTERSECT</tt> operations. Because the <tt>MINUS</tt> set operation cannot be explicitly
+                    used in SQL Server , we will illustrate the <tt>MINUS</tt> operation by using the very common
+                    <tt>IN</tt> predicate and its negation, <tt>NOT..IN</tt>, which enable us to accomplish the same
+                    result as using <tt>INTERSECT</tt> and <tt>MINUS</tt>.</P>
+                <p class="docText">The format of a set statement is as follows:</p>
+                <pre>
+   set <tt><I>OPERATOR</i></tt> set
+</pre><BR>
+
+                <p class="docText">where <tt><I>OPERATOR</I></tt> is a <tt>UNION</tt>, <tt>INTERSECT</tt> or
+                    <tt>MINUS</tt>, and where "set" is defined by a <tt>SELECT</tt>.</P>
+                <p class="docText">First we will discuss the <tt>UNION</tt> operator; the <tt>INTERSECT</tt> operator
+                    will be discussed later in the chapter.</p>
+                <p class="docText">The following is the syntax for a general form of an <tt>UNION</tt>:</P>
+                <pre>
+    SELECT *
+    FROM   TableA
+    UNION
+    SELECT *
+    FROM TableB
+</pre><BR>
+
+                <p class="docText">Set statements allow us to combine two distinct sets of data (two result sets) only
+                    if we insure union compatibility,<a name="IDX-CHP-7-0406"></a>
+                    <a name="IDX-CHP-7-0407"></a>
+                    as explained in the next section.
+                </p>
+                <a name="learnsqlsvr05-CHP-7-SECT-1.1"></a>
+                <H4 id="title-IDAML5S3" class="docSection2Title">7.1.1. Union Compatibility</H4>
+                <p class="docText"><span class="docEmphasis">Union compatibility</span>, the commonly used SQL
+                    terminology for <span class="docEmphasis">set compatibility</span>, means that when using set
+                    operations, the two sets (in this case, the results of two <tt>SELECT</tt>s) being unioned have to
+                    have the same number of similar columns and the columns have to have compatible data types. Next we
+                    will explain what compatible data types means, and we will return to the issue of "similar" columns
+                    in a later section.</p>
+                <p class="docText">So what does "compatible" data types mean? The data types of the columns of the two
+                    sets being unioned do not necessarily have to be exactly the same, meaning that they may differ in
+                    length and even type, but they have to be "well-matched." For union compatibility, the three basic
+                    data types are numeric, string, and dates. All numeric columns are compatible with one another, all
+                    string columns are compatible with one another, and all date columns are compatible with one
+                    another. For numbers, SQL will convert integers, floating-point numbers, and decimals into a numeric
+                    data type, to make them compatible with one another. So any numeric column (for example, integers)
+                    can be unioned with any other numeric column (for example, decimals). Likewise, any fixed-length
+                    character column and any variable-length character column will be converted to a character data
+                    type, and take on the larger size of the character columns being unioned. Similarly, date columns
+                    will be combined to a date data type.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">For union compatibility, the three basic data types are
+                                            numeric, string, and dates.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">Union compatibility can happen in several ways:</p>
+                <ul>
+                    <li>
+                        <p class="docList">By unioning two tables or views that have identical columns (which implies
+                            the same domains as well).</p>
+                    </li>
+                    <li>
+                        <p class="docList">By taking two subsets from a table and combining them.</p>
+                    </li>
+                    <li>
+                        <p class="docList">By using two views from two tables respectively with the columns chosen so
+                            that they are compatible.</P>
+                    </li>
+                </ul>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">For the data type precedence rules, refer to the "<a
+                                                class="docLink"
+                                                href="learnsqlsvr05-CHP-6-SECT-2.html#learnsqlsvr05-CHP-6-SECT-2.2">Data
+                                                Type Precedence</a>" section in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a>.</p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><BR>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,655 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 3.1.&nbsp; Data Types in SQL Server </title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-1"></a>
+                <H3 id="title-IDAOTG55" class="docSection1Title">3.1. Data Types in SQL Server </H3>
+                <p class="docText">Every column in a table has a data type. The data type of a column specifies what
+                    kind of information or values can be stored in the column, and what kind of operations can be
+                    performed on those values. It is a matter of mapping the domain values you need to store to the
+                    corresponding data type. In selecting a data type, you should avoid wasting storage space, while
+                    allowing enough space for a sufficient range of possible values over the life of your application.
+                    SQL Server supports 30 different data types. We will discuss the most commonly used data types
+                    by dividing the data types into four major categories: numeric, character, date and time, and
+                    miscellaneous.</P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText"><I>Domain values</I> are the set of all possible values that
+                                            a column can have. For example, the domain values for a GPA column may be 0
+                                            to 4.</p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </P><br>
+                <p class="docText">Several of the primary data types also have valid synonyms that can be used instead
+                    of the regular data types. The synonyms are external names that are intended to make one SQL product
+                    compatible with another.</p>
+                <p class="docText">The more specific you are when selecting a data type for a column, the more accurate
+                    the information in your database will be. The following sections briefly describe each data type and
+                    its valid synonyms.</p>
+                <a name="learnsqlsvr05-CHP-3-SECT-1.1"></a>
+                <h4 id="title-IDAHUG55" class="docSection2Title">3.1.1. Numeric Data Types</H4><a
+                    name="IDX-CHP-3-0124"></a>
+                <a name="IDX-CHP-3-0125"></a>
+                <a name="IDX-CHP-3-0126"></a>
+                <a name="IDX-CHP-3-0127"></a>
+
+                <p class="docText">Numeric data types should be used for storing numeric data, for data on which you
+                    want to perform numeric comparisons or arithmetic operations. Numeric data types can be divided into
+                    two groups: integers and decimals.</p>
+                <a name="learnsqlsvr05-CHP-3-SECT-1.1.1"></a>
+                <h5 id="title-IDAAVG55" class="docSection3Title">3.1.1.1. Integer data types</h5>
+                <p class="docText">Integer data types have no digits after the decimal point, and range in size from 1
+                    to 8 bytes of internal storage. Integer data types in SQL Server include:</p>
+                <UL>
+                    <LI>
+                        <p class="docList"><tt>BIGINT</tt>, which uses 8 bytes of storage and can be used to store
+                            numbers from -2<sup>63</sup> to 2<sup>63</sup> -1. Avoid using the <tt>BIGINT</tt> data type
+                            unless you really need its additional storage capacity.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>INT</tt>, which uses 4 bytes of storage and can be used to store numbers
+                            from -2<sup>31</sup> to 2<sup>31</sup> -1.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>SMALLINT</tt>, which uses 2 bytes of storage and can be used to store
+                            numbers from -2<sup>15</sup> to 2<sup>15</sup> -1.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>TINYINT</tt>, which uses 1 byte of storage and can be used to store
+                            numbers from 0 to 255.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>MONEY</tt>, which uses 8 bytes of storage.</p>
+                    </li>
+                    <LI>
+                        <p class="docList"><tt>SMALLMONEY</tt>, which uses 4 bytes of storage.</p>
+                    </li>
+                </ul>
+                <p class="docText"><tt>MONEY</tt> and <tt>SMALLMONEY</tt> are included among integer types because they
+                    are internally stored the same way as integers.</P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">The synonym for <tt>INT</tt> is <tt>INTEGER</tt>.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><BR>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.1.2"></a>
+                <h5 id="title-IDAIXG55" class="docSection3Title">3.1.1.2. Decimal data types</h5>
+                <p class="docText">Decimal data types allow a larger range of values as well as a higher degree of
+                    accuracy than integer data types<a name="IDX-CHP-3-0128"></a>
+                    . For decimal data types,<a name="IDX-CHP-3-0129"></a>
+                    you can specify a precision and a scale. <I>Precision</I> is the total number of digits stored, and
+                    <i>scale</i> is the maximum number of digits to the right of the decimal point. The storage space of
+                    decimal data varies according to the precision. Decimals with a precision of 1 to 9 would take up 5
+                    bytes of storage space; decimals with a precision of 10 to 19 would take up 9 bytes of storage, and
+                    so on.
+                </p>
+                <p class="docText">Decimal data types include:</p>
+                <UL>
+                    <li>
+                        <p class="docList"><tt>REAL</tt>, which uses 4 bytes for storage and has a precision of 7
+                            digits. The synonym for <tt>REAL</tt> is <tt>FLOAT[(n)]</tt> for <tt>n</tt> = 1 to 7.</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>FLOAT</tt>, which uses 8 bytes for storage and has a precision of 15
+                            digits. The synonym for <tt>FLOAT</tt> is <tt>DOUBLE PRECISION</tt> and <tt>FLOAT[(n)]</tt>
+                            for <tt>n</tt> = 8 to 15.</P>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>DECIMAL</tt>, whose storage size varies based on the specified precision
+                            and uses 217 bytes for storage. The synonyms for <tt>DECIMAL</tt> are <tt>DEC</tt> and
+                            <tt>NUMERIC</tt>.
+                        </p>
+                    </li>
+                </ul>
+                <p class="docText">Rounding errors can occur when using the <tt>FLOAT</tt> or <tt>REAL</tt> data types.
+                    <tt>NUMERIC</tt> or <tt>DECIMAL</tt> are better in such cases, because they give the precision and
+                    scale, without the problems of <tt>FLOAT</tt> or <tt>REAL</tt>.
+                </p>
+                <p class="docText">When you are trying to select the numeric data type to use, your decision should be
+                    based on the maximum range of possible values that you want to store, and the precision and scale
+                    that you need. But, at the same time, you have to realize that data types that can store a greater
+                    range of values take up more space.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText"><tt>NUMERIC</tt> most closely resembles Oracle's
+                                            <tt>NUMBER</tt> data type.
+                                        </p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2"></a>
+                <H4 id="title-IDAA0K45" class="docSection2Title">3.1.2. Character Data Types</H4>
+                <p class="docText">Character data types are used to store any combination of letters, numbers and
+                    symbols. Single quotes have to be used when entering character data. SQL Server has five types
+                    of character data types: <tt>CHAR</tt>, <tt>VARCHAR</tt>, <tt>TEXT</tt>, <tt>NCHAR</tt>,
+                    <tt>NVARCHAR</tt>.
+                </P>
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.1"></a>
+                <h5 id="title-IDAT0K45" class="docSection3Title">3.1.2.1. The CHAR data type</h5><a
+                    name="IDX-CHP-3-0130"></a>
+                <a name="IDX-CHP-3-0131"></a>
+                <a name="IDX-CHP-3-0132"></a>
+
+                <p class="docText"><tt>CHAR(</tt><tt><i>n</I></tt><tt>)</tt>s are fixed-length single-byte character
+                    strings that can be used to store up to 8,000 bytes of data. <tt>CHAR</tt> data is used when the
+                    column length is known and unvarying; for example, a Social Security number could be of
+                    <tt>CHAR(9)</tt> data type. Because <tt>CHAR</tt>s use a fixed storage length, <tt>CHAR</tt>s are
+                    accessed faster than <tt>VARCHAR</tt>s (varying length character strings). You can and should
+                    specify the maximum byte length of a <tt>CHAR(</tt><tt><I>n</I></tt><tt>)</tt> data type with a
+                    value for <tt><I>n</I></tt>; otherwise, the default size will be used and the default size may be
+                    set to a size much higher than what you need. The synonym for <tt>CHAR</tt> is <tt>CHARACTER</tt>.
+                </p>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.2"></a>
+                <H5 id="title-IDAC2K45" class="docSection3Title">3.1.2.2. The VARCHAR data type<a
+                        name="IDX-CHP-3-0133"></a>
+                    <a name="IDX-CHP-3-0134"></a>
+                </h5><a name="IDX-CHP-3-0135"></a>
+
+                <p class="docText"><tt>VARCHAR(</tt><tt><i>n</I></tt><tt>)</tt>s are variable length single-byte
+                    character strings that can also be used to store up to 8000 bytes of data. You can and should also
+                    specify the maximum byte length of <tt>VARCHAR</tt>s with <tt><I>n</i></tt>, too; otherwise, as with
+                    the <tt>CHAR</tt> data type, the default size will be used, and the default size may be set to a
+                    size much higher than what you need. Variable length means that if less data than the specified
+                    <tt><i>n</i></tt> bytes is used, the storage size will be the actual length of the data entered. The
+                    synonym for <tt>VARCHAR</tt> is <tt>CHAR VARYING</tt>. <tt>VARCHAR</tt> is the most commonly used
+                    character (string) type.
+                </p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText"><tt>VARCHAR2</tt> is the Oracle equivalent of
+                                            <tt>VARCHAR</tt>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.3"></a>
+                <h5 id="title-IDAV3K45" class="docSection3Title">3.1.2.3. The TEXT data type</h5><a
+                    name="IDX-CHP-3-0136"></a>
+                <a name="IDX-CHP-3-0137"></a>
+                <a name="IDX-CHP-3-0138"></a>
+                <a name="IDX-CHP-3-0139"></a>
+                <a name="IDX-CHP-3-0140"></a>
+
+                <p class="docText"><tt>TEXT</tt>s are also variable-length single-byte character strings, but may be
+                    used to store more than 8,000 bytes. The <tt>TEXT</tt> data type, in SQL Server , is a large
+                    object data type, better used if you need to store large strings of data. <tt>TEXT</tt> has extra
+                    overhead that drags down performance. Therefore, the use of the <tt>TEXT</tt> data type is not
+                    encouraged.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText"><tt>LONG</tt> is the Oracle equivalent of <tt>TEXT</tt>.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.4"></a>
+                <h5 id="title-IDAI5K45" class="docSection3Title">3.1.2.4. The NCHAR data type</h5><a
+                    name="IDX-CHP-3-0141"></a>
+                <a name="IDX-CHP-3-0142"></a>
+                <a name="IDX-CHP-3-0143"></a>
+
+                <p class="docText"><tt>NCHAR</tt>s are fixed-length Unicode character strings<a
+                        name="IDX-CHP-3-0144"></a>
+                    <a name="IDX-CHP-3-0145"></a>
+                    <a name="IDX-CHP-3-0146"></a>
+                    <a name="IDX-CHP-3-0147"></a>
+                    . You can also specify the maximum byte length of <tt>NCHAR</tt> with <tt><I>n</I></tt>. The synonym
+                    for <tt>NCHAR</tt> is <tt>NATIONAL CHAR</tt>.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.5"></a>
+                <H5 id="title-IDAABL45" class="docSection3Title">3.1.2.5. The NVARCHAR data type<a
+                        name="IDX-CHP-3-0148"></a>
+                    <a name="IDX-CHP-3-0149"></a>
+                </H5><a name="IDX-CHP-3-0150"></a>
+
+                <p class="docText"><tt>NVARCHAR</tt>s are variable-length Unicode character strings. You can specify the
+                    maximum byte of <tt>NVARCHAR</tt> length with <tt><i>n</I></tt>. The synonym for <tt>NVARCHAR</tt>
+                    is <tt>NATIONAL CHARACTER VARYING</tt>.</p>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.6"></a>
+                <h5 id="title-IDACCL45" class="docSection3Title">3.1.2.6. Unicode character strings</H5>
+                <p class="docText">Unicode character strings need two bytes for each stored character. Most English and
+                    European alphabets can, however, be stored in single-byte characters. Single-byte character strings
+                    can store up to 8,000 characters, and Unicode character strings can store up to 4,000 characters.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.2.7"></a>
+                <h5 id="title-IDALCL45" class="docSection3Title">3.1.2.7. Selecting the character data types</h5>
+                <p class="docText">Some general rules that you can follow to determine which character data type to use:
+                </p>
+                <ul>
+                    <LI>
+                        <p class="docList">Use the variable-length data types (<tt>VARCHAR</tt>) over fixed-length data
+                            types (<tt>CHAR</tt>) when you expect a lot of null values or a lot of variation in the size
+                            of data.</p>
+                    </li>
+                    <li>
+                        <p class="docList">If a column's data does not vary widely in number of characters, consider
+                            using <tt>CHAR</tt> instead of <tt>VARCHAR</tt>.</p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>NVARCHAR</tt> or <tt>NCHAR</tt> data types should not be used unless you
+                            need to store 16-bit character (Unicode) data. <tt>NVARCHAR</tt>s and <tt>NCHAR</tt>s take
+                            up twice as much space as <tt>VARCHAR</tt> or <tt>CHAR</tt> data types, reducing I/O
+                            performance.</p>
+                    </li>
+                </ul>
+
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.3"></a>
+                <h4 id="title-IDAWDL45" class="docSection2Title">3.1.3. Date and Time Data Types</h4>
+                <p class="docText">SQL Server has two data types for storing date and time information:
+                    <tt>DATETIME</tt> and <tt>SMALLDATETIME</tt>. <tt>DATETIME</tt> uses 8 bytes. <tt>SMALLDATETIME</tt>
+                    uses 4 bytes of storage. Internally, the <tt>DATETIME</tt> and <tt>SMALLDATETIME</tt> values are
+                    stored completely differently from how you enter them or how they are displayed. They are stored as
+                    two separate components, a date component and a time component.
+                </p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText"><tt>DATE</tt> is the Oracle equivalent of <tt>DATETIME</tt>.
+                                        </p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">When creating primary keys, do not consider using the <tt>DATETIME</tt> and
+                    <tt>SMALLDATETIME</tt> data types. From a performance standpoint, it is better to use a data type
+                    that uses less space for a primary key. The less the space used for a primary key, the smaller the
+                    table and index, and the less I/O overhead will be required to access the primary key.
+                </P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Creation of primary keys will be discussed in <a
+                                                class="docLink"
+                                                href="learnsqlsvr05-CHP-11.html#learnsqlsvr05-CHP-11">Chapter 11</a>.
+                                        </P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4"></a>
+                <H4 id="title-IDAIFL45" class="docSection2Title">3.1.4. Miscellaneous Data Types</H4><a
+                    name="IDX-CHP-3-0151"></a>
+                <a name="IDX-CHP-3-0152"></a>
+
+                <p class="docText">Among other data types available in SQL Server are <tt>BINARY</tt>,
+                    <tt>IMAGE</tt>, <tt>BIT</tt>, <tt>TABLE</tt>, <tt>SQL_VARIANT</tt>, <tt>UNIQUEIDENTIFIER</tt>, and
+                    the XML data type (one of SQL Server's newest enhancements).
+                </p>
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.1"></a>
+                <h5 id="title-IDAFGL45" class="docSection3Title">3.1.4.1. The BINARY data type<a
+                        name="IDX-CHP-3-0153"></a>
+                    <a name="IDX-CHP-3-0154"></a>
+                </h5><a name="IDX-CHP-3-0155"></a>
+
+                <p class="docText">The <tt>BINARY</tt> data types are <tt>BINARY</tt> and <tt>VARBINARY</tt>.</p>
+                <p class="docText"><tt>BINARY</tt> data types are used to store strings of bits, and values are entered
+                    and displayed using their hexadecimal (hex) representation. The maximum length of the
+                    <tt>BINARY</tt> data type is 8,000 bytes. You can specify the maximum byte length of <tt>BINARY</tt>
+                    data with <tt><I>n</i></tt>.
+                </p>
+                <p class="docText">The <tt>VARBINARY</tt> data type can store up to 8,000 bytes of variable-length
+                    binary data. Once again, you can also specify the maximum byte length with <tt><i>n</i></tt>. The
+                    <tt>VARBINARY</tt> data type should be used (instead of the <tt>BINARY</tt> data type) when you
+                    expect to have null values or a variation in data size.
+                </P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText"><tt>RAW</tt> is the Oracle equivalent of <tt>VARBINARY</tt>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.2"></a>
+                <h5 id="title-IDAFIL45" class="docSection3Title">3.1.4.2. The IMAGE data type<a
+                        name="IDX-CHP-3-0156"></a>
+                    <a name="IDX-CHP-3-0157"></a>
+                </H5><a name="IDX-CHP-3-0158"></a>
+
+                <p class="docText">The <tt>IMAGE</tt> data type is a large object binary data type that stores more than
+                    8000 bytes. The <tt>IMAGE</tt> data type is used to store binary values and is also used to store
+                    pictures.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText"><tt>LONG RAW</tt> is the Oracle equivalent of <tt>IMAGE</tt>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><BR>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.3"></a>
+                <H5 id="title-IDALJL45" class="docSection3Title">3.1.4.3. The BIT data type</h5><a
+                    name="IDX-CHP-3-0159"></a>
+                <a name="IDX-CHP-3-0160"></a>
+                <a name="IDX-CHP-3-0161"></a>
+
+                <p class="docText">The <tt>BIT</tt> data type is actually an integer data type that can store only a 0
+                    or a 1 and can consume only a single bit of storage space. However, if there is only a one bit
+                    column in a table, it will actually take up a whole byte. Up to 8-bit columns are stored in a single
+                    byte. The <tt>BIT</tt> data type is usually used for true/false or yes/no types of data.
+                    <tt>BIT</tt> columns cannot be <tt>NULL</tt> and cannot have indexes on them.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.4"></a>
+                <h5 id="title-IDALKL45" class="docSection3Title">3.1.4.4. The monetary data types<a
+                        name="IDX-CHP-3-0162"></a>
+                    <a name="IDX-CHP-3-0163"></a>
+                </h5><a name="IDX-CHP-3-0164"></a>
+
+                <p class="docText">Monetary data types are generally used to store monetary values. SQL Server has
+                    two monetary data types:</P>
+                <UL>
+                    <li>
+                        <p class="docList"><tt>MONEY</tt>, which uses 8 bytes of storage</p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>SMALLMONEY</tt>, which uses 4 bytes of storage</P>
+                    </li>
+                </ul>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.5"></a>
+                <h5 id="title-IDAQLL45" class="docSection3Title">3.1.4.5. The TABLE data type<a
+                        name="IDX-CHP-3-0165"></a>
+                    <a name="IDX-CHP-3-0166"></a>
+                </h5><a name="IDX-CHP-3-0167"></a>
+
+                <p class="docText">The <tt>TABLE</tt> data type can be used to store the result of a function and can be
+                    used as the data type of local variables. Columns in tables, however, cannot be of type
+                    <tt>TABLE</tt>. Table variables are sometimes preferable to temporary tables, because table
+                    variables are cleaned up automatically at the end of a function or stored procedure.
+                </P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Temporary tables are covered in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a>.
+                                            Discussing functions and stored procedures is beyond the scope of this book.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.6"></a>
+                <h5 id="title-IDAZML45" class="docSection3Title">3.1.4.6. The SQL_VARIANT data type<a
+                        name="IDX-CHP-3-0168"></a>
+                    <a name="IDX-CHP-3-0169"></a>
+                </H5><a name="IDX-CHP-3-0170"></a>
+
+                <p class="docText">Values stored in a <tt>SQL_VARIANT</tt> column can be any data type except
+                    <tt>TEXT</tt> or <tt>IMAGE</tt>. The usage of the <tt>SQL_VARIANT</tt> data type should be avoided
+                    for several reasons: (a) a <tt>SQL_VARIANT</tt> column cannot be part of a primary or foreign key;
+                    (b) a <tt>SQL_VARIANT</tt> column cannot be part of a computed column; (c) a <tt>SQL_VARIANT</tt>
+                    column can be used in indexes or as other unique keys only if they are shorter than 900 bytes; (d) a
+                    <tt>SQL_VARIANT</tt> column must convert the data to another data type when moving data to objects
+                    with other data types.
+                </p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Foreign keys are discussed in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-11.html#learnsqlsvr05-CHP-11">Chapter 11</a>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><BR>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.7"></a>
+                <H5 id="title-IDAOOL45" class="docSection3Title">3.1.4.7. The UNIQUEIDENTIFIER data type<a
+                        name="IDX-CHP-3-0171"></a>
+                    <a name="IDX-CHP-3-0172"></a>
+                </h5><a name="IDX-CHP-3-0173"></a>
+                <a name="IDX-CHP-3-0174"></a>
+                <a name="IDX-CHP-3-0175"></a>
+
+                <p class="docText">The <tt>UNIQUEIDENTIFIER</tt> data type, also referred to as globally unique
+                    identifier (GUID) or universal unique identifier (UUID), is a 128-bit generated value that
+                    guarantees uniqueness worldwide, even among unconnected computers.</P>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.4.8"></a>
+                <h5 id="title-IDASPL45" class="docSection3Title">3.1.4.8. The XML data type</h5><a
+                    name="IDX-CHP-3-0176"></a>
+                <a name="IDX-CHP-3-0177"></a>
+
+                <p class="docText">The <tt>XML</tt> data type is a new data type that has been added to SQL Server
+                    to handle XML data. <tt>XML</tt> can model complex data. The <tt>XML</tt> column can be typed or
+                    untyped. Like other data types, the <tt>XML</tt> data type must meet specific formatting criteria.
+                    It must conform to well-formatted XML criteria (which is untyped) and you can optionally add
+                    additional conformance criteria by specifying a Schema collection (typed). SQL Server will also
+                    allow you to store XML documents associated with multiple schema definitions. The <tt>XML</tt> data
+                    type will allow you to store complete XML documents or fragments of XML documents. XML documents are
+                    limited to two gigabytes of data.</P>
+
+
+                <a name="learnsqlsvr05-CHP-3-SECT-1.5"></a>
+                <H4 id="title-IDAUQL45" class="docSection2Title">3.1.5. Selecting Data Types</h4>
+                <p class="docText">Here we present some general rules that you can follow to determine which data type
+                    to use to define a column:</p>
+                <ul>
+                    <li>
+                        <p class="docList">Use the smallest possible column sizes. The smaller the column size, the
+                            lesser the amount of data that SQL Server has to store and process, and the faster SQL
+                            Server will be able to read and write the data. In addition, the narrower the column, the
+                            faster a sort will be performed on a column.</P>
+                    </li>
+                    <li>
+                        <p class="docList">Use the smallest possible data type for a column that will hold your data.
+                            For example, if you are going to be storing numbers from 1 to 99 in a column, you would be
+                            better off selecting the <tt>TINYINT</tt> data type instead of the <tt>INT</tt> data type.
+                        </p>
+                    </li>
+                    <LI>
+                        <p class="docList">For numeric data, it is better to use a numeric data type such as
+                            <tt>INTEGER</tt>, instead of using <tt>VARCHAR</tt> or <tt>CHAR</tt>, because numeric data
+                            types generally require less space to hold numeric values then character data types. This
+                            saves space, and smaller columns can improve performance when the columns are searched,
+                            joined with other columns, or sorted.
+                        </P>
+                    </li>
+                </ul>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Joins are discussed in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a>.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <ul>
+                    <li>
+                        <p class="docList"><tt>FLOAT</tt>s or <tt>REAL</tt>s should not be used to define primary keys.
+                            Integer data types can be used for primary keys.</P>
+                    </LI>
+                    <LI>
+                        <p class="docList">Avoid selecting the fixed length columns--<tt>CHAR</tt> or <tt>NCHAR</tt>--if
+                            your column will have a lot of nulls. The <tt>NULL</tt> in a <tt>CHAR</tt> or <tt>NCHAR</tt>
+                            field will take up the entire fixed length of 255 characters. This wastes much space and
+                            reduces SQL Server's overall performance.</P>
+                    </LI>
+                    <li>
+                        <p class="docList">If you are going to be using a column for frequent sorts, consider an
+                            integer-based column rather than a character-based column. SQL Server sorts integer data
+                            faster than character data. [1]</p>
+                    </li>
+                </UL>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

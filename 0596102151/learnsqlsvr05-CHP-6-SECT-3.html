@@ -1,0 +1,824 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 6.3.&nbsp; Derived Structures</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-6-SECT-3"></a>
+                <h3 id="title-IDAVYDK4" class="docSection1Title">6.3. Derived Structures</H3>
+                <p class="docText">Derived structures may become necessary as the queries we build get larger and we
+                    have to use a more step-by-step approach to find a result. Derived structures help us to build
+                    queries on top of other queries. In this section, we discuss two of the most commonly used derived
+                    structuresviews<a name="IDX-CHP-6-0374"></a>
+                    <a name="IDX-CHP-6-0375"></a>
+                    and temporary tables.
+                </p>
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1"></a>
+                <h4 id="title-IDAHZDK4" class="docSection2Title">6.3.1. Views</H4>
+                <p class="docText">In SQL, a <i>view</I> (also called a <i>virtual table</I>) is a mechanism to procure
+                    a restricted subset of data that is accessible in ways akin to ordinary tables. We use the word
+                    "akin" because some operations on views (such as some updates and deletes) may be restricted which
+                    otherwise would be allowed if performed on the underlying structure itself.</P>
+                <p class="docText">A view serves several purposes:</P>
+                <UL>
+                    <li>
+                        <p class="docList">It helps to develop a query step by step.</P>
+                    </LI>
+                    <li>
+                        <p class="docList">It can be used to restrict a set of users from seeing part of the database in
+                            a multiuser systemthis can be considered a security feature.</P>
+                    </LI>
+                    <li>
+                        <p class="docList">Views provide a layer of abstraction to data, facilitating backward
+                            compatibility and horizontal and vertical partitioning of data.</p>
+                    </li>
+                    <li>
+                        <p class="docList">Views provide a seamless way to combine data from multiple sources.</P>
+                    </li>
+                    <li>
+                        <p class="docList">Views do not occupy much disk space, as they have no data of their own.</P>
+                    </LI>
+                    <LI>
+                        <p class="docList">When you use a view for queries, you use it just as you would use the
+                            underlying table(s).</p>
+                    </li>
+                    <li>
+                        <p class="docList">Views can be used to create other views or queries.</p>
+                    </li>
+                </ul>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Views are typically a way of building queries on top of other
+                                            queries.</p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.1"></a>
+                <h5 id="title-IDAT0DK4" class="docSection3Title">6.3.1.1. Creating views</H5><a
+                    name="IDX-CHP-6-0376"></a>
+                <a name="IDX-CHP-6-0377"></a>
+
+                <p class="docText">A view can be regarded as a named <tt>SELECT</tt> statement that produces a result
+                    set (a view) that you can further work on. The <tt>SELECT</tt> statement that is used to create a
+                    view can be from one or more underlying tables or from other views in the current or other
+                    databases.</p>
+                <p class="docText">The general SQL syntax used to create a view is:</p>
+                <pre>
+    CREATE VIEW view_name AS
+    SELECT ...
+</pre><BR>
+
+                <p class="docText">The following example creates a view called <tt>namemaj</tt>, which is a view of
+                    students' names and majors from the <tt>Student</tt> table. To create the view <tt>namemaj</tt>,
+                    type the following in the SQL query editor screen:</p>
+                <pre>
+    CREATE VIEW namemaj AS
+    SELECT      sname, major
+    FROM        Student
+</pre><BR>
+
+                <p class="docText">And then execute this query in the regular way. A view will be created.</p>
+                <p class="docText">You will get the following message:</P>
+                <pre>
+    Command(s) completed successfully.
+</pre><BR>
+
+                <p class="docText">To view <tt>namemaj</tt>, click on Views in the Object Explorer, and then click
+                    <tt>dbo.namemaj</tt> and then <tt>Columns</tt>, as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-6-FIG-3">Figure 6-3</a>.
+                </P>
+                <a name="learnsqlsvr05-CHP-6-FIG-3"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 6-3. Viewing the view namemaj</H5>
+                        <img border="0" alt="" width="220" height="92" SRC="images/learnsqlsvr05_0603.jpg">
+                    </center>
+                </P><br>
+
+                <p class="docText">A view is a stored <tt>SELECT</tt> statement. Each time a view is accessed, the
+                    <tt>SELECT</tt> statement in the view is run.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.2"></a>
+                <H5 id="title-IDAB3DK4" class="docSection3Title">6.3.1.2. Using views</h5>
+                <p class="docText">The new view can be used just like a table in the <tt>FROM</tt> clause of any
+                    <tt>SELECT</tt> statement, as shown here:
+                </p>
+                <pre>
+    SELECT  *
+    FROM    namemaj
+</pre><br>
+
+                <p class="docText">This query will give 48 rows of output, of which we show the first 10 rows:</p>
+                <p class="docText">sname major</P>
+                <pre>
+    -------------------- -----
+    Lineas               ENGL
+    Mary                 COSC
+    Zelda                COSC
+    Ken                  POLY
+    Mario                MATH
+    Brenda               COSC
+    Romona               ENGL
+    Richard              ENGL
+    Kelly                MATH
+    Lujack               COSC
+    .
+    .
+    .
+    (48 row(s) affected
+</pre><br>
+
+                <p class="docText">Just like an ordinary table, a view can be filtered and used in a <tt>SELECT</tt>.
+                    For example, type the following query:</p>
+                <pre>
+    SELECT  n.major AS [Major], n.sname AS [Student Name]
+    FROM    namemaj AS n, Department_to_major AS d
+    WHERE   n.major = d.dcode
+    AND     d.dname LIKE 'COMP%'
+</pre><BR>
+
+                <p class="docText">which produces the following output:</P>
+                <pre>
+    Major Student Name
+    ----- --------------------
+    COSC  Mary
+    COSC  Zelda
+    COSC  Brenda
+    COSC  Lujack
+    COSC  Elainie
+    COSC  Jake
+    COSC  Hillary
+    COSC  Brad
+    COSC  Alan
+    COSC  Jerry
+
+    (10 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.3"></a>
+                <h5 id="title-IDAC4DK4" class="docSection3Title">6.3.1.3. ORDER BY in views</h5><a
+                    name="IDX-CHP-6-0378"></a>
+                <a name="IDX-CHP-6-0379"></a>
+
+                <p class="docText">SQL Server does not allow you to use an <tt>ORDER BY</tt> when creating views<a
+                        name="IDX-CHP-6-0380"></a>
+                    . For example, if we try to create an ordered view called <tt>namemaj1</tt>, as follows:</p>
+                <pre>
+    CREATE VIEW namemaj1 AS
+    SELECT      sname, major
+    FROM        Student
+    ORDER BY    sname
+</pre><br>
+
+                <p class="docText">we will get the following error message:</p>
+                <pre>
+    Msg 1033, Level 15, State 1, Procedure namemaj1, Line 4
+    The ORDER BY clause<a name="IDX-CHP-6-0381"></a> 
+ is invalid in views, inline functions, derived tables,
+    subqueries, and common table expressions, unless TOP or FOR XML is also specified.
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">Some SQL languages, such as Oracle, allow the use of
+                                            <tt>ORDER BY</tt> when creating views.
+                                        </p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <p class="docText">But an <tt>ORDER BY</tt> can be used in the <tt>FROM</tt> clause after the view has
+                    been created, as shown:</p>
+                <pre>
+    SELECT   *
+    FROM     namemaj
+    ORDER BY major
+</pre><BR>
+
+                <p class="docText">This query produces 48 rows, of which we show the first 10 rows here:</p>
+                <pre>
+    sname                major
+    -------------------- -----
+    Smith                NULL
+    Thornton             NULL
+    Lionel               NULL
+    Sebastian            ACCT
+    Harrison             ACCT
+    Francis              ACCT
+    Donald               ACCT
+    Chris                ACCT
+    Gus                  ART
+    Benny                CHEM
+    .
+    .
+    .
+    (48 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.4"></a>
+                <H5 id="title-IDADQEK4" class="docSection3Title">6.3.1.4. SELECT INTO in views</h5><a
+                    name="IDX-CHP-6-0382"></a>
+                <a name="IDX-CHP-6-0383"></a>
+                <a name="IDX-CHP-6-0384"></a>
+                <a name="IDX-CHP-6-0385"></a>
+
+                <p class="docText">You cannot use a <tt>SELECT INTO</tt> statement when creating a view, because it is a
+                    combined data definition language (DDL) and data manipulation language (DML) statement, as shown
+                    here:</P>
+                <pre>
+    CREATE VIEW new_view AS
+    SELECT      * INTO new_view
+    FROM        Employee
+</pre><br>
+
+                <p class="docText">You will get the following error message:</P>
+                <pre>
+    Msg 156, Level 15, State 1, Procedure new_view, Line 2
+    Incorrect syntax near the keyword 'INTO'.
+</pre><BR>
+
+                <p class="docText">You can, however, issue a <tt>SELECT INTO</tt> statement when the view is used in the
+                    <tt>FROM</tt> clause, as shown:
+                </P>
+                <pre>
+    CREATE VIEW new_view AS
+    SELECT      *
+    FROM        namemaj
+    WHERE       major = 'MATH'
+</pre><BR>
+
+                <p class="docText">You will get:</p>
+                <pre>
+    Command(s) completed successfully.
+</pre><BR>
+
+                <p class="docText">And now if you type:</P>
+                <pre>
+    SELECT * INTO copy_of_new_view
+    FROM   new_view
+</pre><br>
+
+                <p class="docText">You will get:</P>
+                <pre>
+    (7 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Now if you type:</p>
+                <pre>
+    SELECT *
+    FROM   copy_of_new_view
+</pre><br>
+
+                <p class="docText">You will get the following 7 rows:</p>
+                <pre>
+    sname                major
+    -------------------- -----
+    Mario                MATH
+    Kelly                MATH
+    Reva                 MATH
+    Monica               MATH
+    Sadie                MATH
+    Stephanie            MATH
+    Jake                 MATH
+
+    (7 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.5"></a>
+                <H5 id="title-IDAGSEK4" class="docSection3Title">6.3.1.5. Column aliases in views</h5><a
+                    name="IDX-CHP-6-0386"></a>
+                <a name="IDX-CHP-6-0387"></a>
+                <a name="IDX-CHP-6-0388"></a>
+                <a name="IDX-CHP-6-0389"></a>
+
+                <p class="docText">Column aliases can be used instead of column names in views. For example, type the
+                    following to create a view called <tt>namemaj2</tt> with column aliases<a name="IDX-CHP-6-0390"></a>
+                    :</p>
+                <pre>
+    CREATE VIEW namemaj2 AS
+    SELECT      sname AS [name], major AS [maj]
+    FROM        Student
+    WHERE       major = 'COSC'
+</pre><BR>
+
+                <p class="docText">You will get:</P>
+                <pre>
+    Command(s) completed successfully.
+</pre><BR>
+
+                <p class="docText">Then type:</p>
+                <pre>
+    SELECT *
+    FROM   namemaj2
+</pre><br>
+
+                <p class="docText">This query produces the following 10 rows of output, with the column aliases in the
+                    column headings:</p>
+                <pre>
+    name                 maj
+    -------------------- ----
+    Mary                 COSC
+    Zelda                COSC
+    Brenda               COSC
+    Lujack               COSC
+    Elainie              COSC
+    Jake                 COSC
+    Hillary              COSC
+    Brad                 COSC
+    Alan                 COSC
+    Jerry                COSC
+
+    (10 row(s) affected)
+</pre><br>
+
+                <p class="docText">To use the column aliases in a query, the name of the view or table alias (in this
+                    case, a view alias) has to precede the column alias, as shown in this query:</p>
+                <pre>
+    SELECT  namemaj2.[name], namemaj2.[maj]
+    FROM    namemaj2
+    WHERE   namemaj2.[name] LIKE 'J%'
+</pre><br>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    name                 maj
+    -------------------- ----
+    Jake                 COSC
+    Jerry                COSC
+
+    (2 row(s) affected)
+</pre><br>
+
+                <p class="docText">The same query could also be written as follows, where <tt>n</tt> is the table (view)
+                    alias:</p>
+                <pre>
+    SELECT  n.[name], n.[maj]
+    FROM    namemaj2 AS n
+    WHERE   n.[name] LIKE 'J%'
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.6"></a>
+                <h5 id="title-IDAJUEK4" class="docSection3Title">6.3.1.6. Data in views</h5><a
+                    name="IDX-CHP-6-0391"></a>
+                <a name="IDX-CHP-6-0392"></a>
+                <a name="IDX-CHP-6-0393"></a>
+
+                <p class="docText">A view consists of a set of named columns and rows of data, just like a real table;
+                    however, a view has no data of its own. Data is stored only in the underlying table used to create
+                    the view, and not in the view. The view stores only the <tt>SELECT</tt> statement (rather than the
+                    actual data), and data is dynamically produced from the underlying table when the view is used.
+                    Therefore, views depend on the underlying tables and act like a filter on the underlying tables.</p>
+                <p class="docText">When data in the original table is changed, the view is automatically updated.
+                    Therefore, the view is always up to date. And, when data is changed through a view, the original
+                    (underlying) table is also automatically updated.</p>
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.6.1"></a>
+                <h5 id="title-IDAEVEK4" class="docSection4Title">6.3.1.6.1. Changing data in views</H5>
+                <p class="docText">To demonstrate how changing data through a view automatically updates the original
+                    table, begin with the following <tt>Employee</tt> table, which we created and used in <a
+                        class="docLink" href="learnsqlsvr05-CHP-5.html#learnsqlsvr05-CHP-5">Chapter 5</a>:</p>
+                <pre>
+    names           wage         hours
+    --------------- ------------ -----------
+    Sumon Bagui     10.0000      40
+    Sudip Bagui     15.0000      30
+    Priyashi Saha   18.0000      NULL
+    Ed Evans        NULL         10
+    Genny George    20.0000      40
+
+    (5 row(s) affected)
+</pre><br>
+
+                <div style="font-weight:bold">
+                    <ol class="docList" type="1">
+                        <LI>
+                            <div style="font-weight:normal">
+                                <p class="docList">Create a view called <tt>Employee_view</tt> from the
+                                    <tt>Employee</tt> table, as follows:
+                                </p>
+                                <pre>
+    CREATE VIEW Employee_view AS
+    SELECT      names
+    FROM        Employee
+</pre><br>
+                            </div>
+                        </LI>
+                        <li>
+                            <div style="font-weight:normal">
+                                <p class="docList">To output the entire contents of the view, type the following query:
+                                </p>
+                                <pre>
+    SELECT *
+    FROM   Employee_view
+</pre><BR>
+                                <p class="docList">which produces the following output:</p>
+                                <pre>
+    names
+    --------------------
+    Sumon Bagui
+    Sudip Bagui
+    Priyashi Saha
+    Ed Evans
+    Genny George
+
+    (5 row(s) affected)
+</pre><BR>
+                            </div>
+                        </li>
+                        <LI>
+                            <div style="font-weight:normal">
+                                <p class="docList">To update the data in the view, <tt>Employee_view</tt>, type the
+                                    following <tt>UPDATE</tt> query:</P>
+                                <pre>
+    UPDATE Employee_view
+    SET    names = 'Mala Saha'
+    WHERE  names LIKE 'Priya%'
+</pre><BR>
+                            </div>
+                        </LI>
+                    </ol>
+                </div>
+                <p class="docText">You will get:</p>
+                <pre>
+    (1 row(s) affected)
+</pre><BR>
+
+                <div style="font-weight:bold">
+                    <ol class="docList" type="1">
+                        <LI>
+                            <div style="font-weight:normal">
+                                <p class="docList">Now, to view the contents of the view, <tt>Employee_view</tt>, type:
+                                </p>
+                                <pre>
+    SELECT *
+    FROM   Employee_view
+</pre><BR>
+                                <p class="docList">This query now produces the following output (the third name has
+                                    changed):</P>
+                                <pre>
+    names
+    --------------------
+    Sumon Bagui
+    Sudip Bagui
+    Mala Saha
+    Ed Evans
+    Genny George
+
+    (5 row(s) affected)
+</pre><br>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="font-weight:normal">
+                                <p class="docList">Then, view the contents of the underlying table by typing the
+                                    following (and note that the third name of this table has changed too):</p>
+                                <pre>
+    SELECT *
+    FROM   Employee
+</pre><BR>
+                                <p class="docList">This now gives:</p>
+                                <pre>
+    names           wage         hours
+    --------------- ------------ -----------
+    Sumon Bagui     10.0000      40
+    Sudip Bagui     15.0000      30
+    Mala  Saha      18.0000      NULL
+    Ed Evans        NULL         10
+    Genny George    20.0000      40
+
+    (5 row(s) affected)
+</pre><br>
+                                <p class="docList">If a row were added or deleted from the view, <tt>Employee_view</tt>,
+                                    the same change would also appear in the underlying table.</P>
+                                <p class="docList">Therefore, when adding, changing, or deleting data in views, you
+                                    should always be very careful, because you do not want to unintentionally change the
+                                    original underlying table. Remember that a view may sometimes be only a partial
+                                    section of a table.</P>
+                            </div>
+                        </LI>
+                    </ol>
+                </div>
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.6.2"></a>
+                <h5 id="title-IDACYEK4" class="docSection4Title">6.3.1.6.2. Changing data in tables</h5>
+                <p class="docText">If data is changed in the original table, such as our <tt>Employee</tt> table, the
+                    same data in all the views related to this underlying table also gets changed.</p>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.1.7"></a>
+                <h5 id="title-IDAPYEK4" class="docSection3Title">6.3.1.7. Deleting views</h5>
+                <p class="docText">A view can be deleted with a <tt>DROP VIEW</tt>. For example, to delete the view
+                    called <tt>Employee_view</tt>, you would type:</p>
+                <pre>
+    DROP VIEW Employee_view
+</pre><br>
+
+                <p class="docText">You will get:</p>
+                <pre>
+    Command(s) completed successfully.
+</pre><br>
+
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.2"></a>
+                <h4 id="title-IDAEZEK4" class="docSection2Title">6.3.2. Temporary Tables</h4>
+                <p class="docText">In SQL Server , temporary<a name="IDX-CHP-6-0394"></a>
+                    tables reside in SQL Server's default temporary database, <tt>tempdb</tt>. Every time that SQL
+                    Server 2005 is stopped and restarted, a brand new copy of <tt>tempdb</tt> is built. So temporary
+                    tables are automatically destroyed when the user who created them disconnects from SQL Server .
+                </p>
+                <p class="docText">Though temporary tables involve extra storage as well as extra programming effort,
+                    temporary tables are useful for doing work that requires multiple passes to avoid doing repetitive
+                    work. Temporary tables are useful for doing work on a "picture of the data" in the database. As the
+                    name implies, no permanent storage of the temporary structure is anticipated; when the use of the
+                    temporary data is over, the table is deleted. Data in temporary tables is static and not reflective
+                    of updates to the original table(s). As with views, temporary tables may also allow you to develop
+                    SQL queries in a step-by-step manner and may be used to simplify complex queries.</p>
+                <a name="learnsqlsvr05-CHP-6-SECT-3.2.1"></a>
+                <h5 id="title-IDAYZEK4" class="docSection3Title">6.3.2.1. Creating temporary tables</h5><a
+                    name="IDX-CHP-6-0395"></a>
+
+                <p class="docText">In SQL Server , temporary tables are created in the same way that permanent
+                    tables are created; that is, with a <tt>CREATE TABLE</tt> or a <tt>SELECT INTO</tt> statement;
+                    however, temporary table names must begin with either <tt>#</tt> or <tt>##</tt>.</P>
+                <a name="learnsqlsvr05-CHP-6-SECT-3.2.1.1"></a>
+                <h5 id="title-IDAN0EK4" class="docSection4Title">6.3.2.1.1. Creating local temporary tables</h5>
+                <p class="docText">Local temporary tables are created with <tt>#</tt> in front of the table name and are
+                    visible only to the user who is currently connected to the database. They are deleted when the user
+                    disconnects from this instance of SQL Server. They are local to the session in which they are
+                    created. Thus they are not visible in any other session, not even to one from the same host or
+                    login.</P>
+                <p class="docText">You cannot have foreign key constraints on a temporary table.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">We discuss foreign key constraints in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-11.html#learnsqlsvr05-CHP-11">Chapter 11</a>.
+                                        </p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><BR>
+                <p class="docText">The general SQL Server syntax for creating a local temporary table is:</P>
+                <pre>
+    SELECT column_name, ..., column_name INTO #local_temporary_tablename
+    FROM permanent_tablename
+    WHERE...
+</pre><br>
+
+                <p class="docText">As an example of how to create a local temporary table, <tt>#Temp1</tt>, type the
+                    following <tt>SELECT</tt> query:</P>
+                <pre>
+    SELECT s.sname, s.stno, d.dname, s.class INTO #Temp1
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+    AND       (s.class = 1 or s.class = 2)
+    AND       s.major = 'COSC';
+</pre><BR>
+
+                <p class="docText">You will get:</p>
+                <pre>
+    (6 row(s) affected)
+</pre><br>
+
+                <p class="docText">This query creates a local temporary table called <tt>#Temp1</tt>. You can use
+                    <tt>#Temp1</tt> as a regular table for this session. To view the data in <tt>#Temp1</tt>, type the
+                    following:
+                </p>
+                <pre>
+    SELECT *
+    FROM   #Temp1
+</pre><br>
+
+                <p class="docText">This query produces the following six rows of output:</P>
+                <pre>
+    sname                stno  dname             class
+    -------------------- ----- ----------------  -----
+    Brenda               8     Computer Science  2
+    Lujack               14    Computer Science  1
+    Elainie              17    Computer Science  1
+    Hillary              121   Computer Science  1
+    Brad                 128   Computer Science  1
+    Alan                 130   Computer Science  2
+
+    (6 row(s) affected)
+</pre><br>
+
+                <p class="docText">You can view the local temporary table from the <tt>tempdb</tt> under Object
+                    Explorer. From the Object Explorer, click Databases, System Databases, tempdb, and then Temporary
+                    Tables. You will see the temporary table, <tt>#Temp1,</tt> as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-6-FIG-4">Figure 6-4</a>.</p>
+                <a name="learnsqlsvr05-CHP-6-FIG-4"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 6-4. Viewing the local temporary table from the Object
+                            Explorer</H5>
+                        <img border="0" alt="" width="550" height="133" SRC="images/learnsqlsvr05_0604.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">As in <a class="docLink" href="#learnsqlsvr05-CHP-6-FIG-4">Figure 6-4</a>, in SQL
+                    Server 2005, the local temporary table that you create is appended by a system generated suffixa
+                    12-digit number with leading zeros. The local temporary table name that you provide cannot be more
+                    than 116 characters, allowing 128 characters for the name of the local temporary table. This is done
+                    by SQL Server because SQL Server allows a number of sessions to create a local temporary table with
+                    the same name without the names colliding with each other.</p>
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.2.1.2"></a>
+                <h5 id="title-IDAH3EK4" class="docSection4Title">6.3.2.1.2. Creating global temporary tables</h5>
+                <p class="docText">Global temporary tables are created with a prefix of <tt>##</tt>. Global temporary
+                    tables can be accessed by anyone who logs onto the database, as long as the creator of the global
+                    temporary table is still logged on. The global temporary table will be dropped automatically when
+                    the session that created it ends and when all other processes that reference it have stopped
+                    referencing it. Therefore, even though the process that created the table may have ended, if another
+                    process is still using it, then it will still be alive.</p>
+                <p class="docText">The general SQL Server syntax for creating a global temporary table is:</p>
+                <pre>
+    SELECT column_name, ..., column_name INTO ##global_temporary_tablename
+    FROM permanent_tablename
+    WHERE...
+</pre><br>
+
+                <p class="docText">As an example of how to create a global temporary table, type the following
+                    <tt>SELECT</tt> query:
+                </p>
+                <pre>
+    SELECT s.sname, s.stno, d.dname, s.class INTO ##Temp1
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+    AND       (s.class = 1 or s.class = 2)
+    AND       s.major = 'COSC';
+</pre><br>
+
+                <p class="docText">You will get:</p>
+                <pre>
+    (6 row(s) affected)
+</pre><br>
+
+                <p class="docText">This query creates a global temporary table called <tt>##Temp1</tt>. You can use
+                    <tt>##Temp1</tt> as a regular table for this session. To view the data in <tt>##Temp1</tt>, type the
+                    following:
+                </p>
+                <pre>
+    SELECT *
+    FROM   ##Temp1
+</pre><br>
+
+                <p class="docText">You will get the same output given previously (for the local temporary table).</p>
+                <p class="docText">A global temporary table can also be viewed from the <tt>tempdb</tt> option of the
+                    Object Explorer. From the Object Explorer, click Databases, System Databases, tempdb, and then
+                    Temporary Tables, and you will see the global temporary table, <tt>##Temp1</tt>, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-6-FIG-5">Figure 6-5</a>.</P>
+                <a name="learnsqlsvr05-CHP-6-FIG-5"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 6-5. Viewing the global temporary table from the Object
+                            Explorer</H5>
+                        <img border="0" alt="" width="550" height="140" SRC="images/learnsqlsvr05_0605.jpg">
+                    </center>
+                </p><br>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">Unlike with views, updating data in local or global temporary
+                                            tables does not change the data in the underlying original table.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">You will note that, unlike the local temporary table, the global temporary table does
+                    not have a system generated suffix attached to the name of the global temporary table. In fact, when
+                    creating global temporary tables, you have to be careful that one with the same name does not
+                    already exist, so as to prevent collisions between tables in any one session. There can be only one
+                    instance of a global temporary table with any particular name.</p>
+                <p class="docText">For example, if you type the following query and try to create another global
+                    temporary called <tt>##Temp1</tt>:</P>
+                <pre>
+    SELECT s.sname, s.stno, d.dname, s.class INTO ##Temp1
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+    AND       (s.class = 1 or s.class = 2)
+    AND       s.major = 'MATH';
+</pre><BR>
+
+                <p class="docText">You will get the following error message:</p>
+                <pre>
+    Msg 2714, Level 16, State 6, Line 1
+    There is already an object named '##Temp1' in the database.
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-3.2.1.3"></a>
+                <h5 id="title-IDAZ5EK4" class="docSection4Title">6.3.2.1.3. Deleting temporary tables</h5>
+                <p class="docText">If you want to delete a temporary table (local or global) before ending the session,
+                    you can use the <tt>DROP TABLE</tt> statement, just as you would to delete a permanent table.</P>
+                <p class="docText">For example, with the following query</p>
+                <pre>
+    DROP TABLE ##Temp1
+</pre><br>
+
+                <p class="docText">you will get this message:</P>
+                <pre>
+    Command(s) completed successfully.
+</pre><BR>
+
+                <p class="docText">To view this change (drop), click on select Temporary Tables and then select Refresh,
+                    and you will see that the temporary table <tt>##Temp1</tt> no longer exists, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-6-FIG-6">Figure 6-6</a>.</P>
+                <a name="learnsqlsvr05-CHP-6-FIG-6"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 6-6. Viewing the global temporary table from the Object
+                            Explorer</h5>
+                        <img border="0" alt="" width="550" height="127" SRC="images/learnsqlsvr05_0606.jpg">
+                    </center>
+                </p><br>
+
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 7.2.&nbsp; The UNION Operation</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-2"></a>
+                <h3 id="title-IDAUK10BB" class="docSection1Title">7.2. The UNION Operation</H3><a
+                    name="IDX-CHP-7-0408"></a>
+                <a name="IDX-CHP-7-0409"></a>
+
+                <p class="docText">In SQL Server , a binary union is performed with the <tt>UNION</tt> set operation. A
+                    <tt>UNION</tt> takes the result sets from two (or more) queries and returns all rows from the
+                    results sets as a single result set (removing the duplicates). In this section, we illustrate how a
+                    <tt>UNION</tt> works; although there are other ways to retrieve this information, we are showing the
+                    <tt>UNION</tt> alternative.</p>
+                <p class="docText">Suppose that we want to find the names of all students who are computer science
+                    (COSC) majors, along with all students who are <tt>MATH</tt> majors from the <tt>Student</tt> table,
+                    we may write the following query that uses the <tt>UNION</tt> set operator:</p>
+                <pre>
+    SELECT sname
+    FROM Student
+    WHERE major = 'COSC'
+      UNION
+    SELECT sname
+    FROM Student
+    WHERE major = 'MATH'
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">The two sets being unioned must have the same number of
+                                            columns in the result sets of the <tt>SELECT</tt> clauses.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </P><br>
+                <p class="docText">While executing the <tt>UNION</tt>, SQL first executes the first part of the query:
+                </p>
+                <pre>
+    SELECT sname
+    FROM Student
+    WHERE major = 'COSC'
+</pre><br>
+
+                <p class="docText">This part virtually produces the following 10 rows of output:</p>
+                <pre>
+    sname
+    --------------------
+    Mary
+    Zelda
+    Brenda
+    Lujack
+    Elainie
+    Jake
+    Hillary
+    Brad
+    Alan
+    Jerry
+
+    (10 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Then SQL executes the second part of the query:</p>
+                <pre>
+    SELECT sname
+    FROM Student
+    WHERE major = 'MATH'
+</pre><br>
+
+                <p class="docText">This part virtually produces the following 7 rows of output:</P>
+                <pre>
+    sname
+    --------------------
+    Mario
+    Kelly
+    Reva
+    Monica
+    Sadie
+    Stephanie
+    Jake
+
+    (7 row(s) affected)
+</pre><BR>
+
+                <p class="docText">SQL then combines the two virtual sets of results (the <tt>UNION</tt> operation),
+                    which includes throwing out any duplicates (an extra "Jake," in this case), leaving us with the
+                    following 16 rows of output:</P>
+                <pre>
+    sname
+    --------------------
+    Alan
+    Brad
+    Brenda
+    Elainie
+    Hillary
+    Jake
+    Jerry
+    Kelly
+    Lujack
+    Mario
+    Mary
+    Monica
+    Reva
+    Sadie
+    Stephanie
+    Zelda
+
+    (16 row(s) affected)
+</pre><br>
+
+                <p class="docText">Prior to SQL Server 7, SQL Server always returned the result of a <tt>UNION</tt> in
+                    sorted order. This was so because the <tt>UNION</tt> eliminated duplicate rows using a sorting
+                    strategy. The ordering was simply a by-product of the sorting to eliminate duplicates. Newer
+                    versions of SQL Server, however, have several alternative strategies available for removing
+                    duplicates, so there is no guarantee of any particular order when you use <tt>UNION</tt>. If you
+                    would like to order the output, you should explicitly use <tt>ORDER BY</tt> at the end of your last
+                    <tt>SELECT</tt> statement.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">The maximum number of rows possible when a <tt>UNION</tt> is
+                                            used is the sum of the number of rows in the two result sets (or tables) in
+                                            the two <tt>SELECT</tt> clauses.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-7-SECT-2.1"></a>
+                <h4 id="title-IDARN10BB" class="docSection2Title">7.2.1. Similar Columns in Unions</h4><a
+                    name="IDX-CHP-7-0410"></a>
+
+                <p class="docText">Earlier, we mentioned that for a union to be successful, there has to be union
+                    compatibility, and the two sets being unioned have to have similar columns. So what does similar
+                    columns mean?</P>
+                <p class="docText">If we wrote the earlier <tt>UNION</tt> example like this:</p>
+                <pre>
+    SELECT major
+    FROM Student
+    WHERE major = 'COSC'
+      UNION
+    SELECT sname
+    FROM Student
+    WHERE major = 'MATH'
+</pre><br>
+
+                <p class="docText">We would get a result set, but would the result set (output) be valid? The answer is
+                    <span class="docEmphasis">no</span>. You are trying to union majors and student names. These are not
+                    similar columns (though the data types of the two columns are compatible), and it does not make
+                    sense to union two different types of columns. So, before performing a union operation, you have to
+                    be very careful that you union like columns, and not "apples and oranges."</P>
+
+                <a name="learnsqlsvr05-CHP-7-SECT-2.2"></a>
+                <h4 id="title-IDAJO10BB" class="docSection2Title">7.2.2. Unioning Constants or Variables</h4>
+                <p class="docText">In SQL Server , a group of <tt>SELECT</tt> statements can also be used to union
+                    constants or variables:</P>
+                <pre>
+    SELECT col1=100, col2=200
+    UNION
+    SELECT col1=400, col2=500
+    UNION
+    SELECT col1=100*3, col2=200*3
+    UNION
+    SELECT 900, 400
+</pre><br>
+
+                <p class="docText">This query will produce:</P>
+                <pre>
+    col1        col2
+    ----------- -----------
+    100         200
+    300         600
+    400         500
+    900         400
+
+    (4 row(s) affected)
+</pre><br>
+
+                <p class="docText">Note that the output here happens to be sorted by the first column.</P>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

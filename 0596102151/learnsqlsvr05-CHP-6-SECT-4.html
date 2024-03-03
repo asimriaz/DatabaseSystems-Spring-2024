@@ -1,0 +1,257 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 6.4.&nbsp; Query Development with Derived Structures</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-6-SECT-4"></a>
+<h3 id="title-IDA2V1TC" class="docSection1Title">6.4. Query Development with Derived Structures</H3>
+<p class="docText">In this section, we discuss how derived structures such as views and temporary tables can be used in query development.</p>
+<p class="docText">To illustrate this process, we will list from our standard database, <tt>Student_course</tt>, the name, student number, and department name of students who are freshman or sophomores and computer science majors.</p>
+<p class="docText">In Step 1, we will develop a query, and in Step 2, we will show how to use this query with derived structures. In Step 2, Option 1 shows how the query can be turned into a view, Option 2 shows how the query can be turned into an inline view, and Option 3 shows how the query can be used to create a temporary table.</P>
+<a name="learnsqlsvr05-CHP-6-SECT-4.1"></a>
+<h4 id="title-IDALW1TC" class="docSection2Title">6.4.1. Step 1: Develop a Query Step by Step</H4><a name="IDX-CHP-6-0396"></a> 
+<a name="IDX-CHP-6-0397"></a> 
+
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">The first step is to see which columns we need and in which tables these columns are found. We need student names (<tt>sname</tt>) and numbers (<tt>stno</tt>), which are found in the <tt>Student</tt> table. Department names (<tt>dname</tt>) are found in the <tt>Department_to_major</tt> table. To find the department names that correspond to the student majors, we have to combine the <tt>Student</tt> and <tt>Department_to_major</tt> tables. To combine these two tables, we will join the tables where <tt>major</tt> from the <tt>Student</tt> table joins with the <tt>dcode</tt> from the <tt>Department_to_major</tt> table as follows (because the statements eventually will be filtered by <tt>class</tt>, we include <tt>class</tt> in the result set):</P><pre>
+    SELECT s.sname, s.stno, d.dname, s.class
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+</pre><BR>
+<p class="docList">After you type the query and run it, you will get the following 45 rows of output:</P><pre>
+    sname                stno   dname                class
+    -------------------- ------ -------------------- ------
+    Lineas               2      English              1
+    Mary                 3      Computer Science     4
+    Zelda                5      Computer Science     NULL
+    Ken                  6      Political Science    NULL
+    Mario                7      Mathematics          NULL
+    Brenda               8      Computer Science     2
+    Romona               9      English              NULL
+    Richard              10     English              1
+    Kelly                13     Mathematics          4
+    Lujack               14     Computer Science     1
+    Reva                 15     Mathematics          2
+    Elainie              17     Computer Science     1
+    Harley               19     Political Science    2
+    Donald               20     Accounting           4
+    Chris                24     Accounting           4
+    Jake                 31     Computer Science     4
+    Lynette              34     Political Science    1
+    Susan                49     English              3
+    Monica               62     Mathematics          3
+    Bill                 70     Political Science    NULL
+    Hillary              121    Computer Science     1
+    Phoebe               122    English              3
+    Holly                123    Political Science    4
+    Sadie                125    Mathematics          2
+    Jessica              126    Political Science    2
+    Steve                127    English              1
+    Brad                 128    Computer Science     1
+    Cedric               129    English              2
+    Alan                 130    Computer Science     2
+    Rachel               131    English              3
+    George               132    Political Science    1
+    Jerry                142    Computer Science     4
+    Cramer               143    English              3
+    Fraiser              144    Political Science    1
+    Harrison             145    Accounting           4
+    Francis              146    Accounting           4
+    Smithly              147    English              2
+    Sebastian            148    Accounting           2
+    Losmith              151    Chemistry            3
+    Genevieve            153    NULL                 NULL
+    Lindsay              155    NULL                 1
+    Stephanie            157    Mathematics          NULL
+    Gus                  160    Art                  3
+    Benny                161    Chemistry            4
+    Jake                 191    Mathematics          2
+
+    (45 row(s) affected)
+</pre><BR>
+</div></li><LI><div style="font-weight:normal"><p class="docList">To find all the freshmen and sophomores (class 1 and 2) from the <tt>Student</tt> table, add <tt>AND (s.class = 1 or s.class = 2)</tt> to the end of the previous query, as follows:</P><pre>
+    SELECT s.sname, s.stno, d.dname, s.class
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+    AND (s.class = 1 or s.class = 2)
+</pre><br>
+<p class="docList">Running this query produces the following 21 rows of output:</P><pre>
+    sname                stno   dname                class
+    -------------------- ------ -------------------- ------
+    Lineas               2      English              1
+    Brenda               8      Computer Science     2
+    Richard              10     English              1
+    Lujack               14     Computer Science     1
+    Reva                 15     Mathematics          2
+    Elainie              17     Computer Science     1
+    Harley               19     Political Science    2
+    Lynette              34     Political Science    1
+    Hillary              121    Computer Science     1
+    Sadie                125    Mathematics          2
+    Jessica              126    Political Science    2
+    Steve                127    English              1
+    Brad                 128    Computer Science     1
+    Cedric               129    English              2
+    Alan                 130    Computer Science     2
+    George               132    Political Science    1
+    Fraiser              144    Political Science    1
+    Smithly              147    English              2
+    Sebastian            148    Accounting           2
+    Lindsay              155    NULL                 1
+    Jake                 191    Mathematics          2
+
+    (21 row(s) affected)
+</pre><BR>
+</div></li><li><div style="font-weight:normal"><p class="docList">Now that we have the department names of all the freshmen and sophomores, we need to find the computer science majors from this group, so we add <tt>AND s.major = 'COSC'</tt> to the previous query as follows:</p><pre>
+    SELECT s.sname, s.stno, d.dname, s.class
+    FROM   Student s, Department_to_major d
+    WHERE  s.major = d.dcode
+    AND (s.class = 1 or s.class = 2)
+    AND s.major = 'COSC'
+</pre><br>
+<p class="docList">This query produces the following output (six rows), which finally gives us the student name, student number, and department name of students who are freshman or sophomores and computer science majors:</P><pre>
+    sname                stno   dname                class
+    -------------------- ------ -------------------- ------
+    Brenda               8      Computer Science     2
+    Lujack               14     Computer Science     1
+    Elainie              17     Computer Science     1
+    Hillary              121    Computer Science     1
+    Brad                 128    Computer Science     1
+    Alan                 130    Computer Science     2
+
+    (6 row(s) affected)
+</pre><br>
+<p class="docList">Note that in each case where we add more filtering in the <tt>WHERE</tt> clause, the number of rows declines. If the number of rows does not decline, that could represent a problem.</p></div></LI></ol></div>
+
+<a name="learnsqlsvr05-CHP-6-SECT-4.2"></a>
+<H4 id="title-IDAGZ1TC" class="docSection2Title">6.4.2. Step 2: Using a Derived Structure</H4>
+<p class="docText">This step shows how the previous query (developed in Step 1) can be turned into a view (Option 1), inline view (Option 2), or temporary table (Option 3). Each one of these derived structures will produce the same end results, so as you develop your own queries, you may use whichever derived structure you become most comfortable with and/or is most appropriate.</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">Derived structures are also very useful when you wish to use nested functions.</p></td></tr></table></td></tr></table></p><br>
+<a name="learnsqlsvr05-CHP-6-SECT-4.2.1"></a>
+<H5 id="title-IDATZ1TC" class="docSection3Title">6.4.2.1. Option 1: Turning your query into a view</h5>
+<p class="docText">To create a view (called <tt>stu_view</tt>) using the previous example query, type:</p>
+<pre>
+    CREATE VIEW stu_view AS
+    SELECT   s.sname, s.stno, d.dname, s.class
+    FROM     Student s, Department_to_major d
+    WHERE    s.major = d.dcode
+    AND         (s.class = 1 or s.class = 2)
+    AND         s.major = 'COSC'
+</pre><BR>
+
+<p class="docText">You can now <tt>SELECT</tt> from the view by typing:</p>
+<pre>
+    SELECT *
+    FROM   stu_view
+    WHERE  sname LIKE 'BR%'
+</pre><br>
+
+<p class="docText">This query produces the following output, which includes all the names in the view <tt>stu_view</tt> that start with "Br":</P>
+<pre>
+    sname                stno   dname                class
+    -------------------- ------ -------------------- ------
+    Brenda               8      Computer Science     2
+    Brad                 128    Computer Science     1
+
+    (2 row(s) affected)
+</pre><br>
+
+<p class="docText">Remember that the view always reflects the database as it is, and a view takes up no extra storage in the database, because no data is stored in a view.</p>
+
+<a name="learnsqlsvr05-CHP-6-SECT-4.2.2"></a>
+<H5 id="title-IDAR01TC" class="docSection3Title">6.4.2.2. Option 2: Using an inline view</h5>
+<p class="docText">You can also place a query in the <tt>FROM</tt> clause of a <tt>SELECT</tt> statement and thereby create what is called an <span class="docEmphasis">inline view</span>. An inline view exists only during the execution of a query. The main purpose of an inline view is to simplify the development of a one-time query. In a typical development scenario, a person would probably devise a <tt>SELECT</tt> statement, test it, examine the result, wrap it in parentheses, and continue with the development by using the inline view.</P>
+<p class="docText">Follow these general steps to develop an inline view:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docList">Develop a query:</P><pre>
+    SELECT column1, column2, ...
+    FROM   TableName
+    WHERE  ...
+</pre><BR>
+</div></LI><li><div style="font-weight:normal"><p class="docList">Wrap the results into parentheses and make it into an inline view:</P><pre>
+    SELECT *
+    FROM   (SELECT column1, column2, ... FROM TableName WHERE ...)
+</pre><BR>
+</div></li><LI><div style="font-weight:normal"><p class="docList">Display the columns in the inline view:</P><pre>
+    SELECT v.column1, v.column2, ...
+    FROM   (SELECT column1, column2, ... FROM TableName WHERE ...) v
+</pre><br>
+</div></li></ol></div>
+<p class="docText">You could then proceed to make the previous query an inline view and add more complexity as needed. The beauty of creating a query in steps is that you can examine each step using counts and <tt>TOP</tt> qualifiers to see whether you're heading in the right direction.</p>
+<p class="docText">Let's look at an example of an inline view for our sample problem. In this example, we create the same view as previously inline -- that is, we create the view on the fly, give it an alias of <tt>v</tt>, and use it just as we would use a stored table or view, as follows:</p>
+<pre>
+    SELECT   v.sname, v.dname, v.class
+    FROM     (SELECT s.sname, s.stno, d.dname, s.class
+    FROM     Student AS s, Department_to_major AS d
+    WHERE    s.major = d.dcode
+       AND      (s.class = 1 or s.class = 2)
+       AND      s.major = 'COSC') AS v
+</pre><BR>
+
+<p class="docText">This query produces the following six rows of output:</p>
+<pre>
+    sname                dname                class
+    -------------------- -------------------- ------
+    Brenda               Computer Science     2
+    Lujack               Computer Science     1
+    Elainie              Computer Science     1
+    Hillary              Computer Science     1
+    Brad                 Computer Science     1
+    Alan                 Computer Science     2
+    (6 row(s) affected)
+</pre><br>
+
+<p class="docText">In the final result set of the outer query, the column names reference the names used in the inline view result set.</P>
+
+<a name="learnsqlsvr05-CHP-6-SECT-4.2.3"></a>
+<H5 id="title-IDAM21TC" class="docSection3Title">6.4.2.3. Option 3: Using a global temporary table</H5>
+<p class="docText">To create a global temporary table (called <tt>##Temp2</tt>) using the query developed in Step 1, type:</p>
+<pre>
+    SELECT  s.sname, s.stno, d.dname, s.class INTO ##Temp2
+    FROM    Student s, Department_to_major d
+    WHERE   s.major = d.dcode
+    AND        (s.class = 1 or s.class = 2)
+    AND        s.major = 'COSC'
+</pre><br>
+
+<p class="docText">Once you run or execute your query, you have created a temporary table called <tt>##Temp2</tt>.</p>
+<p class="docText">Now if you type:</p>
+<pre>
+    SELECT *
+    FROM ##Temp2
+</pre><br>
+
+<p class="docText">You should get the following six rows of output, which should be exactly the same as you received in the other options:</p>
+<pre>
+    sname                stno   dname                class
+    -------------------- ------ -------------------- ------
+    Brenda               8      Computer Science     2
+    Lujack               14     Computer Science     1
+    Elainie              17     Computer Science     1
+    Hillary              121    Computer Science     1
+    Brad                 128    Computer Science     1
+    Alan                 130    Computer Science     2
+
+    (6 row(s) affected)
+</pre><br>
+
+<p class="docText">In all the examples of views and temporary tables, the SQL programmer weighs programming effort (individual and team), storage costs, and query efficiency to choose which structure is appropriate.</p>
+
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

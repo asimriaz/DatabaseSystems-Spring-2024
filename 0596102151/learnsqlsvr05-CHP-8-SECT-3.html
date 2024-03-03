@@ -1,0 +1,85 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 8.3.&nbsp; When the Join Cannot Be Turned into a Subquery</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-8-SECT-3"></a>
+<h3 id="title-IDASOPR5" class="docSection1Title">8.3. When the Join Cannot Be Turned into a Subquery</H3>
+<p class="docText">When a column from a table needs to be in the result set, that table has to be in the outer query. If two tables are being used, and if columns from both tables have to be in the result set, a join is necessary. This type of join cannot be turned into a subquery, because information from <span class="docEmphasis">both</span> tables has to be in the result set. But if the result set does not need the columns from more than one table, then the join can be turned into a subquery. The other tables can be included such that the filtering conditions can be in the subquery (or inner query), and the table that has the needed result set columns is in the outer query.</p>
+<p class="docText">Consider this example. Our original query (the first query discussed in this chapter), requested the list of names and student numbers of students who made As or Bs in any course. Student names and numbers are both in the <tt>Student</tt> table; the <tt>Grade_report</tt> table is needed only as a filter, so we could write this as a subquery, and also turn it into a join.</p>
+<p class="docText">Now, if this original query had asked for output from the <tt>Grade_report</tt> table also, such as, "list the names, numbers, <span class="docEmphasis">and</span> grades of all students who have made As or Bs," the query would be asking for information from both the <tt>Student</tt> and <tt>Grade_report</tt> tables. In this case, you would have to join the two tables to get the information; you could not just query the <tt>Grade_report</tt> table, because that table has no names in it. Similarly, the <tt>Student</tt> table contains no grades. So you would not be able to write this as a subquery. Refer again to the original query example:</P>
+<pre>
+    SELECT Student.sname, Student.stno
+    FROM   Student
+    WHERE  Student.stno
+      IN (SELECT   gr.student_number
+          FROM     Grade_report gr
+          WHERE    gr.grade = 'B' OR  gr.grade = 'A')
+    ORDER BY Student.stno
+</pre><br>
+
+<p class="docText">This query asks for information only from the <tt>Student</tt> table (student names and numbers). Although the query used the <tt>Grade_report</tt> table, nothing from the <tt>Grade_report</tt> table was in the outer result set. Again, the <tt>Grade_report</tt> table is needed only as a filter (to get the student numbers of those who have As and Bs); hence we were able to write this as a subquery.</P>
+<p class="docText">The following join query asks for information from both the <tt>Student</tt> and <tt>Grade_report</tt> tables (a result set that lists both names and grades of all students who have made As or Bs in any course):</p>
+<pre>
+    SELECT DISTINCT Student.sname, gr.grade
+    FROM   Student, Grade_report gr
+    WHERE  Student.stno = gr.student_number
+    AND       (gr.grade = 'B' OR gr.grade = 'A')
+</pre><BR>
+
+<p class="docText">This query produces 41 rows of output (of which we show the first 25 rows here):</P>
+<pre>
+    sname                grade
+    -------------------- -----
+    Brenda               A
+    Brenda               B
+    Cedric               A
+    Cedric               B
+    Chris                B
+    Cramer               B
+    Donald               A
+    Fraiser              B
+    Francis              B
+    George               B
+    Harley               B
+    Hillary              B
+    Holly                A
+    Holly                B
+    Jerry                A
+    Jessica              A
+    Jessica              B
+    Kelly                B
+    Ken                  B
+    Lindsay              B
+    Lineas               A
+    Lineas               B
+    Lujack               A
+    Lujack               B
+    Lynette              A
+    .
+    .
+    .
+
+    (41 row(s) affected)
+</pre><BR>
+
+<p class="docText">As this example demonstrates, if information from a table is needed in a result set, then that table cannot be buried in a subqueryit must be in the outer query.</P>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

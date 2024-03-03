@@ -1,0 +1,658 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 4.1.&nbsp; The JOIN</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-1"></a>
+                <H3 id="title-IDAD0245" class="docSection1Title">4.1. The JOIN</H3><a name="IDX-CHP-4-0204"></a>
+
+                <p class="docText">In SQL Server , the join is accomplished using the ANSI <tt>JOIN</tt> SQL syntax<a
+                        name="IDX-CHP-4-0205"></a>
+                    (based on ANSI Standard SQL-92), which uses the <tt>JOIN</tt> keyword and an <tt>ON</tt> clause. The
+                    ANSI <tt>JOIN</tt> syntax requires the use of an <tt>ON</tt> clause for specifying how the tables
+                    are related. One <tt>ON</tt> clause is used for each pair of tables being joined. The general form
+                    of the ANSI <tt>JOIN</tt> SQL syntax is:</P>
+                <pre>
+SELECT columns
+FROM table1 JOIN table2
+ON table1.column1=table2.column1
+</pre><BR>
+
+                <p class="docText">The basic idea of a join is as follows: Suppose we have the following two tables, <a
+                        class="docLink" href="#learnsqlsvr05-CHP-4-TABLE-1">Table 4-1</a> and <a class="docLink"
+                        href="#learnsqlsvr05-CHP-4-TABLE-2">Table 4-2</a>.</p>
+                <a name="learnsqlsvr05-CHP-4-TABLE-1"></a>
+                <p>
+                <table cellspacing="0" FRAME="hsides" RULES="all" cellpadding="4" width="100%">
+                    <caption>
+                        <h5 class="docTableTitle">Table 4-1. The XYZ Table</H5>
+                    </caption>
+                    <colgroup span="3">
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <TR>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnA</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnB</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnC</P>
+                            </th>
+                        </tr>
+                    </thead>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X1</p>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Y1</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z1</p>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X2</p>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Y2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z2</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Y3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z3</P>
+                        </td>
+                    </tr>
+                </table>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-4-TABLE-2"></a>
+                <P>
+                <table cellspacing="0" FRAME="hsides" RULES="all" cellpadding="4" width="100%">
+                    <caption>
+                        <H5 class="docTableTitle">Table 4-2. The XDE Table</H5>
+                    </caption>
+                    <colgroup span="3">
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <TR>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnA</p>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnD</p>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnE</p>
+                            </th>
+                        </TR>
+                    </thead>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X1</P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D1</P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">E1</P>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X2</p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">E2</P>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">E3</p>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">The common column between the two tables (<a class="docLink"
+                        href="#learnsqlsvr05-CHP-4-TABLE-1">Table 4-1</a> and <a class="docLink"
+                        href="#learnsqlsvr05-CHP-4-TABLE-2">Table 4-2</a>) is <tt>columnA</tt>. So the join would be
+                    performed on <tt>columnA</tt>. A SQL <tt>JOIN</tt> would give a table where <tt>columnA</tt> of
+                    <tt>Table1</tt> = <tt>columnA</tt> of <tt>Table2</tt>. This would produce the new table, <a
+                        class="docLink" href="#learnsqlsvr05-CHP-4-TABLE-3">Table 4-3</a>, the result of the join, as
+                    shown below:</P>
+                <a name="learnsqlsvr05-CHP-4-TABLE-3"></a>
+                <p>
+                <table cellspacing="0" FRAME="hsides" RULES="all" cellpadding="4" width="100%">
+                    <caption>
+                        <h5 class="docTableTitle">Table 4-3. Joining XYZ with XDE</h5>
+                    </caption>
+                    <colgroup span="6">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <TR>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnA</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnB</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnC</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnA</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnD</p>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">columnE</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X1</P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Y1</p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z1</p>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X1</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D1</p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">E1</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Y2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">X2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D2</p>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">E2</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X3</P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Y3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Z3</P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">X3</P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">D3</P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">E3</P>
+                        </TD>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">There are several types of joins<a name="IDX-CHP-4-0206"></a>
+                    in SQL. To be precise, the previous model refers to an <i>inner join</I>, where the two tables being
+                    joined must share at least one common column. The columns of the two tables being joined by the
+                    <tt>JOIN</tt> command are matched using an <tt>ON</tt> clause. SQL Server will actually translate
+                    the example <tt>JOIN</tt> statement to an unambiguous <tt>INNER JOIN</tt> form, as you shall see.
+                    When inner-joining two tables, the <tt>JOIN</tt> returns rows from both tables only if there is a
+                    corresponding value in both tables as described by the <tt>ON</tt> clause column. In other words,
+                    the <tt>JOIN</tt> disregards any rows in which the specific join condition, specified in the
+                    <tt>ON</tt> clause, is not met.</p>
+                <p class="docText">To illustrate the <tt>JOIN</tt> using our database (<tt>Student_course</tt>
+                    database), we present the following two examples.</p>
+                <a name="learnsqlsvr05-CHP-4-SECT-1.1"></a>
+                <h4 id="title-IDAIQ345" class="docSection2Title">4.1.1. Example 1</h4><a name="IDX-CHP-4-0207"></a>
+                <a name="IDX-CHP-4-0208"></a>
+                <a name="IDX-CHP-4-0209"></a>
+                <a name="IDX-CHP-4-0210"></a>
+                <a name="IDX-CHP-4-0211"></a>
+
+                <p class="docText">To find the student names and dependent names of all the students who have
+                    dependents, we need to join the <tt>Student</tt> table with the <tt>Dependent</tt> table, because
+                    the data that we want to display is spread across these two tables. Before we can formulate the
+                    <tt>JOIN</tt> query, we have to examine both tables and find out what relationship exists between
+                    the two tables. Usually this relationship is where one table has a column as a primary key and the
+                    other table has a column as a foreign key. A <span class="docEmphasis">primary key</span> is a
+                    unique identifier for a row in a table. A <span class="docEmphasis">foreign key</span> is so called
+                    because the key it references is "foreign" to the table where it exists.</P>
+                <p class="docText">Let us first look at the table descriptions of the <tt>Student</tt> and
+                    <tt>Dependent</tt> tables, shown in <a class="docLink" href="#learnsqlsvr05-CHP-4-FIG-1">Figures
+                        4-1</a> and <a class="docLink" href="#learnsqlsvr05-CHP-4-FIG-2">4-2</a>, respectively.</P>
+                <a name="learnsqlsvr05-CHP-4-FIG-1"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 4-1. Description of Student table</h5>
+                        <img border="0" alt="" width="339" height="141" SRC="images/learnsqlsvr05_0401.jpg">
+                    </center>
+                </p><br>
+                <a name="learnsqlsvr05-CHP-4-FIG-2"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 4-2. Description of Dependent table</h5>
+                        <img border="0" alt="" width="337" height="137" SRC="images/learnsqlsvr05_0402.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">In examining these two tables, we note that student number (<tt>stno</tt> in the
+                    <tt>Student</tt> table) is the primary key of the <tt>Student</tt> table. <tt>stno</tt> is the
+                    unique identifier for each student. The <tt>Dependent</tt> table, which was not created with a
+                    primary key of its own, contains a reference to the <tt>Student</tt> table in that for each
+                    dependent, a parent number (<tt>pno</tt>) is recorded. <tt>pno</tt> in the <tt>Dependent</tt> table
+                    is a foreign keyit represents a primary key from the table it is referencing, <tt>Student</tt>.
+                    <tt>pno</tt> in the <tt>Dependent</tt> table is not unique, because a student can have more than one
+                    dependent; that is, one <tt>stno</tt> can be linked to more than one <tt>pno</tt>.</p>
+                <p class="docText">From the table descriptions, we can see that the <tt>Student</tt> table (which has
+                    columns <tt>stno</tt>, <tt>sname</tt>, <tt>major</tt>, <tt>class</tt>, and <tt>bdate</tt>) can be
+                    joined with the <tt>Dependent</tt> table (which has columns <tt>pno</tt>, <tt>dname</tt>,
+                    <tt>relationship</tt>, <tt>sex</tt>, and <tt>age</tt>) by columns <tt>stno</tt> from the
+                    <tt>Student</tt> table and <tt>pno</tt> from the <tt>Dependent</tt> table. Following the <tt>ANSI
+                        JOIN</tt> syntax, we can join the two tables as follows:</p>
+                <pre>
+SELECT stno, sname, relationship, age
+FROM Student s JOIN Dependent d
+ON s.stno=d.pno
+</pre><br>
+
+                <p class="docText">In this construction, <tt>Student</tt> refers to the <tt>Student</tt> table and
+                    <tt>s</tt> is the table alias of the <tt>Student</tt> table. Likewise, <tt>Dependent</tt> refers to
+                    the <tt>Dependent</tt> table and <tt>d</tt> is the table alias of the <tt>Dependent</tt> table. The
+                    table alias simplifies writing queries or expressions using single-letter table aliases. We very
+                    strongly recommend using table aliases in all multi-table queries. This query requests the student
+                    number (<tt>stno</tt>) and student name (<tt>sname)</tt> from the <tt>Student</tt> table, and the
+                    relationship and age from the <tt>Dependent</tt> table when the student number in the
+                    <tt>Student</tt> table (<tt>stno</tt>) matches a parent number (<tt>pno</tt>) in the
+                    <tt>Dependent</tt> table.</p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Table aliases were discussed in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-2.html#learnsqlsvr05-CHP-2">Chapter 2</a>.</P>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">When the previous query is typed and executed, you will get the following output
+                    showing the dependents of the students:</P>
+                <pre>
+stno   sname                relationship age
+------ -------------------- ------------ ------
+2      Lineas               Son          8
+2      Lineas               Daughter     9
+2      Lineas               Spouse       31
+10     Richard              Son          3
+10     Richard              Daughter     5
+14     Lujack               Son          1
+14     Lujack                            3
+17     Elainie              Daughter     4
+17     Elainie              Son          1
+20     Donald               Son          NULL
+20     Donald               Son          6
+34     Lynette              Daughter     5
+34     Lynette              Daughter     1
+62     Monica               Husband      45
+62     Monica               Son          14
+62     Monica               Daughter     16
+62     Monica               Daughter     12
+123    Holly                Son          5
+123    Holly                Son          2
+126    Jessica              Son          6
+126    Jessica              Son          1
+128    Brad                 Son          1
+128    Brad                 Daughter     NULL
+128    Brad                 Daughter     2
+128    Brad                 Wife         26
+132    George               Daughter     6
+142    Jerry                Daughter     2
+143    Cramer               Daughter     7
+144    Fraiser              Wife         22
+145    Harrison             Wife         22
+146    Francis              Wife         22
+147    Smithly              Wife         23
+147    Smithly              Son          4
+147    Smithly              Son          2
+147    Smithly              Son          NULL
+153    Genevieve            Daughter     5
+153    Genevieve            Daughter     4
+153    Genevieve            Son          2
+158    Thornton             wife         22
+&nbsp;
+ (39 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.2"></a>
+                <H4 id="title-IDATW345" class="docSection2Title">4.1.2. Example 2</h4><a name="IDX-CHP-4-0212"></a>
+                <a name="IDX-CHP-4-0213"></a>
+                <a name="IDX-CHP-4-0214"></a>
+                <a name="IDX-CHP-4-0215"></a>
+                <a name="IDX-CHP-4-0216"></a>
+
+                <p class="docText">To find the course names and the prerequisites of all the courses that have
+                    prerequisites, we need to join the <tt>Prereq</tt> table with the <tt>Course</tt> table. Course
+                    names are in the <tt>Course</tt> table and the <tt>Prereq</tt> (prerequisites) table contains the
+                    relationship of each course to its prerequisite course. The descriptions of the <tt>Prereq</tt>
+                    table and <tt>Course</tt> tables are shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-4-FIG-3">Figures 4-3</a> and <a class="docLink"
+                        href="#learnsqlsvr05-CHP-4-FIG-4">4-4</a>, respectively.</P>
+                <a name="learnsqlsvr05-CHP-4-FIG-3"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 4-3. Description of Prereq table</H5>
+                        <img border="0" alt="" width="305" height="65" SRC="images/learnsqlsvr05_0403.jpg">
+                    </center>
+                </P><br>
+                <a name="learnsqlsvr05-CHP-4-FIG-4"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 4-4. Description of Course table</h5>
+                        <img border="0" alt="" width="290" height="92" SRC="images/learnsqlsvr05_0404.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">From these descriptions, we first note that the <tt>Course</tt> table has
+                    <tt>course_number</tt> as its primary keythe unique identifier for each course. The <tt>Prereq</tt>
+                    table also contains a course number, but the course number in the <tt>Prereq</tt> table is not
+                    uniquethere are often several prerequisites for any given course. The course number in the
+                    <tt>Prereq</tt> table is a foreign key referencing the primary key of the <tt>Course</tt> table. The
+                    <tt>Prereq</tt> table (which has columns <tt>course_number</tt> and <tt>prereq</tt>) can be joined
+                    with the <tt>Course</tt> table (which has columns <tt>course_name</tt>, <tt>course_number</tt>,
+                    <tt>credit_hours</tt>, and <tt>offering_dept</tt>) by the relationship column in both tables,
+                    <tt>course_number</tt>, as follows:</p>
+                <pre>
+SELECT *
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+</pre><br>
+
+                <p class="docText">The same query could be written without the table alias (using a table qualifier) as
+                    follows:</p>
+                <pre>
+SELECT *
+FROM Course JOIN Prereq
+ON Course.course_number=Prereq.course_number
+</pre><BR>
+
+                <p class="docText">However, the use of the table alias is so common that the table-alias form should be
+                    used. Also, aliases let you select columns that have the same names from the tables. This query will
+                    display those rows (12 rows) that have <tt>course_number</tt> in the <tt>Course</tt> table equal to
+                    <tt>course_number</tt> in the <tt>Prereq</tt> table, as follows:</P>
+                <pre>
+COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT COURSE_NUMBER PREREQ
+-------------------- ------------- ------------ ------------- ------------- --------
+MANAGERIAL FINANCE   ACCT3333      3            ACCT          ACCT3333     ACCT2220
+ORGANIC CHEMISTRY    CHEM3001      3            CHEM          CHEM3001     CHEM2001
+DATA STRUCTURES      COSC3320      4            COSC          COSC3320     COSC1310
+DATABASE             COSC3380      3            COSC          COSC3380     COSC3320
+DATABASE             COSC3380      3            COSC          COSC3380     MATH2410
+ADA - INTRODUCTION   COSC5234      4            COSC          COSC5234     COSC3320
+ENGLISH COMP II      ENGL1011      3            ENGL          ENGL1011     ENGL1010
+FUND. TECH. WRITING  ENGL3401      3            ENGL          ENGL3401     ENGL1011
+WRITING FOR NON MAJO ENGL3520      2            ENGL          ENGL3520     ENGL1011
+MATH ANALYSIS        MATH5501      3            MATH          MATH5501     MATH2333
+AMERICAN GOVERNMENT  POLY2103      2            POLY          POLY2103     POLY1201
+POLITICS OF CUBA     POLY5501      4            POLY          POLY5501     POLY4103
+&nbsp;
+ (12 row(s) affected)
+</pre><br>
+
+                <p class="docText">Rows from the <tt>Course</tt> table without a matching row in the <tt>Prereq</tt>
+                    table are not included from the <tt>JOIN</tt> result set. Courses that do not have prerequisites are
+                    not in the result set.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">A primary key is a column or a minimal set of columns whose
+                                            values uniquely identify a row in a table. A primary key cannot have a null
+                                            value. Creation of primary keys is discussed in <a class="docLink"
+                                                href="learnsqlsvr05-CHP-11.html#learnsqlsvr05-CHP-11">Chapter 11</a>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <p class="docText">The inner join uses equality in the <tt>ON</tt> clause (the join condition). When an
+                    equal sign is used as a join condition, the join is called an <i>equi-join</i>. The use of
+                    equi-joins is so common that many people use the phrase "join" synonymously with "equi-join"; when
+                    the term "join" is used without qualification, "equi-join" is inferred.</P>
+                <p class="docText">When dealing with table combinations, specifically joins, it is a good idea to
+                    estimate the number of rows one might expect in the result set. To find out how many rows will
+                    actually occur in the result set, the <tt>COUNT</tt> function is used. For example:</P>
+                <pre>
+SELECT COUNT(*)
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+</pre><BR>
+
+                <p class="docText">will tell us that there are 12 rows in the result set.</P>
+                <p class="docText">In any equi join, let us suppose that the two tables to be joined have X number of
+                    rows and Y number of rows respectively. How many rows does one expect in the join? A good guideline
+                    is in the order of MAX(X,Y). In our case, we have 12 rows in the <tt>Prereq</tt> table and 32 rows
+                    in the <tt>Course</tt> table. MAX(12,32) = 32, but we actually got 12 rows. MAX(X,Y) is just a
+                    guideline. The actual and expected number of rows need not match exactly. It is possible that some
+                    <tt>Course-Prereq</tt> combinations might be repeated.</P>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.3"></a>
+                <h4 id="title-IDAH2345" class="docSection2Title">4.1.3. The INNER JOIN</h4><a name="IDX-CHP-4-0217"></a>
+                <a name="IDX-CHP-4-0218"></a>
+                <a name="IDX-CHP-4-0219"></a>
+                <a name="IDX-CHP-4-0220"></a>
+
+                <p class="docText">In SQL Server, the keyword combination <tt>INNER JOIN</tt> behaves just like the
+                    <tt>JOIN</tt> discussed in the previous section. The general syntax for the <tt>INNER JOIN</tt> is:
+                </p>
+                <pre>
+SELECT columns
+FROM table1 INNER JOIN table2
+ON table1.column1=table2.column1
+</pre><BR>
+
+                <p class="docText">Using the <tt>INNER JOIN</tt>, the <tt>JOIN</tt> query presented in the previous
+                    section also could be written as:</P>
+                <pre>
+SELECT *
+FROM Course INNER JOIN Prereq
+ON Course.course_number=Prereq.course_number
+</pre><BR>
+
+                <p class="docText">And, this query too, would produce the same results as given in the previous section.
+                </P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">As with the <tt>JOIN</tt>, the <tt>INNER JOIN</tt> cannot be
+                                            used without the <tt>ON</tt> clause.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.4"></a>
+                <h4 id="title-IDAC4345" class="docSection2Title">4.1.4. Using a WHERE Clause Instead of a JOIN</h4>
+                <p class="docText">Another way of joining tables in SQL Server is to use a <tt>WHERE</tt> clause instead
+                    of using the <tt>JOIN</tt> or <tt>INNER JOIN</tt> command. According to the SQL-92 standard, the
+                    inner join can be specified either with the <tt>JOIN</tt>/<tt>INNER JOIN</tt> construction or with a
+                    <tt>WHERE</tt> clause. To perform a join with a <tt>WHERE</tt> clause, the tables to be joined are
+                    listed in the <tt>FROM</tt> clause of a <tt>SELECT</tt> statement, and the "join condition" between
+                    the tables to be joined is specified in the <tt>WHERE</tt> clause.</P>
+                <p class="docText">The <tt>JOIN</tt> from the preceding section could be written with a <tt>WHERE</tt>
+                    clause as follows:</P>
+                <pre>
+SELECT *
+FROM Course c, Prereq p
+WHERE c.course_number= p.course_number
+</pre><br>
+
+                <p class="docText">This command will display the same 12 rows as was previously shown (when the
+                    <tt>JOIN</tt> was used). You will soon see one of the reasons it is better not to use
+                    <tt>WHERE</tt>.</p>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.5"></a>
+                <h4 id="title-IDAQ5345" class="docSection2Title">4.1.5. Associative Property of the JOIN</h4>
+                <p class="docText">When two tables are being joined, it does not matter whether <tt>TableA</tt> is
+                    joined with <tt>TableB</tt>, or <tt>TableB</tt> is joined with <tt>TableA</tt>. For example, the
+                    following two queries would essentially give the same result set (output):</p>
+                <pre>
+SELECT *
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+</pre><br>
+
+                <p class="docText">and:</p>
+                <pre>
+SELECT *
+FROM Prereq p JOIN Course c
+ON p.course_number=c.course_number
+</pre><br>
+
+                <p class="docText">The only difference in the two result sets would be the order of the columns<a
+                        name="IDX-CHP-4-0221"></a>
+                    . But the result set column order can be controlled by listing out the columns in the order that you
+                    want them after the <tt>SELECT</tt> instead of using the <tt>SELECT *</tt> syntax.</p>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.6"></a>
+                <h4 id="title-IDAXA445" class="docSection2Title">4.1.6. Column Types in Joins</h4><a
+                    name="IDX-CHP-4-0222"></a>
+                <a name="IDX-CHP-4-0223"></a>
+
+                <p class="docText">Joins have to be performed on "compatible" columns; that is, a character column may
+                    be joined to another character column, a numeric column may be joined to another numeric column, and
+                    so forth. So, for example, a <tt>CHAR</tt> column can be joined to a <tt>VARCHAR</tt> column (both
+                    being character columns), or an <tt>INT</tt> column can be joined to a <tt>REAL</tt> column (both
+                    being numeric columns). Having made the point that compatible columns are required, and keeping in
+                    mind that SQL is not logical, it is up to the programmer to match semantics. In reality, why would
+                    you join two tables unless a relationship existed? If you ask SQL to join a <tt>job_title</tt>
+                    column with a <tt>last_name</tt> column, it will try to do so even though it makes no sense!</p>
+                <p class="docText">Some columns types<i>--</i>for example, <tt>IMAGE</tt>--cannot be joined, as these
+                    columns will generally not contain "like" columns. Joins cannot be operated on binary data types.
+                </P>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-1.7"></a>
+                <h4 id="title-IDA3B445" class="docSection2Title">4.1.7. Performance Hint for Efficient Joins</h4>
+                <p class="docText">Join on the narrowest columns possible. The narrower the column, the less storage
+                    space is used by SQL Server, and SQL Server can read and write the data faster.</p>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

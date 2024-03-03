@@ -1,0 +1,631 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 10.3.&nbsp; Existence Queries and Correlation</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-2.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-4.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-10-SECT-3"></a>
+                <h3 id="title-IDAAMXNGB" class="docSection1Title">10.3. Existence Queries and Correlation</H3><a
+                    name="IDX-CHP-10-0462"></a>
+                <a name="IDX-CHP-10-0463"></a>
+
+                <p class="docText">Correlated queries are often written so that the question in the inner query is one
+                    of existence. For example, suppose you want to find the names of students who have taken a computer
+                    science (<tt>COSC</tt>) class and have earned a grade of B in that course. This query can be written
+                    in several ways. For example, you can write it as a noncorrelated subquery as follows:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+ (SELECT   gr.student_number FROM Grade_report gr, Section
+  WHERE    Section.section_id = gr.section_id
+  AND         Section.course_num LIKE 'COSC%'
+  AND         gr.grade = 'B')
+</pre><br>
+
+                <p class="docText">This query produces the following output (17 rows):</P>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Brenda
+Lujack
+Reva
+Harley
+Chris
+Lynette
+Hillary
+Phoebe
+Holly
+George
+Cramer
+Fraiser
+Francis
+Lindsay
+Stephanie
+&nbsp;
+(17 row(s) affected)
+</pre><br>
+
+                <p class="docText">You can think of this query as first forming the set of student numbers of students
+                    who have made Bs in <tt>COSC</tt> coursesthe inner query result set. In the inner query, you must
+                    have both the <tt>Grade_report</tt> table (for the grades) and the <tt>Section</tt> table (for the
+                    course numbers). Once you form this set of student numbers (by completing the inner query), the
+                    outer query looks through the <tt>Student</tt> table and <tt>SELECT</tt>s only those students who
+                    are in the inner query set.</P>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">This query could also be done by creating a double-nested
+                                            subquery containing two <tt>IN</tt>s, or it could be written using a
+                                            three-table join.</P>
+                                    </td>
+                                </TR>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">Had we chosen to write the query with an unnecessary correlation, it might look like
+                    this:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+ (SELECT      gr.student_number
+  FROM        Grade_report gr, Section
+  WHERE       Section.section_id = gr.section_id
+  AND           Section.course_num LIKE 'COSC%'
+  AND           gr.student_number = s.stno
+  AND           gr.grade = 'B')
+</pre><BR>
+
+                <p class="docText">The output of this query would be the same as the previous query. In this case, the
+                    use of the <tt>Student</tt> table in the subquery is unnecessary. Although correlation is
+                    unnecessary, this example is included to show the following:</p>
+                <ul>
+                    <LI>
+                        <p class="docList">When correlation is necessary</P>
+                    </LI>
+                    <li>
+                        <p class="docList">How to untangle unnecessarily correlated queries</p>
+                    </li>
+                    <li>
+                        <p class="docList">How you might migrate your thought process toward correlation, should it be
+                            necessary</p>
+                    </li>
+                </ul>
+                <p class="docText">First, let's look at situations in which the correlation of a subquery <span
+                        class="docEmphasis">is</span> necessary, and introduce a new predicate: <tt>EXISTS</tt>.</p>
+                <a name="learnsqlsvr05-CHP-10-SECT-3.1"></a>
+                <h4 id="title-IDAKOXNGB" class="docSection2Title">10.3.1. Using EXISTS</h4><a
+                    name="IDX-CHP-10-0464"></a>
+                <a name="IDX-CHP-10-0465"></a>
+
+                <p class="docText">In situations in which the correlation of a subquery <span
+                        class="docEmphasis">is</span> necessary, you can write the correlated subquery with the
+                    <tt>EXISTS</tt> predicate, which looks like this:</p>
+                <pre>
+SELECT s.sname
+FROM   Student s
+WHERE EXISTS
+ (SELECT 1 FROM Grade_report gr, Section
+  WHERE Section.section_id = gr.section_id
+  AND     Section.course_num LIKE 'COSC%'
+  AND     gr.student_number  = s.stno
+  AND     gr.grade = 'B')
+</pre><br>
+
+                <p class="docText">The output of this query would be the same as the output (17 rows) of both of the
+                    previous queries.</p>
+                <p class="docText">Let's dissect this query. The <tt>EXISTS</tt> predicate says, "Choose the row from
+                    the <tt>Student</tt> table in the outer query if the subquery is true (that is, if a row in the
+                    subquery exists that satisfies the condition in the subquery <tt>WHERE</tt> clause)." Because no
+                    actual result set is formed, "<tt>SELECT</tt> 1" is used as a "dummy" result set to indicate that
+                    the subquery is true (1 is returned) or false (no rows are returned). In the noncorrelated case, we
+                    tied the student number in the <tt>Student</tt> table to the inner query by the <tt>IN</tt>
+                    predicate as follows:</p>
+                <pre>
+SELECT   s.stno
+FROM     Student s
+WHERE    s.stno IN
+   (SELECT "student number ...)
+</pre><br>
+
+                <p class="docText">When using the <tt>EXISTS</tt> predicate, we do not use any column of the
+                    <tt>Student</tt> table, but rather are seeking only to find whether the subquery <tt>WHERE</tt> can
+                    be satisfied.</P>
+                <p class="docText">We have indicated that we are using <tt>EXISTS</tt> with (<tt>SELECT 1...</tt>).
+                    Using the <tt>EXISTS</tt> predicate, the subquery does not form a result set per se, but rather
+                    causes <tt>EXISTS</tt> to returns true or false. The use of <tt>SELECT *</tt> in the inner query is
+                    common among SQL programmers. However, from an "internal" standpoint, <tt>SELECT *</tt> causes the
+                    SQL engine to check the data dictionary unnecessarily. As the actual result of the inner query is
+                    not important, it is strongly suggested that you use <tt>SELECT 'X'</tt> (or <tt>SELECT 1 ...</tt>)
+                    instead of <tt>SELECT * ...</tt> so that a constant is <tt>SELECT</tt>ed instead of some "sensible"
+                    entry. The <tt>SELECT 'X' ..</tt> or <tt>SELECT 1 ...</tt> is simply more efficient.</p>
+                <p class="docText">In the <tt>EXISTS</tt> case, we do not specify any columns to be <tt>SELECT</tt>ed in
+                    the inner query's result set; rather, we use a dummy result--<tt>SELECT 'X'</tt> (or we could use
+                    <tt>SELECT 1</tt>). If the subquery <tt>WHERE</tt> is satisfied, it returns <tt>true</tt>, and if
+                    the inner query is not satisfied, it selects nothing, then the subquery returns <tt>false</tt>. The
+                    <tt>EXISTS</tt> predicate forces us to correlate the query. To illustrate that correlation is
+                    usually necessary with <tt>EXISTS</tt>, consider the following query:</P>
+                <pre>
+SELECT   s.sname
+FROM     Student s
+WHERE EXISTS
+ (SELECT 'X' FROM Grade_report gr, Section t
+  WHERE   t.section_id = gr.section_id
+  AND     t.course_num LIKE 'COSC%'
+  AND     gr.grade = 'B')
+</pre><br>
+
+                <p class="docText">This query produces 48 rows of output (of which we show the first 20 rows):</p>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Zelda
+Ken
+Mario
+Brenda
+Romona
+Richard
+Kelly
+Lujack
+Reva
+Elainie
+Harley
+Donald
+Chris
+Jake
+Lynette
+Susan
+Monica
+Bill.
+.
+.
+&nbsp;
+(48 row(s) affected)
+</pre><BR>
+
+                <p class="docText">This query uses <tt>EXISTS</tt>, but has no correlation. This syntax infers that for
+                    each student row, we test the joined <tt>Grade_report</tt> and <tt>Section</tt> tables to see
+                    whether there is a course number like <tt>COSC</tt> and a grade of B (which, of course, there is).
+                    We unnecessarily ask the subquery question over and over again. The result from this latter,
+                    uncorrelated <tt>EXISTS</tt> query is the same as the following:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s
+</pre><br>
+
+                <p class="docText">The point is that the correlation is usually necessary when we use <tt>EXISTS</tt>.
+                </P>
+                <p class="docText">Consider another example in which a correlation could be used. Suppose that we want
+                    to find the names of all students who have three or more Bs. A first pass at a query might be
+                    something like this:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s WHERE "something" IN
+ (SELECT "something"
+  FROM    Grade_report
+  WHERE  "count of grade = 'B'" &gt; 2)
+</pre><BR>
+
+                <p class="docText">This query can be done with a <tt>HAVING</tt> clause, as you saw previously (<a
+                        class="docLink" href="learnsqlsvr05-CHP-9.html#learnsqlsvr05-CHP-9">Chapter 9</a>), but we want
+                    to show how to do this in yet another way. Suppose we arrange the subquery to use the student number
+                    (<tt>stno</tt>) from the <tt>Student</tt> table as a filter and count in the subquery only when a
+                    row in the <tt>Grade_report</tt> table correlates to that student. The query (this time with an
+                    implied <tt>EXISTS</tt>) looks like this:</p>
+                <pre>
+SELECT   s.sname
+FROM     Student s
+WHERE 2 &lt; (SELECT COUNT(*)
+           FROM     Grade_report gr
+           WHERE    gr.student_number = s.stno
+           AND      gr.grade = 'B')
+</pre><BR>
+
+                <p class="docText">which results in the following output (8 rows):</P>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Lujack
+Reva
+Chris
+Hillary
+Phoebe
+Holly
+&nbsp;
+(8 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Although there is no <tt>EXISTS</tt> in this query, it is implied. The syntax of the
+                    query does not allow an <tt>EXISTS</tt>, but the sense of the query is "<tt>WHERE EXISTS</tt> a
+                    <tt>COUNT</tt> of 2 which is less than..." In this correlated subquery, we have to examine the
+                    <tt>Grade_report</tt> table for each member of the <tt>Student</tt> table to see whether the student
+                    has more than two Bs. We test the entire <tt>Grade_report</tt> table for each student row in the
+                    outer query.</P>
+                <p class="docText">If it were possible, a subquery without the correlation would be more desirable,
+                    because it would appear simpler to understand. The overall query might be as follows:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+ (subquery that defines a set of students who have made 3 Bs)
+</pre><BR>
+
+                <p class="docText">Therefore, we might attempt to write the following query:</P>
+                <pre>
+SELECT   s.sname
+FROM     Student s
+WHERE    s.stno IN
+  (SELECT   gr.student_number
+    FROM    Grade_report gr
+    WHERE   gr.grade = 'B')
+</pre><br>
+
+                <p class="docText">However, as the following output (27 rows) shows, this query would give us only
+                    students who earned at least one B:</P>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Zelda
+Ken
+Mario
+Brenda
+Kelly
+Lujack
+Reva
+Harley
+Chris
+Lynette
+Hillary
+Phoebe
+Holly
+Sadie
+Jessica
+Steve
+Cedric
+George
+Cramer
+Fraiser
+Francis
+Smithly
+Sebastian
+Lindsay
+Stephanie
+&nbsp;
+(27 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To get a list of students who have earned at least three Bs, we could try the
+                    following query:</p>
+                <pre>
+SELECT   s.sname
+FROM     Student s
+WHERE    s.stno IN
+ (SELECT    gr.student_number, COUNT(*)
+  FROM      Grade_report gr
+  WHERE     gr.grade = 'B'
+  GROUP BY  gr.student_number
+  HAVING    COUNT(*) &gt; 2)
+</pre><br>
+
+                <p class="docText">However, this approach does not work, because the subquery cannot have two columns in
+                    its result set unless the main query has two columns in the <tt>WHERE .. IN</tt>.</p>
+                <p class="docText">Here, the subquery must have only <tt>gr.student_number</tt> to match
+                    <tt>s.stno</tt>. So, we might try to construct an inline view, as shown in the following query:</p>
+                <pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+  (SELECT vi.student_number
+   FROM  (SELECT    student_number, ct = COUNT(*)
+                 FROM      Grade_report gr
+                 WHERE     gr.grade = 'B'
+                 GROUP BY student_number
+                 HAVING COUNT(*) &gt; 2) AS vi)
+</pre><BR>
+
+                <p class="docText">This is an example of the inline view, discussed in <a class="docLink"
+                        href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a>. This query succeeds in SQL
+                    Server , producing the following output (8 rows):</p>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Lujack
+Reva
+Chris
+Hillary
+Phoebe
+Holly
+&nbsp;
+(8 row(s) affected)
+</pre><br>
+
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">This query also works in Oracle, but it may fail in other SQL
+                                            languages.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">As you can see, several ways exist to query the database with SQL. In this case, the
+                    correlated subquery may be the easiest to see and perhaps the most efficient.</p>
+
+                <a name="learnsqlsvr05-CHP-10-SECT-3.2"></a>
+                <h4 id="title-IDAJVXNGB" class="docSection2Title">10.3.2. From IN to EXISTS</h4><a
+                    name="IDX-CHP-10-0466"></a>
+                <a name="IDX-CHP-10-0467"></a>
+
+                <p class="docText">A simple example of converting from <tt>IN</tt> to <tt>EXISTS</tt>--uncorrelated to
+                    correlated (or vice versa)--would be to move the set test in the <tt>WHERE .. IN</tt> of the
+                    uncorrelated subquery to the <tt>WHERE</tt> of the <tt>EXISTS</tt> in the correlated query.</p>
+                <p class="docText">As an example, consider the following uncorrelated subquery:</P>
+                <pre>
+SELECT *
+FROM   Student s
+WHERE  s.stno  IN
+  (SELECT  g.student_number
+   FROM    Grade_report g
+   WHERE   grade = 'B')
+</pre><br>
+
+                <p class="docText">The following is the same query written as a correlated subquery:</p>
+                <pre>
+SELECT *
+FROM   Student s
+WHERE EXISTS
+  (SELECT   g.student_number
+   FROM     Grade_report g
+   WHERE    grade = 'B'
+    AND     s.stno = g.student_number)
+</pre><BR>
+
+                <p class="docText">This query produces 27 rows of output (of which we show the first 15 rows):</p>
+                <pre>
+STNO   SNAME                MAJOR CLASS  BDATE
+------ -------------------- ----- ------ -----------------------
+2      Lineas               ENGL  1      1980-04-15 00:00:00
+3      Mary                 COSC  4      1978-07-16 00:00:00
+5      Zelda                COSC  NULL   1978-02-12 00:00:00
+6      Ken                  POLY  NULL   1980-07-15 00:00:00
+7      Mario                MATH  NULL   1980-08-12 00:00:00
+8      Brenda               COSC  2      1977-08-13 00:00:00
+13     Kelly                MATH  4      1980-08-12 00:00:00
+14     Lujack               COSC  1      1977-02-12 00:00:00
+15     Reva                 MATH  2      1980-06-10 00:00:00
+19     Harley               POLY  2      1981-04-16 00:00:00
+24     Chris                ACCT  4      1978-02-12 00:00:00
+34     Lynette              POLY  1      1981-07-16 00:00:00
+121    Hillary              COSC  1      1977-07-16 00:00:00
+122    Phoebe               ENGL  3      1980-04-15 00:00:00
+123        Holly                  POLY  4       1981-01-15 00:00:00.
+.
+.
+&nbsp;
+(27 row(s) affected)
+</pre><br>
+
+                <p class="docText">This example gives you a pattern to move from one kind of query to the other kind and
+                    to test the efficiency of both kinds of queries. Both of the preceding queries should produce the
+                    same output.</P>
+
+                <a name="learnsqlsvr05-CHP-10-SECT-3.3"></a>
+                <h4 id="title-IDAUWXNGB" class="docSection2Title">10.3.3. NOT EXISTS</h4><a name="IDX-CHP-10-0468"></a>
+                <a name="IDX-CHP-10-0469"></a>
+
+                <p class="docText">As with the <tt>IN</tt> predicate, which has a <tt>NOT IN</tt> compliment,
+                    <tt>EXISTS</tt> may also be used with <tt>NOT</tt>. In some situations, the predicates
+                    <tt>EXISTS</tt> and <tt>NOT EXISTS</tt> are vital. For example, if we ask a "for all" question, it
+                    must be answered by "existence"--actually, the lack thereof (that is, "not existence"). In logic,
+                    the statement, "find x for all y" is logically equivalent to "do not find x where there does not
+                    exist a y." Or, there is no x for no y. Or, you cannot find an x when there is no y.</P>
+                <p class="docText">In SQL, there is no "for all" predicate. Instead, SQL uses the idea of "for all"
+                    logic with <tt>NOT EXISTS</tt>. (A word of caution, howeverSQL is not simply a logic exercise, as
+                    you will see.) In this section, we look at how <tt>EXISTS</tt> and <tt>NOT EXISTS</tt> work in SQL.
+                    In the following section, we address the "for all" problem.</p>
+                <p class="docText">Consider the following query:</P>
+                <pre>
+SELECT   s.sname
+FROM     Student s
+WHERE EXISTS
+  (SELECT 'X'
+   FROM        Grade_report gr
+   WHERE       s.stno = gr.student_number
+   AND         gr.grade = 'C')
+</pre><br>
+
+                <p class="docText">which produces the following output (24 rows):</P>
+                <pre>
+sname
+--------------------
+Zelda
+Ken
+Mario
+Brenda
+Richard
+Reva
+Donald
+Jake
+Susan
+Monica
+Bill
+Sadie
+Jessica
+Steve
+Alan
+Rachel
+Smithly
+Sebastian
+Losmith
+Genevieve
+Thornton
+Gus
+Benny
+Lionel
+&nbsp;
+(24 row(s) affected)
+</pre><BR>
+
+                <p class="docText">For this correlated subquery, "student names" are <tt>SELECT</tt>ed when:</P>
+                <UL>
+                    <li>
+                        <p class="docList">The student is enrolled in a section (<tt>WHERE s.stno =
+                                gr.student_number</tt>)</P>
+                    </LI>
+                    <li>
+                        <p class="docList">The same student has a grade of C (note the correlation in the <tt>WHERE</tt>
+                            clause in the inner query)</P>
+                    </LI>
+                </ul>
+                <p class="docText">Both statements must be true for the student row to be <tt>SELECT</tt>ed. Recall that
+                    we use <tt>SELECT 1</tt> or <tt>SELECT 'X'</tt> in our inner query, because we want the subquery to
+                    return something if the subquery is true. The actual value of the "something" does not matter.
+                    <tt>true</tt> means something is returned; <tt>false</tt> means nothing was returned from the
+                    subquery. Therefore, <tt>SELECT .. EXISTS</tt> "says" <tt>SELECT .. WHERE true</tt>. The inner query
+                    is true if any row is <tt>SELECT</tt>ed in the inner query.</p>
+                <p class="docText">Now consider the preceding query with a <tt>NOT EXISTS</tt> in it instead of
+                    <tt>EXISTS</tt> for students who do not have a grade of C:</p>
+                <pre>
+SELECT s.sname
+FROM   Student s
+WHERE NOT EXISTS
+  (SELECT 'X'
+   FROM    Grade_report gr
+   WHERE   s.stno = gr.student_number
+   AND     gr.grade = 'C')
+</pre><BR>
+
+                <p class="docText">This query produces the following output (24 rows):</p>
+                <pre>
+sname
+--------------------
+Lineas
+Mary
+Romona
+Kelly
+Lujack
+Elainie
+Harley
+Chris
+Lynette
+Smith
+Hillary
+Phoebe
+Holly
+Brad
+Cedric
+George
+Jerry
+Cramer
+Fraiser
+Harrison
+Francis
+Lindsay
+Stephanie
+Jake
+&nbsp;
+(24 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this query, we are still <tt>SELECT</tt>ing with the pattern <tt>SELECT .. WHERE
+                        true</tt> because all <tt>SELECT</tt>s with <tt>EXISTS</tt> work that way. But, the twist is
+                    that the subquery has to be false to be <tt>SELECT</tt>ed with <tt>NOT EXISTS</tt>. If the subquery
+                    is false, then <tt>NOT EXISTS</tt> is true and the outer row is <tt>SELECT</tt>ed.</P>
+                <p class="docText">Now, logic implies that if either <tt>s.stno &lt;&gt; gr.student_number</tt> or
+                    <tt>gr.grade &lt;&gt; 'C'</tt>, then the subquery "fails"--that is, it is false for that student
+                    row. As the subquery is false, the <tt>NOT EXISTS</tt> would return a <tt>TRue</tt> for that row.
+                    Unfortunately, this logic is not quite what happens. Recall that we characterized the correlated
+                    subquery as follows:</P>
+                <pre>
+LOOP1: For each row in Student  s  DO
+      LOOP2: For each row in Grade_report DO
+             IF (gr.student_number = s.stno) THEN
+                     IF (gr.grade = 'C') THEN TRUE
+      END LOOP2;
+     IF TRUE, THEN student row is SELECTed
+END LOOP1
+</pre><br>
+
+                <p class="docText">Note that <tt>LOOP2</tt> is completed before the next student is tested. In other
+                    words, just because a student number exists that is not equal, it will not cause the subquery to be
+                    false. Rather, the entire subquery table is parsed and the logic is more like this:</p>
+                <p class="docText">For the case <tt>.. WHERE EXISTS s.stno = gr.student_number ...</tt>, is there a
+                    <tt>gr.grade = 'C'</tt>? If, when the student numbers are equal, no C can be found, then the
+                    subquery returns no rowsit is false for that student row. So, with <tt>NOT EXISTS</tt>, we will
+                    <tt>SELECT</tt> students who have student numbers equal in the <tt>Grade_report</tt> and
+                    <tt>Student</tt> tables, but who have no C in the <tt>Grade_report</tt> table. The point about "no C
+                    in the <tt>Grade_report</tt> table" can be answered <tt>true</tt> only by looking at all the rows in
+                    the inner query and finding no C for that student.</p>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-2.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-4.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

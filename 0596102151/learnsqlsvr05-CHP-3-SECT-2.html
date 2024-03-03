@@ -1,0 +1,126 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 3.2.&nbsp; Creating a Table</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-2"></a>
+                <H3 id="title-IDA34005" class="docSection1Title">3.2. Creating a Table</H3><a name="IDX-CHP-3-0178"></a>
+
+                <p class="docText">In SQL Server , a relational database, data is loaded into tables that are created in
+                    a database. In <a class="docLink" href="learnsqlsvr05-CHP-1.html#learnsqlsvr05-CHP-1">Chapter 1</a>,
+                    we showed you how to create a database. In this section we will concentrate on creating<a
+                        name="IDX-CHP-3-0179"></a>
+                    a table within an existing database.</P>
+                <p class="docText">In SQL, the <tt>CREATE TABLE</tt><a name="IDX-CHP-3-0180"></a>
+                    command is used to create a table. In SQL Server , the <tt>CREATE TABLE</tt> command has to be typed
+                    in the query editor screen.</P>
+                <p class="docText">The general syntax of the <tt>CREATE TABLE</tt> statement is:</p>
+                <pre>
+CREATE TABLE Tablename
+ (column_name type,  column_name, type, .....)
+</pre><br>
+
+                <p class="docText">To demonstrate how this <tt>CREATE TABLE</tt> command works, we provide two examples.
+                </p>
+                <p class="docText">For the first example, we will create a table called <tt>Employee</tt> that has four
+                    columns (attributes). First, type the following in the query editor screen (make sure that you have
+                    selected the <tt>Student_course</tt> database before typing this; if you do not remember how to
+                    select the <tt>Student_Course</tt> database, refer to <a class="docLink"
+                        href="learnsqlsvr05-CHP-1-SECT-3.html#learnsqlsvr05-CHP-1-FIG-16">Figure 1-16</a> of <a
+                        class="docLink" href="learnsqlsvr05-CHP-1.html#learnsqlsvr05-CHP-1">Chapter 1</a>):</P>
+                <pre>
+CREATE TABLE  Employee (names            VARCHAR(20),
+                        address          VARCHAR(20),
+                        employee_number  INT,
+                        salary           SMALLMONEY)
+</pre><BR>
+
+                <p class="docText">Execute the query.</P>
+                <p class="docText">You will get:</P>
+                <pre>
+Command(s) completed successfully.
+</pre><BR>
+
+                <p class="docText">This <tt>CREATE TABLE</tt> query created a table called <tt>Employee</tt> with four
+                    columns (in the <tt>Student_course</tt> database): <tt>names</tt>, <tt>address</tt>,
+                    <tt>employee_number</tt>, and <tt>salary</tt>. The data type of <tt>names</tt> is <tt>VARCHAR</tt>
+                    (variable-length character), with a maximum length of 20 characters. The data type of
+                    <tt>address</tt> is <tt>VARCHAR</tt>, with a maximum length of 20 characters. The data type of
+                    <tt>employee_number</tt> is <tt>INT</tt> and the data type of <tt>salary</tt> is
+                    <tt>SMALLMONEY</tt>.</p>
+                <p class="docText">To view the <tt>Employee</tt> table in the <tt>Student_course</tt> database, expand
+                    the <tt>Student_course</tt> node (under the Object Explorer) and the Tables node, and you should be
+                    able to see the <tt>Employee</tt> table, as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-3-FIG-1">Figure 3-1</a>.</P>
+                <a name="learnsqlsvr05-CHP-3-FIG-1"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 3-1. Viewing the Employee table</H5>
+                        <img border="0" alt="" width="275" height="465" SRC="images/learnsqlsvr05_0301.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">To look at the table definition of the table you just created, right-click on the
+                    table, <tt>Employee</tt>, and select Modify. <a class="docLink"
+                        href="#learnsqlsvr05-CHP-3-FIG-2">Figure 3-2</a> shows the table definition of the
+                    <tt>Employee</tt> table.</p>
+                <a name="learnsqlsvr05-CHP-3-FIG-2"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 3-2. Table Definition of Employee table</H5>
+                        <img border="0" alt="" width="386" height="141" SRC="images/learnsqlsvr05_0302.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">For the second example to demonstrate the use of the <tt>CREATE TABLE</tt> command,
+                    we will create a table called <tt>Names</tt> (type the following query):</p>
+                <pre>
+CREATE TABLE Names
+   (fullname VARCHAR(20))
+</pre><br>
+
+                <p class="docText">This table has only one column, <tt>fullname</tt>. Its data type is <tt>VARCHAR</tt>
+                    and the maximum length of a name in this table is 20 characters.</P>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

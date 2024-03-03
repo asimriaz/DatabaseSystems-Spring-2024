@@ -1,0 +1,68 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 10.7.&nbsp; Exercises</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-11.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-10-SECT-7"></a>
+<h3 id="title-IDAEFML5" class="docSection1Title">10.7. Exercises</H3>
+<p class="docText">Unless specified otherwise, use the <tt>Student_course</tt> database to answer the following questions. Also, use appropriate column headings when displaying your output.</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">List the names of students who have received Cs. Do this in three ways: (a) as a join, (b) as an uncorrelated subquery, and (c) as a correlated subquery. Show both results and account for any differences.</P></div></li><LI><div style="font-weight:normal"><p class="docList">In section "<a class="docLink" href="learnsqlsvr05-CHP-10-SECT-3.html#learnsqlsvr05-CHP-10-SECT-3">Existence Queries and Correlation</a>," you were asked to find the names of students who have taken a computer science class and earned a grade of B. We noted that it could be done in several ways. One query could look like this:</p><pre>
+SELECT   s.sname
+FROM     Student s
+WHERE    s.stno IN
+   (SELECT  gr.student_number
+    FROM    Grade_report gr, Section
+    WHERE   Section.section_id =  gr.section_id
+    AND         Section.course_num LIKE 'COSC___  _'
+    AND         gr.grade = 'B')
+</pre><BR>
+<p class="docList">Redo this query, putting the finding of the <tt>COSC</tt> course in a correlated subquery. The query should be as follows:</P><p class="docList">The <tt>Student</tt> table uncorrelated subquery to the <tt>Grade_report</tt> table, correlated <tt>EXISTS</tt> to the <tt>Section</tt> table.</P></div></LI><li><div style="font-weight:normal"><p class="docList">In the section "<a class="docLink" href="learnsqlsvr05-CHP-10-SECT-4.html#learnsqlsvr05-CHP-10-SECT-4">SQL Universal and Existential Qualifiers</a>," we illustrated both an existence query:</P><pre>
+SELECT  s.sname
+FROM    Student s
+WHERE EXISTS
+  (SELECT 'X'
+   FROM     Grade_report gr
+   WHERE    Student.stno = gr.student_number
+   AND      gr.grade = 'C')
+</pre><BR>
+<p class="docList">and a <tt>NOT EXISTS</tt> version:</p><pre>
+SELECT   s.sname
+FROM     Student s
+WHERE NOT EXISTS
+  (SELECT 'X'
+   FROM     Grade_report gr
+   WHERE    Student.stno = gr.student_number
+   AND      gr.grade = 'C')
+</pre><BR>
+<p class="docList">Show that the <tt>EXISTS</tt> version is the complement of the <tt>NOT EXISTS</tt> versioncount the rows in the <tt>EXISTS</tt> result, the rows in the <tt>NOT EXISTS</tt> result, and the rows in the <tt>Student</tt> table. Also, devise a query to give the same result with <tt>IN</tt> and <tt>NOT..IN</tt>.</P></div></li><li><div style="font-weight:normal"><p class="docList">Discover whether all students take courses by counting the students, and then count those students whose student numbers are in the <tt>Grade_report</tt> table and those whose student numbers are not in the table. Use <tt>IN</tt> and then <tt>NOT..IN</tt>, and then use <tt>EXISTS</tt> and <tt>NOT EXISTS</tt>. How many students take courses and how many students do not?</p><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">Find out which students have taken courses but who have not taken <tt>COSC</tt> courses. Create a set of student names and courses from the <tt>Student</tt>, <tt>Grade_report</tt>, and <tt>Section</tt> tables (use the prefix <tt>COSC</tt> to indicate computer science courses). Then, use <tt>NOT..IN</tt> to "subtract" from that set another set of student names of students (who take courses) who have taken <tt>COSC</tt> courses. For this set difference, use <tt>NOT..IN</tt>.</P></div></li><li><div style="font-weight:normal"><p class="docList">Change <tt>NOT..IN</tt> to <tt>NOT EXISTS</tt> (with other appropriate changes) and explain the result. The "other appropriate changes" include adding the correlation and the change of the result column in the subquery set.</P></div></LI></ol></div></div></LI><li><div style="font-weight:normal"><p class="docList">There exists a table called <tt>Plants</tt>. List the table and then find out what company or companies have plants in all cities. Verify your result manually.</p></div></li><li><div style="font-weight:normal"><p class="docList">Run the following query and print the result:</p><pre>
+SELECT distinct name, langu
+FROM Cap x
+WHERE NOT EXISTS
+              (SELECT 'X'
+              FROM Cap y
+              WHERE NOT EXISTS
+                          (SELECT 'X'
+                          FROM Cap z
+                          WHERE X.langu =Z.langu
+                          AND Y.name=Z.name))
+</pre><br>
+<p class="docList">Save the query (e.g., save forall) and hand in the result.</p><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">Recreate the <tt>Cap</tt> table (e.g., call it some other name, such as <tt>LANG1</tt>). To do this, first create the table and then use the <tt>INSERT</tt> statement with the sub select option (<tt>INSERT INTO LANG1 AS SELECT * FROM Cap</tt>).</p></div></li><li><div style="font-weight:normal"><p class="docList">Add a new person to your table who speaks only <tt>BENG</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">Recall your previous <tt>SELECT</tt> (get for all).</p></div></LI><li><div style="font-weight:normal"><p class="docList"><tt>CHANGE</tt> the table from <tt>CAP</tt> to <tt>LANG1</tt> (for all occurrences, use <tt>CHANGE</tt>/<tt>Cap</tt>/<tt>lang1</tt>/ repeatedly, assuming that you called your table <tt>LANG1</tt>).</p></div></LI><li><div style="font-weight:normal"><p class="docList">Start the new query (the one you just created with <tt>LANG1</tt> in it).</p></div></LI><li><div style="font-weight:normal"><p class="docList">How is this result different from the situation in which <tt>Newperson</tt> was not in <tt>LANG1</tt>? Provide an explanation of why the query did what it did.</p></div></LI></ol></div></div></li><LI><div style="font-weight:normal"><p class="docList">The <tt>Department_to_major</tt> table is a list of four-letter department codes with the department names. In <a class="docLink" href="learnsqlsvr05-CHP-8.html#learnsqlsvr05-CHP-8">Chapter 8</a>, Exercise 7 (hereafter referred to as Exercise 8-7), you created a table called <tt>Secretary</tt>, which should now have data like this:</p><P><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="90%"><colgroup span="2"><col><col></colgroup><thead><TR><th class="thead" scope="col" align="left"><p class="docText">Secretary</P></th><th class="thead" scope="col" align="left"><p class="docText">&nbsp;</P></th></tr></thead><TR><TD class="docTableCell" align="left"><p class="docText">dCode</p></TD><TD class="docTableCell" align="left"><p class="docText">Name</p></td></tr><tr><TD class="docTableCell" align="left"><p class="docText">ACCT</p></td><TD class="docTableCell" align="left"><p class="docText">Beryl</P></TD></tr><tr><td class="docTableCell" align="left"><p class="docText">COSC</p></td><td class="docTableCell" align="left"><p class="docText">Kaitlyn</p></td></tr><tr><td class="docTableCell" align="left"><p class="docText">ENGL</p></td><td class="docTableCell" align="left"><p class="docText">David</p></TD></tr><tr><TD class="docTableCell" align="left"><p class="docText">HIST</p></td><TD class="docTableCell" align="left"><p class="docText">Christina</p></td></TR><tr><TD class="docTableCell" align="left"><p class="docText">BENG</p></TD><TD class="docTableCell" align="left"><p class="docText">Fred</P></TD></tr><TR><TD class="docTableCell" align="left"><p class="docText">Null</p></TD><TD class="docTableCell" align="left"><p class="docText">Brenda</p></td></tr></table></p><BR><p class="docList">In Exercise 8-7, you did the following:</p><div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">Create a query that lists the names of departments that have secretaries (use <tt>IN</tt> and the <tt>Secretary</tt> table in a subquery). Save this query as q8_7a.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Create a query that lists the names of departments that do not have secretaries (use <tt>NOT..IN</tt>). Save this query as q8_7b.</p></div></li><li><div style="font-weight:normal"><p class="docList">Add one more row to the <tt>Secretary</tt> table that contains &lt;null,'Brenda'&gt;. (This could be a situation in which you have hired Brenda but have not yet assigned her to a department.)</p></div></li><li><div style="font-weight:normal"><p class="docList">Recall q8_7a and rerun it.</p></div></li><li><div style="font-weight:normal"><p class="docList">Recall q8_7b and rerun it.</p></div></li></ol></div><p class="docList">We remarked in Exercise 8-7 that the <tt>NOT..IN</tt> predicate has problems with nulls: the behavior of <tt>NOT..IN</tt> when nulls exist may surprise you. If nulls may exist in the subquery, then <tt>NOT..IN</tt> should not be used. If you use <tt>NOT..IN</tt> in a subquery, you must ensure that nulls will not occur in the subquery or you must use some other predicate, such as <tt>NOT EXISTS</tt>. Perhaps the best advice is to avoid <tt>NOT..IN</tt>.</p><p class="docList">Here, we repeat Exercise 8-7 using <tt>NOT EXISTS</tt>:</p></div></li><li><div style="font-weight:normal"><p class="docList">Reword query q8_7a to use <tt>EXISTS</tt>. You will have to correlate the inner and outer queries. Save this query as q10_7aa.</P></div></li><li><div style="font-weight:normal"><p class="docList">Reword query q8_7b to use <tt>NOT EXISTS</tt>. You will have to correlate the inner and outer queries. Save this query as q10_7bb. You should <span class="docEmphasis">not</span> have a phrase <tt>IS NOT NULL</tt> in your <tt>NOT EXISTS</tt> query.</P></div></li><li><div style="font-weight:normal"><p class="docList">Rerun q8_9a with and without &lt;null, Brenda&gt;.</P></div></li><li><div style="font-weight:normal"><p class="docList">Rerun q8_9b with and without &lt;null, Brenda&gt;.</P><p class="docList">Note the difference in behavior versus the original question. List the names of those departments that do or do not have secretaries. The point here is to encourage you to use <tt>NOT EXISTS</tt> in a correlated subquery, rather than <tt>NOT..IN</tt>.</p></div></LI></ol></div>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-11.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

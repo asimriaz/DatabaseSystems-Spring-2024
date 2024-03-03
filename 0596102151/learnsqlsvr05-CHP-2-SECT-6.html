@@ -1,0 +1,115 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.6.&nbsp; Synonyms</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-6"></a>
+                <H3 id="title-IDAMUG1GB" class="docSection1Title">2.6. Synonyms</H3>
+                <p class="docText">In the last section, we discussed one way of referring to a tablethrough the use of
+                    table aliases. Table aliases are not permanent, in the sense that they do not exist after the query
+                    has been executed. In this section, we show you another way of referring to a
+                    table--<I>synonyms</I><a name="IDX-CHP-2-0117"></a>
+                    . Synonyms are more permanent; they are available for use until they are deleted. In this section,
+                    we show you how to create, use, and delete synonyms.</p>
+                <p class="docText">SQL Server allows you to create synonyms for your tables. Synonyms are usually
+                    shorter names that can be used in place of the table name. If a change is made in the original table
+                    or its data, this change will be reflected when the synonym is used. And, if a change is made in the
+                    data of the table using a synonym, this change will be reflected in the original table. But, you
+                    cannot alter the table's definition using the synonym. Alter table commands (covered in <a
+                        class="docLink" href="learnsqlsvr05-CHP-3.html#learnsqlsvr05-CHP-3">Chapter 3</a>) can be used
+                    only on the actual tables.</p>
+                <p class="docText">The general syntax to create a synonym is:</p>
+                <pre>
+CREATE SYNONYM <tt><I>synonym_name</I></tt>
+FOR <tt><I>Table_name</I></tt>
+</pre><BR>
+
+                <p class="docText">For example, to create a synonym for the <tt>Student</tt> table called <tt>s1</tt>,
+                    type:</p>
+                <pre>
+CREATE SYNONYM s1
+FOR Student
+</pre><BR>
+
+                <p class="docText">To view the synonym that you just created, from the Object Explorer, expand
+                    <tt>Student_course</tt> database and then Synonyms (as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-2-FIG-2">Figure 2-2</a>), and you will see the synonym, <tt>s1</tt>.
+                </p>
+                <a name="learnsqlsvr05-CHP-2-FIG-2"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 2-2. The synonym</H5>
+                        <img border="0" alt="" width="411" height="282" SRC="images/learnsqlsvr05_0202.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">You can now type:</p>
+                <pre>
+SELECT *
+FROM s1
+</pre><br>
+
+                <p class="docText">And you will get the same output as if you typed:</P>
+                <pre>
+SELECT *
+FROM Student
+</pre><br>
+
+                <p class="docText">A synonym will exist until you delete it. The general syntax to delete a synonym is:
+                </p>
+                <pre>
+DROP SYNONYM <tt><i>synonym_name</i></tt>
+</pre><BR>
+
+                <p class="docText">So, if you want to delete the synonym <tt>s1</tt>, type:</P>
+                <pre>
+DROP SYNONYM s1
+</pre><br>
+
+                <p class="docText">You can also delete the synonym by right-clickingon the synonym and selecting Delete.
+                </p>
+                <p class="docText">If you forget which synonym has been created for which table, right-clickon the
+                    synonym and select Properties.</p>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

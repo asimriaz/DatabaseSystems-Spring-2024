@@ -1,0 +1,312 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 9.4.&nbsp; GROUP BY and HAVING: Aggregates of Aggregates</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-9-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-9-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-9-SECT-4"></a>
+                <h3 id="title-IDAPRR1GB" class="docSection1Title">9.4. GROUP BY and HAVING: Aggregates of Aggregates
+                </H3><a name="IDX-CHP-9-0450"></a>
+                <a name="IDX-CHP-9-0451"></a>
+
+                <p class="docText">A "usual" <tt>GROUP BY</tt> has an aggregate and a column that are grouped like this:
+                </p>
+                <pre>
+SELECT      COUNT(stno) AS [count of student no], class
+FROM        Student
+GROUP BY class
+</pre><br>
+
+                <p class="docText">This produces a result set of 5 rows of counts by <tt>class</tt>:</P>
+                <pre>
+count of student no     class
+-------------------     -----
+10                      NULL
+11                      1
+10                      2
+7                       3
+10                      4
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Although you must have <tt>class</tt> or some other attribute in the <tt>GROUP
+                        BY</tt>, you do not have to have the <tt>class</tt> in the result set. Consider the following
+                    query, which generates the same numeric information as the previous query, but does not report the
+                    <tt>class</tt> in the result:</P>
+                <pre>
+SELECT      COUNT(stno) AS [count of student no]
+FROM        Student
+GROUP BY class
+</pre><br>
+
+                <p class="docText">This query produces the following five rows of output:</P>
+                <pre>
+count of student no
+-------------------
+10
+11
+10
+7
+10
+&nbsp;
+(5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">This previous example may seem contradictory to the preceding discussion, but it is
+                    not. You must have all the non aggregate columns from the result set in the <tt>GROUP BY</tt>, but
+                    you do not have to have the columns in the result set that you are grouping. That example may prove
+                    useful when a grouped result is needed in a filter. For example, how would you find the class with
+                    the most students?</P>
+                <a name="learnsqlsvr05-CHP-9-SECT-4.1"></a>
+                <H4 id="title-IDACTR1GB" class="docSection2Title">9.4.1. Aggregation and Grouping in SQL Server </h4><a
+                    name="IDX-CHP-9-0452"></a>
+
+                <p class="docText">SQL Server will not allow you to handle aggregation and grouping by nesting<a
+                        name="IDX-CHP-9-0453"></a>
+                    aggregates. For example, suppose you want to find the <tt>class</tt> with the minimum number of
+                    students. You might try the following query:</P>
+                <pre>
+SELECT MIN(COUNT(stno))
+FROM Student
+GROUP BY class
+</pre><BR>
+
+                <p class="docText">Though it may seem logical, this query will not work in SQL Server . It will produce
+                    the following error message:</p>
+                <pre>
+Msg 130, Level 15, State 1, Line 1
+Cannot perform an aggregate function on an expression containing an aggregate or a
+subquery.
+</pre><BR>
+
+                <p class="docText">The <tt>MIN</tt> function is an aggregate function, and aggregate functions operate
+                    on rows within tables. In this case, the query is asking <tt>MIN</tt> to operate on a table of
+                    counted classes that have not yet been calculated. The point is that SQL Server does not handle this
+                    mismatch of aggregation and grouping.</P>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">This mismatch of aggregation and grouping can be handled by
+                                            other SQL languages, such as Oracle.</P>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">To handle this mismatch of aggregation and grouping in SQL Server , you can use
+                    derived structures such as temporary tables, inline views, or regular views (derived structures are
+                    covered in <a class="docLink" href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a>).
+                    Using either a temporary table or an inline view is the most logical way to solve this problem, so
+                    only these two choices are described here.</p>
+                <a name="learnsqlsvr05-CHP-9-SECT-4.1.1"></a>
+                <h5 id="title-IDAQUR1GB" class="docSection3Title">9.4.1.1. Aggregation and grouping handled with a
+                    global temporary table</h5>
+                <p class="docText">This section shows how we can handle the mismatch of aggregation and grouping
+                    (described earlier) using a global temporary table.</p>
+                <p class="docText">The following steps describe how to use a global temporary table to find the
+                    <tt>class</tt> with the minimum number of students:</p>
+                <div style="font-weight:bold">
+                    <ol class="docList" type="1">
+                        <li>
+                            <div style="font-weight:normal">
+                                <p class="docList">Display the counts of classes, grouped by <tt>class</tt>:</p>
+                                <pre>
+SELECT      COUNT(stno) AS [count of students]
+FROM        Student
+GROUP BY class
+</pre><br>
+                                <p class="docList">This query produces the following five rows of output:</p>
+                                <pre>
+count       class
+----------- ------
+10          NULL
+11          1
+10          2
+7           3
+10          4
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+                            </div>
+                        </li>
+                        <LI>
+                            <div style="font-weight:normal">
+                                <p class="docList">To find the minimum number of students in a class, count the students
+                                    (you could use <tt>stno</tt> for student number) grouped by <tt>class</tt>, and put
+                                    this result in <tt>##Temp1</tt> (a global temporary table)--shown by the first query
+                                    following, and then find the minimum number of students in a class from the global
+                                    temporary table, <tt>##Temp1</tt>, with <tt>SELECT MIN(count) AS [MINIMUM COUNT]
+                                        FROM ##Temp1</tt>, and then use this information in a subquery with a
+                                    <tt>HAVING</tt> clause as follows: First type the query:</p>
+                                <pre>
+SELECT (COUNT([stno])) AS [count], class INTO ##Temp1
+FROM Student
+GROUP BY [class]
+</pre><br>
+                                <p class="docList">After executing the previous query, type:</P>
+                                <pre>
+SELECT COUNT(stno) AS [count of stno], class
+FROM Student
+GROUP BY class
+HAVING COUNT(stno) =
+(SELECT MIN(count) AS [Minimum count]
+FROM ##Temp1)
+</pre><br>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <p class="docText">This query produces the desired output (the class with the minimum number of
+                    students):</P>
+                <pre>
+count of stno     class
+-------------     -----
+7                 3
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-9-SECT-4.1.2"></a>
+                <h5 id="title-IDAKWR1GB" class="docSection3Title">9.4.1.2. Aggregation and grouping handled with an
+                    inline view</H5>
+                <p class="docText">As described in <a class="docLink"
+                        href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a>, you can put a query in the
+                    <tt>FROM</tt> clause of a <tt>SELECT</tt> statement to create an inline view. An inline view exists
+                    only during the execution of a query.</p>
+                <p class="docText">The following steps describe how to use an inline view to find the <tt>class</tt>
+                    with the minimum number of students:</P>
+                <div style="font-weight:bold">
+                    <ol class="docList" type="1">
+                        <li>
+                            <div style="font-weight:normal">
+                                <p class="docList">Count the <tt>stno</tt> in the <tt>FROM</tt> clause of the
+                                    <tt>SELECT</tt> statement as follows:</P>
+                                <pre>
+SELECT "Min of Count" = MIN(c)
+FROM (SELECT c = COUNT(stno)
+FROM Student
+GROUP BY class) AS in_view
+</pre><BR>
+                                <p class="docList">Because SQL Server cannot directly find aggregates of aggregates, in
+                                    the previous query, we give a name to the <tt>COUNT</tt> in the inline view,
+                                    <tt>c</tt>, to temporarily store the aggregate result in the inline view,
+                                    <tt>in_view</tt>. We then operate on the inline view as though it were a table and
+                                    find the minimum value for <tt>c.</tt></P>
+                                <p class="docList">The previous query produces the following output:</P>
+                                <pre>
+Min of Count
+------------
+7
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+                            </div>
+                        </LI>
+                        <LI>
+                            <div style="font-weight:normal">
+                                <p class="docList">To find out which class has the minimum count, you can write the
+                                    final query using the previous query as a subquery with a <tt>HAVING</tt> clause in
+                                    the outer part of the final query, as follows:</p>
+                                <pre>
+SELECT class, "Count of Class" = COUNT(*)
+FROM Student
+GROUP BY class
+HAVING COUNT(*) =
+(SELECT MIN(c)
+FROM (SELECT COUNT(stno) AS [c]
+FROM Student
+GROUP BY class) AS in_view)
+</pre><BR>
+                            </div>
+                        </LI>
+                    </ol>
+                </div>
+                <p class="docText">This query produces the desired output:</p>
+                <pre>
+class     Count of Class
+-----     --------------
+3         7
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+                <p class="docText">So, although SQL Server does not handle a mismatch of aggregation and
+                    <tt>HAVING</tt>, you can use your knowledge of temporary tables and inline views to work around the
+                    problem. This problem may also be solved using regular views. It is also noteworthy to see the
+                    process of query development in that some problems require using small queries and building
+                    <tt>from</tt> them to a final result.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Once again, <a class="docLink"
+                                                href="learnsqlsvr05-CHP-6.html#learnsqlsvr05-CHP-6">Chapter 6</a> covers
+                                            the advantages and disadvantages of using each one of the derived
+                                            structures.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-9-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-9-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

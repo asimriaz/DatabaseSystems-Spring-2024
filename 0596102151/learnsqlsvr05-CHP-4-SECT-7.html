@@ -1,0 +1,199 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 4.7.&nbsp; The OUTER JOIN</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-7"></a>
+<H3 id="title-IDAIQC55" class="docSection1Title">4.7. The OUTER JOIN</H3><a name="IDX-CHP-4-0237"></a> 
+<a name="IDX-CHP-4-0238"></a> 
+<a name="IDX-CHP-4-0239"></a> 
+
+<p class="docText">In an <span class="docEmphasis">equi-inner join</span>, rows without matching values are eliminated from the join result. For example, with the following join, we did not see information on any course that did not have a prerequisite:</P>
+<pre>
+SELECT *
+FROM Course c, Prereq p
+WHERE c.course_number = p.course_number
+</pre><BR>
+
+<p class="docText">In some cases, it may be desirable to include rows from one table even if it does not have matching rows in the other table. This is done by the use of an <tt>OUTER JOIN</tt>. <tt>OUTER JOIN</tt>s are used when we want to keep all the rows from the one table, such as <tt>Course</tt>, or all the rows from the other, regardless of whether they have matching rows in the other table. In SQL Server, an <tt>OUTER JOIN</tt> in which we want to keep all the rows from the first (left) table is called a <tt>LEFT OUTER JOIN</tt>,<a name="IDX-CHP-4-0240"></a> 
+<a name="IDX-CHP-4-0241"></a> 
+<a name="IDX-CHP-4-0242"></a> 
+ and an <tt>OUTER JOIN</tt> in which we want to keep all the rows from the second table (or right relation) is called the <tt>RIGHT OUTER JOIN</tt>. The term <tt>FULL OUTER JOIN</tt> is used to designate the union of the <tt>LEFT</tt> and <tt>RIGHT OUTER JOIN</tt>s. In the following subsections, we illustrate the <tt>LEFT OUTER JOIN</tt>, <tt>RIGHT OUTER JOIN</tt>, and <tt>FULL OUTER JOIN</tt>.</p>
+<a name="learnsqlsvr05-CHP-4-SECT-7.1"></a>
+<h4 id="title-IDAOSC55" class="docSection2Title">4.7.1. The LEFT OUTER JOIN</h4><a name="IDX-CHP-4-0243"></a> 
+
+<p class="docText"><tt>LEFT OUTER JOIN</tt>s include all the rows from the first (left) of the two tables, even if there are no matching values for the rows in the second (right) table. <tt>LEFT OUTER JOIN</tt>s are performed in SQL Server using a <tt>LEFT OUTER JOIN</tt> statement.</P>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><td valign="top"><p class="docText"><tt>LEFT JOIN</tt> is the same as <tt>LEFT OUTER JOIN</tt>. The inclusion of the word <tt>OUTER</tt> is optional in SQL Server SQL, but we will use <tt>LEFT OUTER JOIN</tt> instead of <tt>LEFT JOIN</tt> for clarity.</p></TD></TR></table></td></tr></table></p><br>
+<p class="docText">The following is the simplest form of a <tt>LEFT OUTER JOIN</tt> statement:</P>
+<pre>
+SELECT columns
+FROM table1 LEFT OUTER JOIN table2
+ON table1.column1=table2.column1
+</pre><br>
+
+<p class="docText">For example, if we want to list all the rows in the <tt>Course</tt> table (the left, or first table), even if these courses do not have prerequisites, we type the following <tt>LEFT OUTER JOIN</tt> statement:</p>
+<pre>
+SELECT *
+FROM Course c LEFT OUTER JOIN Prereq p
+ON c.course_number = p.course_number
+</pre><br>
+
+<p class="docText">Here the <tt>LEFT OUTER JOIN</tt> is processed as follows: First, all the rows from the <tt>Course</tt> table that have <tt>course_number</tt> equal to the <tt>course_number</tt> in the <tt>Prereq</tt> table are joined. Then, when a row (with a <tt>course_number</tt>) from the <tt>Course</tt> table (first table) has no match in <tt>Prereq</tt> table (second table), the rows from the <tt>Course</tt> table are anyway included in the result set with a row of null values joined to the right side. This means that the courses that do not have prerequisites will get a set of null values for prerequisites. So, the output (result set) of a <tt>LEFT OUTER JOIN</tt> includes all rows from the left (first) table, which in this case is the <tt>Course</tt> table with matching <tt>Prereq</tt> rows where applicable.</p>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">The use of the <tt>*=</tt> operator for the <tt>LEFT OUTER JOIN</tt> is considered old syntax, and hence its use is not encouraged. It is prone to ambiguities, especially when joining three or more tables.</p></td></tr></table></td></tr></table></p><br>
+<p class="docText">The previous query will produce the following 33 rows of output (of which we show the first 13 rows here):</p>
+<pre>
+COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT COURSE_NUMBER PREREQ
+-------------------- ------------- ------------ ------------- ------------- -------
+ACCOUNTING I         ACCT2020      3            ACCT          NULL          NULL
+ACCOUNTING II        ACCT2220      3            ACCT          NULL          NULL
+MANAGERIAL FINANCE   ACCT3333      3            ACCT          ACCT3333     ACCT2220
+ACCOUNTING INFO SYST ACCT3464      3            ACCT          NULL          NULL
+INTRO TO CHEMISTRY   CHEM2001      3            CHEM          NULL          NULL
+ORGANIC CHEMISTRY    CHEM3001      3            CHEM          CHEM3001     CHEM2001
+INTRO TO COMPUTER SC COSC1310      4            COSC          NULL          NULL
+TURBO PASCAL         COSC2025      3            COSC          NULL          NULL
+ADVANCED COBOL       COSC2303      3            COSC          NULL          NULL
+DATA STRUCTURES      COSC3320      4            COSC          COSC3320     COSC1310
+DATABASE             COSC3380      3            COSC          COSC3380     COSC3320
+DATABASE             COSC3380      3            COSC          COSC3380     MATH2410
+OPERATIONS RESEARCH  COSC3701      3            COSC          NULL          NULL
+.
+.
+.
+&nbsp;
+(33 row(s) affected)
+</pre><br>
+
+<p class="docText">Note the nulls added to courses (due to the <tt>LEFT OUTER JOIN</tt>) like ACCOUNTING I, ACCOUNTING II, ACCOUNTING INFO SYST, and so on, which are the courses (in the <tt>Course</tt> table) that do not have prerequisites.</P>
+
+<a name="learnsqlsvr05-CHP-4-SECT-7.2"></a>
+<h4 id="title-IDARVC55" class="docSection2Title">4.7.2. The RIGHT OUTER JOIN</h4><a name="IDX-CHP-4-0244"></a> 
+<a name="IDX-CHP-4-0245"></a> 
+<a name="IDX-CHP-4-0246"></a> 
+<a name="IDX-CHP-4-0247"></a> 
+
+<p class="docText"><tt>RIGHT OUTER JOIN</tt>s include all the rows from the second (right) of the two tables, even if there are no matching values for the rows in the first (left) table. <tt>RIGHT OUTER JOIN</tt>s are performed in SQL Server using a <tt>RIGHT OUTER JOIN</tt> statement.</p>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText"><tt>RIGHT JOIN</tt> is the same as <tt>RIGHT OUTER JOIN</tt>. The inclusion of the word <tt>OUTER</tt> is optional in SQL Server SQL, but we will use <tt>RIGHT OUTER JOIN</tt> instead of <tt>RIGHT JOIN</tt> for clarity's sake.</p></TD></TR></table></TD></TR></table></P><br>
+<p class="docText">The following is the simplest form of a <tt>RIGHT OUTER JOIN</tt> statement:</P>
+<pre>
+SELECT columns
+FROM table1 RIGHT OUTER JOIN table2
+ON table1.fieldcolumn1=table2.column1
+</pre><br>
+
+<p class="docText">As an example, we will redo the previous query from the right side. If we want to list all the rows in the <tt>Course</tt> table (the right, or second table), even if these courses do not have prerequisites, we may type the following <tt>RIGHT OUTER JOIN</tt> statement:</p>
+<pre>
+SELECT *
+FROM Prereq p RIGHT OUTER JOIN Course c
+ON p.course_number = c.course_number
+</pre><BR>
+
+<p class="docText">Here, the <tt>RIGHT OUTER JOIN</tt> is processed as follows. First, all the rows from the <tt>Prereq</tt> table that have <tt>course_number</tt> equal to the <tt>course_number</tt> in the <tt>Course</tt> table are joined. Then, when a row (with a <tt>course_number</tt>) from the <tt>Course</tt> table (second table) has no match in the <tt>Prereq</tt> table (first table), the rows from the <tt>Course</tt> table are anyway included in the result set with a row of null values joined to the left side. This means that courses that do not have prerequisites will get a set of null values joined to the left side. The output of a <tt>RIGHT OUTER JOIN</tt> includes all rows from the right (second) table, which in this case is the <tt>Course</tt> table, producing output similar to that obtained in the previous section.</P>
+<p class="docText">The output consists of 33 rows (of which the first 13 rows are shown here):</p>
+<pre>
+COURSE_NUMBER PREREQ   COURSE_NAME         COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT
+------------- -------- -------------------- ------------- ------------ ------------
+NULL          NULL     ACCOUNTING I         ACCT2020      3            ACCT
+NULL          NULL     ACCOUNTING II        ACCT2220      3            ACCT
+ACCT3333      ACCT2220 MANAGERIAL FINANCE   ACCT3333      3            ACCT
+NULL          NULL     ACCOUNTING INFO SYST ACCT3464      3            ACCT
+NULL          NULL     INTRO TO CHEMISTRY   CHEM2001      3            CHEM
+CHEM3001      CHEM2001 ORGANIC CHEMISTRY    CHEM3001      3            CHEM
+NULL          NULL     INTRO TO COMPUTER SC COSC1310      4            COSC
+NULL          NULL     TURBO PASCAL         COSC2025      3            COSC
+NULL          NULL     ADVANCED COBOL       COSC2303      3            COSC
+COSC3320      COSC1310 DATA STRUCTURES      COSC3320      4            COSC
+COSC3380      COSC3320 DATABASE             COSC3380      3            COSC
+COSC3380      MATH2410 DATABASE             COSC3380      3            COSC
+NULL          NULL     OPERATIONS RESEARCH  COSC3701      3            COSC
+.
+.
+.
+&nbsp;
+(33 row(s) affected)
+</pre><br>
+
+<p class="docText">Once again, note the NULLs added to the unmatched rows from the second table due to the use of the <tt>RIGHT OUTER JOIN</tt>.</p>
+
+<a name="learnsqlsvr05-CHP-4-SECT-7.3"></a>
+<h4 id="title-IDAYYC55" class="docSection2Title">4.7.3. The FULL OUTER JOIN</H4><a name="IDX-CHP-4-0248"></a> 
+<a name="IDX-CHP-4-0249"></a> 
+<a name="IDX-CHP-4-0250"></a> 
+<a name="IDX-CHP-4-0251"></a> 
+
+<p class="docText">The <tt>FULL OUTER JOIN</tt> includes the rows that are equi-joined from both tables, plus the remaining rows from the first table and the remaining rows from the second table. <tt>NULL</tt>s are added to the unmatched rows from both the first and second tables.</p>
+<p class="docText">The following is the simplest form of a <tt>FULL OUTER JOIN</tt> statement:</p>
+<pre>
+SELECT columns
+FROM table1 FULL OUTER JOIN table2
+ON table1.column1=table2.column1
+</pre><br>
+
+<p class="docText">If we want to list all the rows for which a connection exists between the <tt>Prereq</tt> table and the <tt>Course</tt> table (result of a regular <tt>JOIN</tt>), and in addition, we want all rows from the <tt>Prereq</tt> table for which there is no corresponding row in the <tt>Course</tt> table (<tt>LEFT</tt> <tt>OUTER JOIN</tt>), and in addition, we want all rows in the <tt>Course</tt> table for which there is no corresponding row in the <tt>Prereq</tt> table (<tt>RIGHT OUTER JOIN</tt>), we would use the following <tt>FULL OUTER JOIN</tt> statement:</p>
+<pre>
+SELECT *
+FROM Prereq p FULL OUTER JOIN Course c
+ON p.course_number = c.course_number
+</pre><BR>
+
+<p class="docText">We will get 33 rows:</P>
+<pre>
+COURSE_NUMBER PREREQ   COURSE_NAME         COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT
+------------- -------- -------------------- ------------- ------------ ------------
+NULL          NULL     ACCOUNTING I         ACCT2020      3            ACCT
+NULL          NULL     ACCOUNTING II        ACCT2220      3            ACCT
+ACCT3333      ACCT2220 MANAGERIAL FINANCE   ACCT3333      3            ACCT
+NULL          NULL     ACCOUNTING INFO SYST ACCT3464      3            ACCT
+NULL          NULL     INTRO TO CHEMISTRY   CHEM2001      3            CHEM
+CHEM3001      CHEM2001 ORGANIC CHEMISTRY    CHEM3001      3            CHEM
+NULL          NULL     INTRO TO COMPUTER SC COSC1310      4            COSC
+NULL          NULL     TURBO PASCAL         COSC2025      3            COSC
+NULL          NULL     ADVANCED COBOL       COSC2303      3            COSC
+COSC3320      COSC1310 DATA STRUCTURES      COSC3320      4            COSC
+COSC3380      COSC3320 DATABASE             COSC3380      3            COSC
+COSC3380      MATH2410 DATABASE             COSC3380      3            COSC
+NULL          NULL     OPERATIONS RESEARCH  COSC3701      3            COSC
+NULL          NULL     ADVANCED ASSEMBLER   COSC4301      3            COSC
+NULL          NULL     SYSTEM PROJECT       COSC4309      3            COSC
+COSC5234      COSC3320 ADA - INTRODUCTION   COSC5234      4            COSC
+NULL          NULL     NETWORKS             COSC5920      3            COSC
+NULL          NULL     ENGLISH COMP I       ENGL1010      3            ENGL
+ENGL1011      ENGL1010 ENGLISH COMP II      ENGL1011      3            ENGL
+ENGL3401      ENGL1011 FUND. TECH. WRITING  ENGL3401      3            ENGL
+NULL          NULL     TECHNICAL WRITING    ENGL3402      2            ENGL
+ENGL3520      ENGL1011 WRITING FOR NON MAJO ENGL3520      2            ENGL
+NULL          NULL     CALCULUS 1           MATH1501      4            MATH
+NULL          NULL     CALCULUS 2           MATH1502      3            MATH
+NULL          NULL     CALCULUS 3           MATH1503      3            MATH
+NULL          NULL     ALGEBRA              MATH2333      3            MATH
+NULL          NULL     DISCRETE MATHEMATICS MATH2410      3            MATH
+MATH5501      MATH2333 Math Analysis        MATH5501      3            MATH
+NULL          NULL     AMERICAN CONSTITUTIO POLY1201      1            POLY
+NULL          NULL     INTRO TO POLITICAL S POLY2001      3            POLY
+POLY2103      POLY1201 AMERICAN GOVERNMENT  POLY2103      2            POLY
+NULL          NULL     SOCIALISM AND COMMUN POLY4103      4            POLY
+POLY5501      POLY4103 POLITICS OF CUBA     POLY5501      4            POLY
+&nbsp;
+ (33 row(s) affected)
+</pre><br>
+
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

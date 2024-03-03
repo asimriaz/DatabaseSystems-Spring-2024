@@ -1,0 +1,60 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 3.6.&nbsp; The DELETE Command</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-6"></a>
+<H3 id="title-IDAEQH15" class="docSection1Title">3.6. The DELETE Command</H3><a name="IDX-CHP-3-0197"></a> 
+<a name="IDX-CHP-3-0198"></a> 
+
+<p class="docText">Earlier in the chapter, we saw that the <tt>DELETE</tt> command can be used to remove all rows of a table. In this section we revisit the powerful <tt>DELETE</tt>. Keep in mind as you read this that the <tt>DELETE</tt> statement can affect multiple rows as we have seen and hence, one must be careful when using it. Following is the general syntax of the <tt>DELETE</tt> command used to delete rows from a table:</P>
+<pre>
+DELETE FROM Table
+WHERE (condition)
+</pre><BR>
+
+<p class="docText"><tt>(condition)</tt> determines which rows of the table will be deleted. As you saw earlier, if no <tt>WHERE</tt> condition is used, all the rows of the table will be deleted.</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/warning_yellow.jpg" width="51" height="36" alt=""></TD><TD valign="top"><p class="docText">Multiple rows can be affected by the <tt>DELETE</tt> command, so be careful when using it.</p></TD></tr></table></td></TR></table></P><br>
+<p class="docText">Here is an example of using the <tt>DELETE</tt> command on our original <tt>Employee</tt> table:</p>
+<pre>
+DELETE FROM Employee
+WHERE salary &lt; 1500
+</pre><br>
+
+<p class="docText">Now if you type:</p>
+<pre>
+SELECT *
+FROM EMPLOYEE
+</pre><BR>
+
+<p class="docText">You will get the following four rows of output:</p>
+<pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101             2500.00
+Pradeep Saha         27 Shillingford      103             3300.00
+Joya Das             23 Pesterfield Cr    114             2290.00
+Terry Livingstone    465 Easter Ave       95              3390.00
+&nbsp;
+(4 row(s) affected)
+</pre><br>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

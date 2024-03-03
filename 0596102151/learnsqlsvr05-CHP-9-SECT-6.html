@@ -1,0 +1,175 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 9.6.&nbsp; Nulls Revisited</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-9-SECT-6"></a>
+<h3 id="title-IDABCBVCB" class="docSection1Title">9.6. Nulls Revisited</H3><a name="IDX-CHP-9-0457"></a> 
+<a name="IDX-CHP-9-0458"></a> 
+
+<p class="docText">Nulls present a complication with regard to aggregate functions and other queries, because nulls are never equal to, less than, greater than, or not equal to any value. Using aggregates by themselves on columns that contain nulls will ignore the null values. For example, suppose you have the following <a class="docLink" href="#learnsqlsvr05-CHP-9-TABLE-4">Table 9-4</a> called <tt>Sal</tt>.</p>
+<a name="learnsqlsvr05-CHP-9-TABLE-4"></a><p><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><H5 class="docTableTitle">Table 9-4. Sal table</h5></caption><colgroup span="1"><col></colgroup><thead></thead><TR><td class="docTableCell" align="left"><p class="docText"></P>
+<pre>
+Name         salary
+------------ -----------
+Joe          1000.00
+Sam          2000.00
+Bill         3000.00
+Dave         NULL
+&nbsp;
+(4 row(s) affected)
+</pre><BR>
+
+</TD></TR></table></p><BR>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-9-TABLE-4">Table 9-4</a> (<tt>Sal</tt>) has not been created for you. You have to create it to run the queries that follow.</p></TD></tr></table></td></TR></table></P><BR>
+<p class="docText">Now consider the following query:</p>
+<pre>
+SELECT COUNT(*) AS [count], AVG(salary) AS [average], SUM(salary) AS [sum], MAX(salary)
+AS [max], MIN(salary) AS [min]
+FROM Sal
+</pre><br>
+
+<p class="docText">which produces the following output:</p>
+<pre>
+count       average     sum         max         min
+----------- ----------- ----------- ----------- -----------
+4           2000.00     6000.00     3000.00     1000.00
+&nbsp;
+Warning: Null value is eliminated by an aggregate or other SET operation.
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText"><tt>COUNT (*)</tt> counts all the rows. But, the <tt>AVERAGE</tt>, <tt>SUM</tt>, <tt>MAX</tt>, and <tt>MIN</tt> functions ignore the nulled salary row in computing the aggregates. Counting columns also indicates the presence of nulls. If you count by using the following query:</p>
+<pre>
+SELECT COUNT(name) AS [Count of Names]
+FROM   Sal
+</pre><br>
+
+<p class="docText">you get:</p>
+<pre>
+Count of Names
+--------------
+4
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText">If you use the "salary" column, you get:</p>
+<pre>
+SELECT COUNT(salary) AS [Count of salary]
+FROM   Sal
+</pre><br>
+
+<p class="docText">which produces:</p>
+<pre>
+Count of salary
+---------------
+3
+&nbsp;
+Warning: Null value is eliminated by an aggregate or other SET operation.
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText">This result indicates that you have a null salary. If you want to include nulls in the aggregate and have a rational value to substitute for a value that is not known (a big assumption), you can use the <tt>ISNULL</tt> function.</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><td valign="top"><p class="docText">The <tt>ISNULL</tt> function was introduced and discussed in <a class="docLink" href="learnsqlsvr05-CHP-5.html#learnsqlsvr05-CHP-5">Chapter 5</a>.</p></TD></tr></table></td></TR></table></p><BR>
+<p class="docText"><tt>ISNULL</tt> returns a value if the value is null. <tt>ISNULL</tt> has the form <tt>ISNULL(</tt><tt><i>column name</I></tt><tt>,</tt> <tt><I>value if null</I></tt>), which is used in place of the column name. For example, if you type the following:</P>
+<pre>
+SELECT name, ISNULL(salary, 0) AS [salary]
+FROM   Sal
+</pre><br>
+
+<p class="docText">you get the following output:</P>
+<pre>
+name         salary
+------------ -----------
+Joe          1000.00
+Sam          2000.00
+Bill         3000.00
+Dave         0.00
+&nbsp;
+(4 row(s) affected)
+</pre><BR>
+
+<p class="docText">If you type the following:</p>
+<pre>
+SELECT COUNT(ISNULL(salary,0)) AS [Count of salary]
+FROM   Sal
+</pre><BR>
+
+<p class="docText">you get:</P>
+<pre>
+Count of salary
+---------------
+4
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText">The "Count of salary" is now 4 instead of the 3 that you received earlier when the <tt>ISNULL</tt> function was not used.</p>
+<p class="docText">If you type the following:</p>
+<pre>
+SELECT AVG(ISNULL(salary, 0)) AS [Average of salary]
+FROM   Sal
+</pre><br>
+
+<p class="docText">you get:</P>
+<pre>
+Average of salary
+-----------------
+1500.00
+&nbsp;
+(1 row(s) affected)
+</pre><br>
+
+<p class="docText">The "Average of salary" is now 1500.00, instead of the 2000.00 that you had received earlier because the zero value for the null was used in the calculation. What seems almost contradictory to these examples is that when grouping is added to the query, nulls in the grouped column are included in the result set. So, if the <tt>Sal</tt> table had another column like this:</p>
+<pre>
+Name         salary      job
+------------ ----------- --------------------
+Joe          1000.00     Programmer
+Sam          2000.00     NULL
+Bill         3000.00     Plumber
+Dave         NULL        Programmer
+</pre><BR>
+
+<p class="docText">And if you ran a query like this:</P>
+<pre>
+SELECT SUM(salary) AS [Sum of salary], job
+FROM   Sal
+GROUP BY job
+</pre><BR>
+
+<p class="docText">You would get the following output:</p>
+<pre>
+Sum of salary Job
+------------- --------------------
+2000.00        NULL
+3000.00        Plumber
+1000.00        Programmer
+&nbsp;
+Warning: Null value is eliminated by an aggregate or other SET operation.
+&nbsp;
+(3 row(s) affected)
+</pre><br>
+
+<p class="docText">The aggregate will ignore values that are null, but grouping will compute a value for the nulled column value.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

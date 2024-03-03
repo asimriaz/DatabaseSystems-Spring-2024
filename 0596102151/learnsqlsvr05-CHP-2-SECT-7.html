@@ -1,0 +1,107 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.7.&nbsp; Adding Comments to SQL Statements</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-7"></a>
+                <H3 id="588026-998" class="docSection1Title">2.7. Adding Comments to SQL Statements</H3><a
+                    name="IDX-CHP-2-0118"></a>
+
+                <p class="docText">Comments are nonexecutable words or phrases included in SQL queries to make the
+                    queries easier to understand (particularly by other people). Comments are ignored by the SQL engine,
+                    but they are very useful to programmers in determining what the statement does, when it was written,
+                    who wrote it, and so on. There are two ways of including comments<a name="IDX-CHP-2-0119"></a>
+                    in SQL Server . The first way is by the use of dashes, as shown here:</P>
+                <pre>
+SELECT *            -- displays "all" attributes
+FROM   Dependent d  -- of the Dependent table
+WHERE  d.age &gt; 5    -- where the age of the dependent is greater than 5.
+</pre><BR>
+
+                <p class="docText">The second way of including comments in Server SQL 2005 is by the use of
+                    <tt>/*...*/</tt> construction. Following is an example of a commented statement that uses this
+                    format:</p>
+                <pre>
+SELECT dname, age            /* displays the dependent name and age  */
+FROM   Dependent d          /* from the Dependent table     */
+WHERE  d.age &gt; 5              /* where the age of the dependent is greater than 5 */
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">SQL Server allows you to include comments even before the
+                                            first line in a query and after the last line in a query.</P>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">We wish to encourage the use of comments in writing SQL queries, particularly for
+                    complex queries, and when queries will be debugged or enhanced by others.</p>
+                <p class="docText">SQL Server also has icons to turn lines into comment lines. For example, if you type
+                    in the query as shown in <a class="docLink" href="#learnsqlsvr05-CHP-2-FIG-3">Figure 2-3</a>, and
+                    then you wish to make the last line a comment line, highlight the last line and clickthe Make
+                    Comment button and the last line will become a comment line. If you wish to remove the comment,
+                    clickthe button beside it, the Remove Comment button, and the comment will be removed, turning the
+                    line into a regular line.</p>
+                <a name="learnsqlsvr05-CHP-2-FIG-3"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 2-3. Icons for adding/removing comments</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="222"
+                            SRC="images/learnsqlsvr05_0203.jpg">
+                    </center>
+                </p><br>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

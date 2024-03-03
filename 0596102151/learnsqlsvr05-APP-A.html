@@ -1,0 +1,85 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Appendix A.&nbsp; The Student Database and Other Tables Used in This Book</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-11-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-A-SECT-1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-APP-A"></a>
+<h2 id="title-IDAMH20BB" class="docAppendixTitle">Appendix A. The Student Database and Other Tables Used in This Book</H2>
+<a name="learnsqlsvr05-APP-A-TABLE-1"></a><p><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table A-1. Table definitions of the tables in the Student_course database</H5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><TD class="docTableCell" align="left"><p class="docText"></p>
+<pre>
+<span class="docEmphStrong">STUDENT
+    STNO      NOT NULL      SMALLINT      PRIMARY KEY
+    SNAME                   NVARCHAR(20)
+    MAJOR                   NVARCHAR(4)
+    CLASS                   SMALLINT
+    BDATE                   SMALLDATETIME
+
+DEPENDENT
+    PNO                              SMALLINT
+    DNAME                            NVARCHAR(20)
+    RELATIONSHIP                     NVARCHAR(8)
+    SEX                              CHAR(1)
+    AGE                              SMALLINT
+
+GRADE_REPORT
+    STUDENT_NUMBER    NOT NULL       SMALLINT
+    SECTION_ID        NOT NULL       SMALLINT
+    GRADE                            CHAR(1)
+    PRIMARY KEY(STUDENT_NUMBER, SECTION_ID)
+
+SECTION
+    SECTION_ID        NOT NULL       SMALLINT      PRIMARY KEY
+    COURSE_NUM                       NVARCHAR(8)
+    SEMESTER                         NVARCHAR(6)
+    YEAR                             CHAR(2)
+    INSTRUCTOR                       NVARCHAR(10)
+    BLDG                             SMALLINT
+    ROOM                             SMALLINT
+
+DEPARTMENT_TO_MAJOR
+    DCODE             NOT NULL       NVARCHAR(4)   PRIMARY KEY
+    DNAME                            NVARCHAR(20)
+
+COURSE
+    COURSE_NAME                      NVARCHAR(20)
+    COURSE_NUMBER     NOT NULL       NVARCHAR(8)   PRIMARY KEY    NOT NULL
+    CREDIT_HOURS                     SMALLINT
+    OFFERING_DEPT                    NVARCHAR(4)
+
+ ROOM
+    BLDG              NOT NULL       SMALLINT
+    ROOM              NOT NULL       SMALLINT
+    CAPACITY                         SMALLINT
+    OHEAD                            NVARCHAR(1)
+    PRIMARY KEY(BLDG, ROOM)
+
+ <pre><B>PREREQ</b></pre>
+    COURSE_NUMBER                    NVARCHAR(8)
+    PREREQU                          NVARCHAR(8)
+    PRIMARY KEY (COURSE_NUMBER, PREREQ)</span>
+</pre><BR>
+
+</TD></TR></table></p><BR>
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docList">ER Diagram for the Student_course Database</p><a name="learnsqlsvr05-APP-A-FIG-1"></a><P><center>
+<H5 class="docFigureTitle">Figure A-1. Diagram for the Student_course database</h5>
+<img border="0" alt="" width="413" height="270" SRC="images/learnsqlsvr05_aa01.jpg">
+</center></p></div></li></ol></div>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-11-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-APP-A-SECT-1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

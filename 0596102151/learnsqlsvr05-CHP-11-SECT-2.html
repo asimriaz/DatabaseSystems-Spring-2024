@@ -1,0 +1,191 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 11.2.&nbsp; Indexes</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-1.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-3.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-11-SECT-2"></a>
+                <h3 id="title-IDA5NI15" class="docSection1Title">11.2. Indexes</H3><a name="IDX-CHP-11-0476"></a>
+
+                <p class="docText">SQL Server allows you to create several indexes on a table. In SQL Server , it is the
+                    job of the query optimizer to determine which indexes will be the most useful in processing a
+                    specific query. Although indexes may speed up queries in large tables, indexes will slow update
+                    operations (insert, delete, update), because every update causes a rebuild of the index. We begin by
+                    introducing the "simple" <tt>CREATE INDEX</tt> statement.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Discussing the query optimizer is beyond the scope of this
+                                            book.</P>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-11-SECT-2.1"></a>
+                <H4 id="title-IDASOI15" class="docSection2Title">11.2.1. The "Simple" CREATE INDEX</h4>
+                <p class="docText">The <tt>CREATE INDEX</tt> statement is used to create a new index on some column in
+                    an existing table. The following is the general syntax for the <tt>CREATE INDEX</tt> statement:</p>
+                <pre>
+CREATE INDEX index_name
+ON Tablename (column [ASC | DESC])
+</pre><br>
+
+                <p class="docText">For example, if we wanted to create an index called <tt>ssn_ndx</tt> on the
+                    <tt>ssn</tt> column, in descending order of <tt>ssn</tt>, for the <tt>Test1</tt> table, we would
+                    type the following:</p>
+                <pre>
+CREATE INDEX ssn_ndx
+ON Test1 (ssn DESC)
+</pre><BR>
+
+                <p class="docText">You will get:</p>
+                <pre>
+Command(s) completed successfully.
+</pre><br>
+
+                <p class="docText">This result means that the index was successfully created. Although the user has the
+                    option of setting the column in ascending (<tt>ASC</tt>) or descending (<tt>DESC</tt>) order, if
+                    <tt>DESC</tt> is not included, the index will be created in ascending order, because <tt>ASC</tt> is
+                    the default order for indexes<a name="IDX-CHP-11-0477"></a>
+                    .</P>
+                <p class="docText">To view the index that you just created, click on the + sign beside the newly created
+                    table, <tt>Test1</tt>, and then click on the + sign beside the Indexes node, and you will be able to
+                    see that index that we just created, <tt>ssn_ndx</tt>, and you will get <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-1">Figure 11-1</a>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-1"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-1. Viewing the index</h5>
+                        <img border="0" alt="" width="256" height="114" SRC="images/learnsqlsvr05_1101.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">Now, to see if this index, <tt>ssn_ndx</tt>, is in ascending order or descending
+                    order, right-click on the index, <tt>ssn_ndx</tt> and select Properties, and you will get <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-2">Figure 11-2</a>. <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-2">Figure 11-2</a> shows that this index, <tt>ssn_ndx</tt>, is
+                    in descending order, indexed by the <tt>ssn</tt> column.</p>
+                <p class="docText">Also from <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-2">Figure 11-2</a>, to
+                    add more columns to the index key, we can click Add; to remove columns from the index key, we can
+                    select the key and then click Remove.</p>
+                <p class="docText">To prevent duplicate values in indexed columns, you must use the <tt>UNIQUE</tt>
+                    option in the <tt>CREATE INDEX</tt> statement, as follows:</p>
+                <pre>
+CREATE UNIQUE INDEX ssn_ndx1
+ON Test1 (ssn DESC)
+</pre><br>
+
+                <p class="docText">This query will create the unique index, <tt>ssn_ndx1</tt>, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-3">Figure 11-3</a>.</p>
+                <p class="docText">The <tt>UNIQUE</tt> option can be used on columns that will not be a primary key in a
+                    table. A primary key is a key or field that uniquely identifies a row in a table.</p>
+                <p class="docText">The <tt>UNIQUE</tt> option will disallow duplicate entries for a column even though
+                    the column is not a primary key in a table. <tt>NULL</tt>s are allowed in nonprimary key indexes.
+                </p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-2.2"></a>
+                <h4 id="title-IDA0SI15" class="docSection2Title">11.2.2. Deleting Indexes Using SQL</h4><a
+                    name="IDX-CHP-11-0478"></a>
+                <a name="IDX-CHP-11-0479"></a>
+
+                <p class="docText">You can use a <tt>DROP INDEX</tt> statement to delete an index in SQL. The general
+                    format of the <tt>DROP INDEX</tt> statement is as follows:</p>
+                <pre>
+DROP INDEX Table_name.index_name
+</pre><br>
+
+                <p class="docText">For example, to delete the index <tt>ssn_ndx1</tt> created on <tt>Test1</tt>, you
+                    would type the following:</P>
+                <pre>
+DROP INDEX Test1.ssn_ndx1
+</pre><br>
+
+                <a name="learnsqlsvr05-CHP-11-FIG-2"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-2. Index properties</h5>
+                        <img border="0" alt="" width="550" height="485" SRC="images/learnsqlsvr05_1102.jpg">
+                    </center>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-11-FIG-3"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-3. Showing the UNIQUE index</H5>
+                        <img border="0" alt="" width="256" height="124" SRC="images/learnsqlsvr05_1103.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">Unused indexes slow data modification without helping retrieval. So, if you have
+                    indexes that are not being used, you should delete (drop) them. All indexes will automatically get
+                    deleted (dropped) if the table is deleted.</p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Indexes cannot be created on all column types in SQL Server .
+                                            For example, you cannot create an index on a column of <tt>TEXT</tt>,
+                                            <tt>NTEXT</tt>, or <tt>IMAGE</tt> data type.</p>
+                                    </TD>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-1.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-3.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

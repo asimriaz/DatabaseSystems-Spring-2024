@@ -1,0 +1,63 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 2.4.&nbsp; The ROWCOUNT Function</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-4"></a>
+<H3 id="title-IDA0TYL5" class="docSection1Title">2.4. The ROWCOUNT Function</H3><a name="IDX-CHP-2-0109"></a> 
+<a name="IDX-CHP-2-0110"></a> 
+
+<p class="docText">In an earlier section, we discussed how to limit the number of rows that are returned by a <tt>SELECT</tt> statement with the use of a <tt>WHERE</tt> clause and logical operators. In this section, we introduce the <tt>ROWCOUNT</tt> function, another way of limiting the number of rows that can be the returned by a <tt>SELECT</tt> statement.</P>
+<p class="docText">The <tt>WHERE</tt> clause assumes that you have knowledge of the actual data values present in a data set. But what if you want to see only a sample of a result set, and you have no idea which range of values are present in the table? In this case, the <tt>ROWCOUNT</tt> function can come in handy.</P>
+<p class="docText">For example, to see the first 10 rows of the <tt>Dependent</tt> table, you can type:</p>
+<pre>
+SET ROWCOUNT 10
+SELECT *
+FROM   Dependent
+</pre><br>
+
+<p class="docText">This query returns the following 10 rows of output:</p>
+<pre>
+PNO    DNAME                RELATIONSHIP SEX  AGE
+------ -------------------- ------------ ---- ------
+2      Matt                 Son          M    8
+2      Mary                 Daughter     F    9
+2      Beena                Spouse       F    31
+10     Amit                 Son          M    3
+10     Shantu               Daughter     F    5
+14     Raju                 Son          M    1
+14     Rani                              F    3
+17     Susan                Daughter     F    4
+17     Sam                  Son          M    1
+20     Donald II            Son          M    NULL
+&nbsp;
+(10 row(s) affected)
+</pre><BR>
+
+<p class="docText">After using <tt>ROWCOUNT</tt>, you should reset the <tt>ROWCOUNT</tt> property by:</P>
+<pre>
+SET ROWCOUNT 0
+</pre><BR>
+
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><TD valign="top"><p class="docText">If you do not reset the <tt>ROWCOUNT</tt> property, you will keep getting whatever you set your <tt>ROWCOUNT</tt> to for the remainder of this session (that is, until you log off).</P></td></tr></table></td></tr></table></P><br>
+<p class="docText">If you set <tt>ROWCOUNT</tt> and issue multiple queries in the same batch, the rows are limited for all queries within the batch.</p>
+<p class="docText">Other important functions are discussed in <a class="docLink" href="learnsqlsvr05-CHP-5.html#learnsqlsvr05-CHP-5">Chapter 5</a>.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

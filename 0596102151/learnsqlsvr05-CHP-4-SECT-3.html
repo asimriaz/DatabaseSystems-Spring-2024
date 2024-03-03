@@ -1,0 +1,49 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 4.3.&nbsp; Equi-Joins and Non-Equi-Joins</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-3"></a>
+<H3 id="title-IDAWKGX5" class="docSection1Title">4.3. Equi-Joins and Non-Equi-Joins</H3>
+<p class="docText">Joins with comparison (non-equal) operatorsthat is, =, &gt;, &gt;=, &lt;, &lt;=, and &lt;&gt;--on the <tt>WHERE</tt> or <tt>ON</tt> clauses are called <I>theta joins</I>, where <i>theta</i> represents the relational operator. Inner joins with an = operator are called <i>equi-joins</I><a name="IDX-CHP-4-0228"></a> 
+<a name="IDX-CHP-4-0229"></a> 
+ and joins with an operator other than an = sign are called <I>non-equi-joins</I><a name="IDX-CHP-4-0230"></a> 
+<a name="IDX-CHP-4-0231"></a> 
+.</P>
+<a name="learnsqlsvr05-CHP-4-SECT-3.1"></a>
+<H4 id="title-IDA1LGX5" class="docSection2Title">4.3.1. Equi-Joins</h4><a name="IDX-CHP-4-0232"></a> 
+<a name="IDX-CHP-4-0233"></a> 
+<a name="IDX-CHP-4-0234"></a> 
+
+<p class="docText">The most common join involves join conditions with equality comparisons. Such a join, where the comparison operator is = in the <tt>WHERE</tt> or <tt>ON</tt> clause, is called an equi-join. The following is an example:</P>
+<pre>
+SELECT *
+FROM Course c JOIN Prereq p
+ON c.course_number=p.course_number
+</pre><br>
+
+<p class="docText">Another way to look at a join of any kind is that it is the Cartesian product with an added condition. The output for this query has been shown earlier in this chapter. You will note that the result of the join is simply the Cartesian product with the rows where the course numbers are equal. Per the output, you will see that this query displays all rows that have <tt>course_number</tt> in the <tt>Course</tt> table equal to <tt>course_number</tt> in the <tt>Prereq</tt> table. All the join columns have been included in this result set. This means that <tt>course_number</tt> has been shown twiceonce from the <tt>Course</tt> table, and once from the <tt>Prereq</tt> tableand, this duplicate column is of course redundant.</p>
+
+<a name="learnsqlsvr05-CHP-4-SECT-3.2"></a>
+<H4 id="title-IDAJNGX5" class="docSection2Title">4.3.2. Non-Equi-Joins</H4>
+<p class="docText">Joins that do not test for equality are non-equi-joins. Non-equi-joins are rare. The following section on self joins provides an example of a theta join without an equality (=) operator (a non-equi join).</p>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

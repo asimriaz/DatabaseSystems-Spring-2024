@@ -1,0 +1,71 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Chapter 11.&nbsp; Indexes and Constraints on Tables</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-7.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-1.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-11"></a>
+                <h2 id="title-IDAF3J33" class="docChapterTitle">Chapter 11. Indexes and Constraints on Tables</H2>
+                <p class="docText">In previous chapters, we concentrated primarily on retrieving information from
+                    existing tables. This chapter revisits the creation of tables, but focuses on how indexes and
+                    constraints can be added to tables to make the tables more efficient and to increase the integrity
+                    of the data in the tables (and hence in the database). Referential integrity constraints and other
+                    constraints are also discussed.</p>
+                <p class="docText">SQL Server does not need indexes to successfully retrieve results for a
+                    <tt>SELECT</tt> statement. But, an <span class="docEmphasis">index</span> may speed up queries and
+                    searches on the indexed columns and may facilitate sorting and grouping operations. As tables get
+                    larger, the value of using proper indexes becomes more of an issue. Indexes can be used to find data
+                    quickly that satisfy conditions in a <tt>WHERE</tt> clause, find matching rows in a <tt>JOIN</tt>
+                    clause, or to efficiently maintain <span class="docEmphasis">uniqueness</span> of the key columns
+                    during <tt>INSERT</tt>s and <tt>UPDATE</tt>s.</p>
+                <p class="docText"><span class="docEmphasis">Constraints</span> are a very powerful ways to increase the
+                    data integrity in a database. Integrity implies believability and correctness. Any data that
+                    destroys the sense of correctness is said to lack integrity. For example, a constraint is used to
+                    establish relationships with other tables. A violation of integrity would be, for instance, if a
+                    nonexistent referenced row were included in the relationship. The <tt>CONSTRAINT</tt> clause can be
+                    used with the <tt>CREATE TABLE</tt> and the <tt>ALTER TABLE</tt> statements to create constraints or
+                    delete constraints, respectively.</P>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-10-SECT-7.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-1.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

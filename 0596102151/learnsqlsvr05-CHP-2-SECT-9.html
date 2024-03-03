@@ -1,0 +1,91 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 2.9.&nbsp; A Few Notes About SQL Server Syntax</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-8.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-10.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-9"></a>
+                <H3 id="title-IDAHVF0Y" class="docSection1Title">2.9. A Few Notes About SQL Server Syntax</H3>
+                <p class="docText">A few things that you need to know about syntax<a name="IDX-CHP-2-0122"></a>
+                    in SQL Server :</P>
+                <UL>
+                    <li>
+                        <p class="docList">SQL Server allows blank lines in the SQL window.</p>
+                    </li>
+                    <LI>
+                        <p class="docList">Queries in SQL Server do not have to end in a semicolon.</P>
+                    </LI>
+                    <LI>
+                        <p class="docList">SQL Server allows you to include comments anywhere in a SQL script or query.
+                            Many other SQL languages will not let you include a comment as the first line of a script or
+                            query (other SQL languages will look for a SQL statement beginning with a command like
+                            SELECT on the first line of a script or query), but SQL Server will allow you to include a
+                            comment on the first line of a script or query. SQL Server also allows comments after the
+                            semi-colon (which may have been used to end a query). Many SQL languages will not accept
+                            anything typed after the semi-colon.</P>
+                    </li>
+                    <LI>
+                        <p class="docList">SQL Server will allow you to type in multiple queries on the query editor
+                            screen at one time, and you may only execute the ones that you wish to execute. For example,
+                            if you type in the following three queries on the query editor screen:</p>
+                    </li>
+                </UL>
+                <pre>
+SELECT *
+FROM   Dependent
+&nbsp;
+SELECT *
+FROM   Student
+&nbsp;
+SELECT *
+FROM   Course
+</pre><BR>
+
+                <p class="docText">To first execute the middle query, <tt>SELECT * FROM Student</tt>, you may highlight
+                    this query and clickthe Execute button. If you then wish to execute the first query, <tt>SELECT *
+                        FROM Dependent</tt>, you may highlightthis query and clickon the Execute button. You can, of
+                    course, do this as many times as you wish, and in any combination that you wish.</p>
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-8.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-2-SECT-10.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

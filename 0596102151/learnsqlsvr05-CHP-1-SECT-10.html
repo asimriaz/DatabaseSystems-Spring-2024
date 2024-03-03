@@ -1,0 +1,83 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 1.10.&nbsp; Entering a SQL Query or Statement</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-9.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-11.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-1-SECT-10"></a>
+                <H3 id="588026-883" class="docSection1Title">1.10. Entering a SQL Query or Statement</H3><a
+                    name="IDX-CHP-1-0036"></a>
+                <a name="IDX-CHP-1-0037"></a>
+                <a name="IDX-CHP-1-0038"></a>
+                <a name="IDX-CHP-1-0039"></a>
+                <a name="IDX-CHP-1-0040"></a>
+
+                <p class="docText">Like every computer language, a SQL query or statement is used to give instructions
+                    to the computer. A query is a request for data stored in SQL Server. The computer analyzes each
+                    instruction and interprets it. If the instruction is "understandable" to the computer, the computer
+                    produces a result. If the computer cannot figure out what the instruction means, it displays an
+                    error message.</P>
+                <p class="docText">In this book, we focus on Transact-SQL (T-SQL), SQL Server's variant of SQL. In SQL
+                    Server , the SQL query is typed in the query editor screen, as shown in <a class="docLink"
+                        href="learnsqlsvr05-CHP-1-SECT-3.html#learnsqlsvr05-CHP-1-FIG-12">Figure 1-12</a>. But, before
+                    you type in your query, make sure the database that you wish to work with is active or open. To type
+                    in or work on the queries in this book, the <tt>Student_course</tt> database should be active or
+                    open.</P>
+                <p class="docText">Right click on <tt>Student_course</tt> and then select New Query. Type the following
+                    SQL query in the resulting screen:</p>
+                <pre>
+    USE Student
+    SELECT *
+    FROM Student
+</pre><br>
+
+                <p class="docText"><tt>USE Student</tt> opens the <tt>Student_course</tt> database, as shown in <a
+                        class="docLink" href="learnsqlsvr05-CHP-1-SECT-3.html#learnsqlsvr05-CHP-1-FIG-12">Figure
+                        1-12</a>. <tt>SELECT</tt> is the SQL keyword that means "select data" or "retrieve the following
+                    data from the database." The <tt>*</tt> is interpreted to mean "show all columns in the result."
+                    <tt>FROM</tt> is the keyword that names the source of the data, and <tt>Student</tt> is the name of
+                    a table. So this is a simple SQL query that tells SQL Server to display all the rows and columns
+                    (all the data) in the <tt>Student</tt> table.</p>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-9.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-11.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

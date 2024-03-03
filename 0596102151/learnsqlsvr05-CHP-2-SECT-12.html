@@ -1,0 +1,35 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 2.12.&nbsp; Exercises</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-11.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-2-SECT-12"></a>
+<H3 id="title-IDACG545" class="docSection1Title">2.12. Exercises</H3>
+<p class="docText">Unless specified otherwise, use the <tt>Student_course</tt> database to answer the following questions.</P>
+<p class="docText">In writing out all the following queries, use table and column aliases wherever you feel that it would improve the readability of your output. Follow the conventions for writing SQL statements. Also, for future reference, you may want to get into the practice of saving your queries by question number. For example, save the query you write for Question 2-2a as <span class="docEmphasis">query2-2a</span>. Print the query and your results.</P>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><TD valign="top"><p class="docText">Refer to Appendix A for a complete listing of all tables (and their columns) available in the <tt>Student_course</tt> database.</P></td></TR></table></td></tr></table></P><BR>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">The <tt>Student_course</tt> database used in this book has the following tables: <tt>Student</tt>, <tt>Dependent</tt>, <tt>Course</tt>, <tt>Section</tt>, <tt>Prereq</tt> (for prerequisite), <tt>Grade_report</tt>, <tt>Department_to_major</tt>, and <tt>Room</tt>.</p><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">Display the data from each of these tables by using the simple form of the <tt>SELECT *</tt> statement.</p></div></LI><li><div style="font-weight:normal"><p class="docList">Display the first five rows from each of these tables.</p></div></li><li><div style="font-weight:normal"><p class="docList">Display the student name and student number of all students who are juniors (hint: class = 3).</P></div></LI><li><div style="font-weight:normal"><p class="docList">Display the student names and numbers (from question 2) in descending order by name.</p></div></li><li><div style="font-weight:normal"><p class="docList">Display the course name and number of all courses that are three credit hours.</p></div></li><li><div style="font-weight:normal"><p class="docList">Display all the course names and course numbers (from question 3) in ascending order by course name.</p></div></li></ol></div></div></li><li><div style="font-weight:normal"><p class="docList">Display the building number, room number, and room capacity of all rooms in descending order by room capacity. Use appropriate column aliases to make your output more readable.</p></div></li><li><div style="font-weight:normal"><p class="docList">Display the course number, instructor, and building number of all courses that were offered in the Fall semester of 1998. Use appropriate column aliases to make your output more readable.</P></div></li><li><div style="font-weight:normal"><p class="docList">List the student number of all students who have grades of C or D.</p></div></LI><LI><div style="font-weight:normal"><p class="docList">List the <tt>offering_dept</tt> of all courses that are more than three credit hours.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Display the student name of all students who have a major of COSC.</p></div></li><li><div style="font-weight:normal"><p class="docList">Find the capacity of room 120 in Bldg 36.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Display a list of all student names ordered by major.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Display a list of all student names ordered by major, and by class within major. Use appropriate table and column aliases.</P></div></li><li><div style="font-weight:normal"><p class="docList">Count the number of departments in the <tt>Department_to_major</tt> table.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Count the number of buildings in the <tt>Room</tt> table.</p></div></li><li><div style="font-weight:normal"><p class="docList">What output will the following query produce?</P><pre>
+SELECT COUNT(class)
+FROM Student
+WHERE class IS NULL
+</pre><br>
+<p class="docList">Why do you get this output?</p></div></li><li><div style="font-weight:normal"><p class="docList">Use the <tt>BETWEEN</tt> operator to list all the sophomores, juniors, and seniors from the <tt>Student</tt> table.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Use the <tt>NOT BETWEEN</tt> operator to list all the sophomores and juniors from the <tt>Student</tt> table.</p></div></li><li><div style="font-weight:normal"><p class="docList">Create synonyms for each of the tables available in the <tt>Student_course</tt> database. View your synonyms in the Object Explorer.</p></div></li></ol></div>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-2-SECT-11.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

@@ -1,0 +1,182 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 1.2.&nbsp; Creating a Database in Microsoft SQL Server </title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-1-SECT-2"></a>
+                <H3 id="title-IDAIFGG4" class="docSection1Title">1.2. Creating a Database in Microsoft SQL Server </H3>
+                <a name="IDX-CHP-1-0007"></a>
+
+                <p class="docText">Before we begin to work with Microsoft SQL Server , we will create a database. To
+                    create a database, as shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-4">Figure 1-4</a>,
+                    right click on Databases in the Object Explorer and select New Database... from the context menu.
+                </P>
+                <a name="learnsqlsvr05-CHP-1-FIG-4"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-4. Creating a New Database</h5>
+                        <img border="0" alt="" width="550" height="266" SRC="images/learnsqlsvr05_0104.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">You will get the New Database dialog box,<a name="IDX-CHP-1-0008"></a>
+                    as shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-5">Figure 1-5</a>. We will create a
+                    database called <tt>Student_course</tt>.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-5"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 1-5. Typing in the database name</H5>
+                        <img border="0" alt="" width="550" height="417" SRC="images/learnsqlsvr05_0105.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">Type in your database name as <tt>Student_course</tt>. You may leave the Owner as
+                    &lt;default<a name="IDX-CHP-1-0009"></a>
+                    <a name="IDX-CHP-1-0010"></a>
+                    &gt; for now, as shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-5">Figure 1-5</a>. Click
+                    OK. You will get the screen shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-6">Figure
+                        1-6</a>.
+                </p>
+                <a name="learnsqlsvr05-CHP-1-FIG-6"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 1-6. The Student_course database</H5>
+                        <img border="0" alt="" width="550" height="251" SRC="images/learnsqlsvr05_0106.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">The <tt>Student_course</tt> database has now been created. Note the newly created
+                    <tt>Student_course</tt> database icon under the Summary tab on the righthand side of the screen
+                    below Databases (see <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-6">Figure 1-6</a>).</p>
+                <p class="docText">In order to view the <tt>Student_course</tt> database under the Object Explorer (on
+                    the left side of your screen) right away, you may have to first right-click on the Databases node
+                    and then select Refresh.</p>
+                <p class="docText">Then, as shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-6">Figure
+                        1-6</a>, you may now expand the Databases node by clicking on the + sign beside Databases under
+                    the Object Explorer, and you also will see the <tt>Student_course</tt> database node under and
+                    Databases (under the Object Explorer on the left portion of your screen), as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-1-FIG-7">Figure 1-7</a>.</P>
+                <a name="learnsqlsvr05-CHP-1-SECT-2.1"></a>
+                <h4 id="title-IDAKZGG4" class="docSection2Title">1.2.1. Objects in the Student_course Database</h4><a
+                    name="IDX-CHP-1-0011"></a>
+
+                <p class="docText">A SQL Server database is a collection of many objects,<a name="IDX-CHP-1-0012"></a>
+                    such as tables, views, and synonyms, defined to support activities performed with data.</p>
+                <p class="docText">From <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-7">Figure 1-7</a>, expand the
+                    <tt>Student_course</tt> database node by clicking on the <tt>+</tt> sign beside the
+                    <tt>Student_course</tt> node, and you will get the screen shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-8">Figure 1-8</a>, which shows the default objects that are in
+                    the <tt>Student_course</tt> database.</p>
+
+                <a name="learnsqlsvr05-CHP-1-SECT-2.2"></a>
+                <H4 id="title-IDAS0GG4" class="docSection2Title">1.2.2. Default Tables in the Student_course Database
+                </H4>
+                <p class="docText">A database is a collection of related tables. So far we have created the
+                    <tt>Student_course</tt> database, but we have not created any tables.</p>
+                <a name="learnsqlsvr05-CHP-1-FIG-7"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-7. The Student_course database under the Object Explorer
+                        </h5>
+                        <img border="0" alt="" width="550" height="302" SRC="images/learnsqlsvr05_0107.jpg">
+                    </center>
+                </p><br>
+                <a name="learnsqlsvr05-CHP-1-FIG-8"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-8. Viewing the Objects in the Student_course database</h5>
+                        <img border="0" alt="" width="291" height="431" SRC="images/learnsqlsvr05_0108.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">To view the default tables in the <tt>Student_course</tt> database, expand the Tables
+                    node (as shown in <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-9">Figure 1-9</a>), and the only
+                    default table in the <tt>Student_course</tt> database, System Tables, will be displayed.</p>
+                <a name="learnsqlsvr05-CHP-1-FIG-9"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-9. System tables in the Student_coursedatabase</H5>
+                        <img border="0" alt="" width="356" height="360" SRC="images/learnsqlsvr05_0109.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">At this point you may click on the - sign beside the Tables node, and then on the -
+                    sign beside the <tt>Student_course</tt> node to close those up, and you will get back to <a
+                        class="docLink" href="#learnsqlsvr05-CHP-1-FIG-7">Figure 1-7</a>.</p>
+
+                <a name="learnsqlsvr05-CHP-1-SECT-2.3"></a>
+                <H4 id="title-IDAY2GG4" class="docSection2Title">1.2.3. Default System Databases</H4><a
+                    name="IDX-CHP-1-0013"></a>
+                <a name="IDX-CHP-1-0014"></a>
+
+                <p class="docText">SQL Server comes with some default System databases--<tt>master</tt>, <tt>model</tt>,
+                    <tt>msdb</tt>, and <tt>tempdb</tt>. To view these default database nodes, expand the Database node
+                    and then System Databases node, as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-10">Figure 1-10</a>, and you will be able to see the default
+                    System databases.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-10"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 1-10. Default System Databases</h5>
+                        <img border="0" alt="" width="289" height="195" SRC="images/learnsqlsvr05_0110.jpg">
+                    </center>
+                </p><br>
+                <p class="docText"><tt>master</tt><a name="IDX-CHP-1-0015"></a>
+                    is a database composed of system tables that keeps track of server installation as a whole and all
+                    other databases that are subsequently created. The SQL Server Management Studio query window
+                    defaults to the <tt>master</tt> database context. Any queries executed from the query window will
+                    execute in the <tt>master</tt> database unless you change the context.</P>
+                <p class="docText"><tt>model</tt><a name="IDX-CHP-1-0016"></a>
+                    is a template database. Every time a new database is created, SQL Server makes a copy of the model
+                    database<a name="IDX-CHP-1-0017"></a>
+                    (and all of the objects in it) to form the basis of the new database. If you want all your new
+                    databases to inherit certain properties, you could include these properties and objects in your
+                    model database.</P>
+                <p class="docText"><tt>msdb</tt><a name="IDX-CHP-1-0018"></a>
+                    is a database that contains the metadata and database objects used by the SQL Server agent that
+                    performs scheduled activities such as backups and replication tasks.</P>
+                <p class="docText"><tt>tempdb</tt><a name="IDX-CHP-1-0019"></a>
+                    is a temporary database or workspace recreated every time SQL Server is restarted. <tt>tempdb</tt>
+                    is used for temporary tables created by users and to hold intermediate results created internally by
+                    SQL Server during query processing and sorting.</P>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

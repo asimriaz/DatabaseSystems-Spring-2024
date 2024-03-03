@@ -1,0 +1,117 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 8.5.&nbsp; Using Subqueries with Operators</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-8-SECT-5"></a>
+<h3 id="title-IDAEH1WCB" class="docSection1Title">8.5. Using Subqueries with Operators</H3><a name="IDX-CHP-8-0438"></a> 
+<a name="IDX-CHP-8-0439"></a> 
+
+<p class="docText">In this section, we look at examples that demonstrate the use of subqueries with comparison operators. These examples are based on the <tt>Room</tt> table, which has the following data:</p>
+<pre>
+    BLDG  ROOM  CAPACITY OHEAD
+    ----- ----- -------- -----
+    13    101   85       Y
+    36    123   35       N
+    58    114   60       NULL
+    79    179   35       Y
+    79    174   22       Y
+    58    112   40       NULL
+    36    122   25       N
+    36    121   25       N
+    36    120   25       N
+    58    110   NULL     Y
+
+    (10 row(s) affected)
+</pre><br>
+
+<p class="docText">In previous chapters, you have seen <tt>SELECT</tt>s with conditions like the following:</P>
+<pre>
+    SELECT *
+    FROM   Room
+    WHERE  capacity = 25
+</pre><br>
+
+<p class="docText">In this example, <tt>25</tt> is a constant and <tt>=</tt> is a comparison operator. The constant can be replaced by a subquery, and the operator can be any of the comparison operators (<tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>, <tt>&gt;</tt>, <tt>&lt;=</tt>, or <tt>&gt;=</tt>). For example, we could devise a query to tell us which classrooms have a below-average capacity by computing the average in a subquery and using a comparison operator, like this:</P>
+<pre>
+    SELECT *
+    FROM   Room
+    WHERE  capacity &lt;
+      (SELECT AVG(capacity)
+       FROM   Room)
+</pre><br>
+
+<p class="docText">This query produces the following six rows of output, showing six rooms with below-average capacity:</P>
+<pre>
+    BLDG   ROOM   CAPACITY OHEAD
+    ------ ------ -------- -----
+    36     120    25       N
+    36     121    25       N
+    36     122    25       N
+    36     123    35       N
+    79     174    22       Y
+    79     179    35       Y
+
+    Warning: Null value is eliminated by an aggregate or other SET operation.
+
+    (6 row(s) affected)
+</pre><BR>
+
+<p class="docText">The only problem with using subqueries in this fashion is that <span class="docEmphasis">the subquery must return only one row</span>. If an aggregate function is applied to a table in the subquery in this fashion, you will always get only one roweven if there is a <tt>WHERE</tt> clause that excludes all rows, the subquery returns one row with a null value. For example, if we were to change the preceding query to the following and force multiple rows in the subquery,</P>
+<pre>
+    SELECT *
+    FROM   Room
+    WHERE  capacity &lt;
+      (SELECT AVG(capacity)
+       FROM   Room
+       WHERE  bldg = 99)
+</pre><BR>
+
+<p class="docText">we would get:</p>
+<pre>
+    BLDG   ROOM   CAPACITY OHEAD
+    ------ ------ -------- -----
+
+    (0 row(s) affected)
+</pre><BR>
+
+<p class="docText">We get no rows selected because there is no <tt>bldg = 99</tt>. If we were to change the query to the following:</P>
+<pre>
+     SELECT *
+     FROM   Room
+     WHERE  bldg =
+        (SELECT  bldg
+         FROM    Room
+         WHERE   capacity &gt; 10)
+</pre><br>
+
+<p class="docText">we would get the following error message:</P>
+<pre>
+    BLDG   ROOM   CAPACITY OHEAD
+    ------ ------ -------- -----
+    Msg 512, Level 16, State 1, Line 1
+    Subquery returned more than 1 value. This is not permitted when the subquery follows
+    =, !=, &lt;, &lt;=, &gt;, &gt;= or when the subquery is used as an expression.
+</pre><BR>
+
+<p class="docText">When using comparison operators, only single values are acceptable from the subquery. Again, to ensure that we get only one row in the subquery and hence a workable query, we can use an aggregate with no <tt>GROUP BY</tt> or <tt>HAVING</tt> (to be discussed in <a class="docLink" href="learnsqlsvr05-CHP-9.html#learnsqlsvr05-CHP-9">Chapter 9</a>).</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><TD valign="top"><p class="docText">As with all queries, the caveat to audit the result is always applicable.</P></TD></tr></table></td></tr></table></p><br>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

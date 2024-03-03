@@ -1,0 +1,178 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 7.7.&nbsp; The Union and the Join</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-7"></a>
+<h3 id="title-IDABU1P1" class="docSection1Title">7.7. The Union and the Join</H3>
+<p class="docText">In <a class="docLink" href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a>, we discussed joins. In this section, we discuss some differences between the two operations, the <tt>UNION</tt> and the <tt>JOIN</tt>. Although the <tt>UNION</tt> operation and the <tt>JOIN</tt> operation are similar in that they both combine two tables or sets of data, the approaches used by the two operations are different. We will first present an example of when a <tt>JOIN</tt> may be used versus when a <tt>UNION</tt> may be used, and then we will present some other differences between the <tt>UNION</tt> and the <tt>JOIN</tt>.</p>
+<a name="learnsqlsvr05-CHP-7-SECT-7.1"></a>
+<h4 id="title-IDAAV1P1" class="docSection2Title">7.7.1. When a JOIN May Be Used Versus When a UNION May Be Used</H4><a name="IDX-CHP-7-0428"></a> 
+<a name="IDX-CHP-7-0429"></a> 
+<a name="IDX-CHP-7-0430"></a> 
+
+<p class="docText">A <tt>JOIN</tt> is very commonly used in queries. As we discussed previously (in <a class="docLink" href="learnsqlsvr05-CHP-4.html#learnsqlsvr05-CHP-4">Chapter 4</a>), <tt>JOIN</tt>s (specifically, equi-joins) involve a result set created based on tables where the tables are linked via some common column. The <tt>UNION</tt> operator is mostly used to combine two sets of information where the genesis of the information is not as straightforward as in a join. Consider the following two examples.</p>
+<a name="learnsqlsvr05-CHP-7-SECT-7.1.1"></a>
+<H5 id="title-IDAEW1P1" class="docSection3Title">7.7.1.1. Example 1: A straightforward join operation</h5>
+<p class="docText">Suppose that we wanted to find the names of students who took accounting courses. This is a straightforward join example. This type of query would involve joining the <tt>Student</tt>, <tt>Section</tt>, and <tt>Course</tt> tables and selecting the student names from the result set. In this case though, we actually have to join the <tt>Student</tt> table to the <tt>Grade_report</tt> table first, and then join that result to the <tt>Section</tt> table, because we cannot directly join the <tt>Student</tt> table to the <tt>Section</tt> table. Then, we join that combined result to the <tt>Course</tt> tableso this ends up becoming a four-table join, with the <tt>Grade_report</tt> table acting like a bridge between <tt>Student</tt> and <tt>Section</tt>. The <tt>JOIN</tt> query would be:</P>
+<pre>
+    SELECT DISTINCT(sname)
+    FROM Course c JOIN (Section se JOIN
+    (Student s JOIN Grade_report g
+    ON s.stno = g.student_number)
+    ON se.section_id = g.section_id)
+    ON c.course_number = se.course_num
+    AND c.course_name LIKE 'ACC%'
+</pre><BR>
+
+<p class="docText">This query would give the following 20 rows of output:</P>
+<pre>
+    sname
+    ---------------
+    Alan
+    Bill
+    Brad
+    Brenda
+    Cedric
+    Chris
+    Donald
+    Hillary
+    Holly
+    Jessica
+    Kelly
+    Ken
+    Mario
+    Monica
+    Phoebe
+    Romona
+    Sadie
+    Steve
+    Susan
+    Zelda
+
+    (20 row(s) affected)
+</pre><BR>
+
+<p class="docText">Note that we had to use a <tt>DISTINCT</tt> in the previous query, as the result of a <tt>JOIN</tt> gives duplicates.</p>
+<p class="docText">This example query could also be answered using subqueries, which are discussed later, but the point is that it is easy to see the relationship between the three (actually four) tables.</P>
+
+<a name="learnsqlsvr05-CHP-7-SECT-7.1.2"></a>
+<H5 id="title-IDAXX1P1" class="docSection3Title">7.7.1.2. Example 2: A not-so-straightforward query</h5>
+<p class="docText">Suppose that we wanted to find something like the names of the students who take accounting courses and combine them with the names of students who also major in subjects that use overhead projectors in the courses they take. This could be done using a join with this database, but it would involve finding a join-path through most of the database. For a much larger database, it might be very impractical to consider such a large join. It would be easier to first find the set of names of students who take accounting courses (call this set A) and then find students who major in subjects that use projectors (set B), then union sets A and B. The <tt>UNION</tt> approach allows us to simplify the problem and check intermediate results, so we will present this problem using a <tt>UNION</tt>. Further, each part of the problem can be done with joins or subqueries as needed for efficiency and then the results finally unioned. Set operations allow us to create sets of results any way we can and then combine the result sets using set operations; <tt>UNION</tt> is a set operation.</P>
+<p class="docText">Following, we present the <tt>UNION</tt> approach to doing this query. The first step is to do the parts individually. That is, first find the set of names of students who take accounting courses (this is the first half of the query before the <tt>UNION</tt>). Once this is done, then do the second part individually; that is, find the students who major in subjects that use projectors. Once you have the result for both parts, <tt>UNION</tt> the two results. We will not need the <tt>DISTINCT</tt> here, as <tt>UNION</tt> does not keep the duplicates. Here is a query that shows this approach:</P>
+<pre>
+    SELECT sname
+    FROM Course c JOIN (Section se JOIN
+    (Student s JOIN Grade_report g
+    ON s.stno = g.student_number)
+    ON se.section_id = g.section_id)
+    ON c.course_number = se.course_num
+    AND c.course_name LIKE 'ACC%'
+    UNION
+    SELECT sname
+    FROM Student s JOIN
+    (Department_to_major d
+    JOIN (Course c JOIN
+    (Room r JOIN Section se
+    ON r.room = se.room)
+    ON se.course_num = c.course_number)
+    ON c.offering_dept = d.dcode)
+    ON s.major = d.dcode
+    AND r.ohead = 'Y'
+</pre><br>
+
+<p class="docText">This query produces 30 rows:</p>
+<pre>
+    sname
+    --------------------
+    Alan
+    Bill
+    Brad
+    Brenda
+    Cedric
+    Chris
+    Cramer
+    Donald
+    Elainie
+    Hillary
+    Holly
+    Jake
+    Jerry
+    Jessica
+    Kelly
+    Ken
+    Lineas
+    Lujack
+    Mario
+    Mary
+    Monica
+    Phoebe
+    Rachel
+    Richard
+    Romona
+    Sadie
+    Smithly
+    Steve
+    Susan
+    Zelda
+
+    (30 row(s) affected)
+</pre><br>
+
+
+
+<a name="learnsqlsvr05-CHP-7-SECT-7.2"></a>
+<h4 id="title-IDA4Y1P1" class="docSection2Title">7.7.2. A Summary of the Other Differences Between the UNION and the JOIN</H4>
+<p class="docText">In this section, we summarize our <tt>JOIN</tt>/<tt>UNION</tt> discussion with three abstract tables containing three rows each of symbolic data. Relations or tables are <span class="docEmphasis">sets of rows</span>.</p>
+<p class="docText">We will first show the union. Assume that we have the following two tables.</p>
+<p class="docText"><span class="docEmphasis">Table A</span></P>
+<P><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="3"><col><col><col></colgroup><thead><TR><th class="thead" scope="col" align="left"><p class="docText">ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnB</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnC</p></th></tr></thead><tr><td class="docTableCell" align="left"><p class="docText">X1</p></td><td class="docTableCell" align="left"><p class="docText">Y1</p></td><td class="docTableCell" align="left"><p class="docText">Z1</p></td></tr><TR><td class="docTableCell" align="left"><p class="docText">X2</p></TD><td class="docTableCell" align="left"><p class="docText">Y2</p></TD><td class="docTableCell" align="left"><p class="docText">Z2</p></TD></tr><TR><td class="docTableCell" align="left"><p class="docText">X3</P></TD><TD class="docTableCell" align="left"><p class="docText">Y3</P></td><TD class="docTableCell" align="left"><p class="docText">Z3</P></td></TR></table></P><br>
+<p class="docText"><span class="docEmphasis">Table B</span></p>
+<p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="3"><col><col><col></colgroup><thead><tr><th class="thead" scope="col" align="left"><p class="docText">ColumnA</P></th><th class="thead" scope="col" align="left"><p class="docText">ColumnB</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnC</p></th></TR></thead><TR><TD class="docTableCell" align="left"><p class="docText">X4</p></td><td class="docTableCell" align="left"><p class="docText">Y4</p></td><td class="docTableCell" align="left"><p class="docText">Z4</p></td></tr><tr><td class="docTableCell" align="left"><p class="docText">X5</p></td><td class="docTableCell" align="left"><p class="docText">Y5</p></TD><td class="docTableCell" align="left"><p class="docText">Z5</p></TD></tr><tr><TD class="docTableCell" align="left"><p class="docText">X6</p></td><TD class="docTableCell" align="left"><p class="docText">Y6</p></TD><td class="docTableCell" align="left"><p class="docText">Z6</P></TD></TR></table></P><br>
+<p class="docText">A SQL <tt>UNION</tt> can be shown would be:</P>
+<pre>
+    SELECT * FROM TableA
+    UNION
+    SELECT * FROM TableB
+</pre><BR>
+
+<p class="docText">which produces the following table as a result:</p>
+<p class="docText"><span class="docEmphasis">Table C</span></P>
+<P><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="3"><col><col><col></colgroup><thead><tr><th class="thead" scope="col" align="left"><p class="docText">ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnB</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnC</p></th></TR></thead><tr><td class="docTableCell" align="left"><p class="docText">X1</P></TD><TD class="docTableCell" align="left"><p class="docText">Y1</p></td><td class="docTableCell" align="left"><p class="docText">Z1</p></td></tr><tr><td class="docTableCell" align="left"><p class="docText">X2</p></td><td class="docTableCell" align="left"><p class="docText">Y2</p></td><td class="docTableCell" align="left"><p class="docText">Z2</p></TD></tr><tr><TD class="docTableCell" align="left"><p class="docText">X3</p></td><TD class="docTableCell" align="left"><p class="docText">Y3</p></td><TD class="docTableCell" align="left"><p class="docText">Z3</p></TD></tr><TR><TD class="docTableCell" align="left"><p class="docText">X4</P></TD><td class="docTableCell" align="left"><p class="docText">Y4</P></TD><td class="docTableCell" align="left"><p class="docText">Z4</P></TD></tr><tr><td class="docTableCell" align="left"><p class="docText">X5</p></TD><td class="docTableCell" align="left"><p class="docText">Y5</p></TD><TD class="docTableCell" align="left"><p class="docText">Z5</P></td></tr><tr><td class="docTableCell" align="left"><p class="docText">X6</p></td><td class="docTableCell" align="left"><p class="docText">Y6</p></td><td class="docTableCell" align="left"><p class="docText">Z6</p></td></tr></table></p><br>
+<p class="docText">Using a similar set of diagrams, the join operation could be shown as follows with the following two tables (joining <tt>TableA</tt> and <tt>TableD</tt> into <tt>TableE</tt>):</P>
+<p class="docText"><span class="docEmphasis">Table A</span></p>
+<p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="3"><col><col><col></colgroup><thead><TR><th class="thead" scope="col" align="left"><p class="docText">ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnB</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnC</P></th></tr></thead><tr><TD class="docTableCell" align="left"><p class="docText">X1</p></TD><td class="docTableCell" align="left"><p class="docText">Y1</P></TD><TD class="docTableCell" align="left"><p class="docText">Z1</P></td></TR><TR><td class="docTableCell" align="left"><p class="docText">X2</P></TD><td class="docTableCell" align="left"><p class="docText">Y2</p></td><td class="docTableCell" align="left"><p class="docText">Z2</P></td></tr><TR><TD class="docTableCell" align="left"><p class="docText">X3</P></td><td class="docTableCell" align="left"><p class="docText">Y3</p></td><td class="docTableCell" align="left"><p class="docText">Z3</p></td></tr></table></p><br>
+<p class="docText"><span class="docEmphasis">Table D</span></p>
+<p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="3"><col><col><col></colgroup><thead><tr><th class="thead" scope="col" align="left"><p class="docText">ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnD</p></th><th class="thead" scope="col" align="left"><p class="docText">ColumnE</P></th></tr></thead><tr><TD class="docTableCell" align="left"><p class="docText">X1</p></td><TD class="docTableCell" align="left"><p class="docText">D1</p></td><TD class="docTableCell" align="left"><p class="docText">E1</p></TD></tr><TR><TD class="docTableCell" align="left"><p class="docText">X2</P></TD><td class="docTableCell" align="left"><p class="docText">D2</P></TD><td class="docTableCell" align="left"><p class="docText">E2</P></TD></tr><tr><td class="docTableCell" align="left"><p class="docText">X3</p></TD><td class="docTableCell" align="left"><p class="docText">D3</p></TD><TD class="docTableCell" align="left"><p class="docText">E3</P></td></tr></table></p><br>
+<p class="docText">Now, a SQL JO<tt>IN</tt> would be:</p>
+<pre>
+    SELECT *
+    FROM TableA a JOIN TableD d
+    ON a.ColumnA = d.ColumnA
+</pre><br>
+
+<p class="docText">Giving the following table:</p>
+<p class="docText"><span class="docEmphasis">Table E</span></p>
+<p><table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%"><colgroup span="6"><col><col><col><col><col><col></colgroup><thead><tr><th class="thead" scope="col" align="left"><p class="docText">TableA.ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">TableA.ColumnB</p></th><th class="thead" scope="col" align="left"><p class="docText">TableA.ColumnC</p></th><th class="thead" scope="col" align="left"><p class="docText">TableB.ColumnA</p></th><th class="thead" scope="col" align="left"><p class="docText">TableB.ColumnD</p></th><th class="thead" scope="col" align="left"><p class="docText">TableB.ColumnE</P></th></tr></thead><tr><TD class="docTableCell" align="left"><p class="docText">X1</p></td><TD class="docTableCell" align="left"><p class="docText">Y1</p></td><TD class="docTableCell" align="left"><p class="docText">Z1</p></TD><td class="docTableCell" align="left"><p class="docText">X1</P></TD><TD class="docTableCell" align="left"><p class="docText">D1</P></td><TD class="docTableCell" align="left"><p class="docText">E1</P></td></TR><TR><td class="docTableCell" align="left"><p class="docText">X2</p></td><td class="docTableCell" align="left"><p class="docText">Y2</P></td><td class="docTableCell" align="left"><p class="docText">Z2</P></TD><TD class="docTableCell" align="left"><p class="docText">X2</p></td><td class="docTableCell" align="left"><p class="docText">D2</p></td><td class="docTableCell" align="left"><p class="docText">E2</p></td></tr><tr><td class="docTableCell" align="left"><p class="docText">X3</p></td><td class="docTableCell" align="left"><p class="docText">Y3</p></TD><td class="docTableCell" align="left"><p class="docText">Z3</p></TD><td class="docTableCell" align="left"><p class="docText">X3</p></TD><td class="docTableCell" align="left"><p class="docText">D3</p></TD><td class="docTableCell" align="left"><p class="docText">E3</P></td></TR></table></P><BR>
+<p class="docText">Following are the major differences between <tt>UNION</tt>s and <tt>JOIN</tt>s:</P>
+<ul><LI><p class="docList">In a <tt>UNION</tt>, all the rows in the resulting tables (sets) being unioned have to be compatible; in a <tt>JOIN</tt>, only the joining columns of the tables being joined have to be compatiblethe other columns may be different.</P></li><LI><p class="docList">In a <tt>UNION</tt>, no "new" columns can be added to the final result of the <tt>UNION</tt>; in a <tt>JOIN</tt>, new columns can be added to the result of the <tt>JOIN</tt>.</P></li><li><p class="docList">In a <tt>UNION</tt>, the number of columns in the result set has to be the same as the number of columns in the sets being unioned; in a <tt>JOIN</tt>, the number of columns in the result set may vary.</p></li></UL>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

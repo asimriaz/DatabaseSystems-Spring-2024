@@ -1,0 +1,257 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 10.4.&nbsp; SQL Universal and Existential Qualifiers</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-10-SECT-4"></a>
+<h3 id="title-IDAJEC45" class="docSection1Title">10.4. SQL Universal and Existential Qualifiers</H3>
+<p class="docText">In SQL, "for all" and "for each" are the universal qualifiers,<a name="IDX-CHP-10-0470"></a> 
+ whereas "there exists" is the existential<a name="IDX-CHP-10-0471"></a> 
+ qualifier. As mentioned in the preceding section, SQL does not have a "for all" predicate; however, logically, the following relationship exists:</p>
+<dl class="docList"><dd>For all x, <tt>WHERE</tt> P(x) is true ...</dd></dl>
+<p class="docText">which is logically the same as the following:</p>
+<dl class="docList"><dd>There does not exist an x, <tt>WHERE</tt> P(x) is not true.</dd></dl>
+<p class="docText">A "for all" type SQL query is less straightforward than the other queries we have used, because it involves a double-nested, correlated subquery using the <tt>NOT EXISTS</tt> predicate. The next section shows an example.</P>
+<a name="learnsqlsvr05-CHP-10-SECT-4.1"></a>
+<h4 id="title-IDASFC45" class="docSection2Title">10.4.1. Example 1</H4><a name="IDX-CHP-10-0472"></a> 
+<a name="IDX-CHP-10-0473"></a> 
+
+<p class="docText">To show a "for all" type SQL query, we will use another table in our <tt>Student_course</tt> databasea table called <tt>Cap</tt> (for "capability"). This table has names of students who have multiple foreign-language capabilities. We begin by looking at the table by typing the following query:</p>
+<pre>
+SELECT *
+FROM   Cap
+ORDER BY name
+</pre><BR>
+
+<p class="docText">This query produces the following output (18 rows):</P>
+<pre>
+NAME      LANGU
+--------- -------
+BRENDA    FRENCH
+BRENDA    CHINESE
+BRENDA    SPANISH
+JOE       CHINESE
+KENT      CHINESE
+LUJACK    SPANISH
+LUJACK    FRENCH
+LUJACK    GERMAN
+LUJACK    CHINESE
+MARY JO   FRENCH
+MARY JO   GERMAN
+MARY JO   CHINESE
+MELANIE   FRENCH
+MELANIE   CHINESE
+RICHARD   SPANISH
+RICHARD   FRENCH
+RICHARD   CHINESE
+RICHARD   GERMAN
+&nbsp;
+(18 row(s) affected)
+</pre><BR>
+
+<p class="docText">Suppose that we want to find out which languages are spoken by all students (for which we would ask the question, "For each language, does it occur with all students?"). Although this manual exercise would be very difficult for a large table, for our practice table, we can answer the question by displaying and manually counting in the table ordered by language.</P>
+<p class="docText">To see how to answer a question of the type--"Which languages are spoken by all students?"--for a much larger table where sorting and examining the result would be tedious, we will construct a query. After showing the query, we will dissect the result. Following is the query to answer our question:</p>
+<pre>
+SELECT  name, langu
+FROM    Cap x
+WHERE NOT EXISTS
+             (SELECT 'X'
+             FROM Cap y
+             WHERE NOT EXISTS
+                           (SELECT 'X'
+                           FROM Cap z
+                           WHERE x.langu = z.langu
+                           AND y.name = z.name))
+</pre><BR>
+
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">As you will see, all the for all/for each questions follow this double-nested, correlated <tt>NOT EXISTS</tt> pattern.</p></TD></tr></table></td></TR></table></P><BR>
+<p class="docText">This query produces the following output (7 rows):</p>
+<pre>
+name      langu
+--------- -------
+BRENDA    CHINESE
+RICHARD   CHINESE
+LUJACK    CHINESE
+MARY JO   CHINESE
+MELANIE   CHINESE
+JOE       CHINESE
+KENT      CHINESE
+&nbsp;
+(7 row(s) affected)
+</pre><br>
+
+<a name="learnsqlsvr05-CHP-10-SECT-4.1.1"></a>
+<h5 id="title-IDA5GC45" class="docSection3Title">10.4.1.1. The way the query works</h5>
+<p class="docText">To <tt>SELECT</tt> a "language" spoken by all students, the query proceeds as follows:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList"><tt>SELECT</tt> a row in <tt>Cap (x)</tt> (outer query).</p></div></li><li><div style="font-weight:normal"><p class="docList">For that row, begin <tt>SELECT</tt>ing each row again in <tt>Cap (y)</tt> (middle query).</p></div></li><li><div style="font-weight:normal"><p class="docList">For each of the middle query rows, we want the inner query (<tt>Cap z</tt>) to be true for all cases of the middle query (remember that <tt>true</tt> is translated to <tt>false</tt> by the <tt>NOT EXISTS</tt>). As each inner query is satisfied (it is <tt>true</tt>), it forces the middle query to continue looking for a matchto look at all cases and eventually conclude <tt>false</tt> (evaluate to <tt>false</tt> overall). If the middle query is <tt>false</tt>, the outer query sees <tt>true</tt> because of its <tt>NOT EXISTS</tt>.</P><p class="docList">To make the middle query <tt>(y)</tt> find <tt>false</tt>, all the inner query <tt>(z)</tt> occurrences must be <tt>true</tt>; that is, the languages from the outer query must exist with all names from the middle one (<tt>y</tt>) in the inner one (<tt>z</tt>). For an eventual "match," every row in the middle query for an outer query row must be <tt>false</tt> (that is, every row in the inner query is <tt>true</tt>).</P></div></li></ol></div>
+<p class="docText">These steps are explained in further detail in the next example, in which we use a smaller table, so that the explanation is easier to understand.</p>
+
+
+<a name="learnsqlsvr05-CHP-10-SECT-4.2"></a>
+<H4 id="title-IDAPJC45" class="docSection2Title">10.4.2. Example 2</h4>
+<p class="docText">Suppose that we have the simpler table <tt>Cap1</tt> (see <a class="docLink" href="#learnsqlsvr05-CHP-10-TABLE-1">Table 10-1</a>) when attempting to answer the question "Which languages are spoken by all students?"</p>
+<a name="learnsqlsvr05-CHP-10-TABLE-1"></a><P><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table 10-1. Cap1</H5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><TD class="docTableCell" align="left"><p class="docText"></P>
+<pre>
+Name         Language
+------------ ------------
+Joe          Hindi
+Mary         Hindi
+Mary         French
+&nbsp;
+(3 row(s) affected)
+</pre><BR>
+
+</TD></tr></table></P><BR>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">The table <tt>Cap1</tt> does not exist in the <tt>Student_course</tt> database. You will have to create it. Keep the column names and types similar to the table <tt>Cap</tt>.</P></td></tr></table></TD></TR></table></P><br>
+<p class="docText">The query will be similar to the one used in the previous section:</p>
+<pre>
+SELECT name, language
+FROM   Cap1 x
+WHERE NOT EXISTS
+     (SELECT 'X'
+       FROM Cap1 y
+       WHERE NOT EXISTS
+         (SELECT 'X'
+              FROM   Cap1 z
+              WHERE  x.language = z. language
+              AND    y.name = z.name))
+ORDER BY language
+</pre><br>
+
+<p class="docText">This query produces the following output:</p>
+<pre>
+name         language
+------------ ------------
+Joe          Hindi
+Mary         Hind
+&nbsp;
+(2 row(s) affected)
+</pre><br>
+
+<a name="learnsqlsvr05-CHP-10-SECT-4.2.1"></a>
+<h5 id="title-IDASLC45" class="docSection3Title">10.4.2.1. The way this query works</h5>
+<p class="docText">The following is a step-by-step explanation of how this query would work in <a class="docLink" href="#learnsqlsvr05-CHP-10-TABLE-1">Table 10-1</a> (Cap1):</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">The row &lt;Joe, Hindi&gt; is <tt>SELECT</tt>ed by the outer query <tt>(x)</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">The row &lt;Joe, Hindi&gt; is <tt>SELECT</tt>ed by the middle query <tt>(y)</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">The row &lt;Joe, Hindi&gt; is <tt>SELECT</tt>ed by the inner query <tt>(z)</tt>.</P></div></li><li><div style="font-weight:normal"><p class="docList">The inner query is true:</P><pre>
+    X.LANGUAGE = Hindi
+    Z.LANGUAGE = Hindi
+    Y.NAME = Joe
+    Z.NAME = Joe
+</pre><br>
+</div></li><LI><div style="font-weight:normal"><p class="docList">Because the inner query returns a row (is <tt>true</tt>), the <tt>NOT EXISTS</tt> of the middle query translates this to <tt>false</tt> and continues with the next row in the middle query. The middle query <tt>SELECT</tt>s &lt;Mary, Hindi&gt; and the inner query begins again with &lt;Joe, Hindi&gt; seeing:</p><pre>
+     X.LANGUAGE = Hindi
+     Z.LANGUAGE = Hindi
+     Y.NAME = Mary
+     Z.NAME = Joe
+</pre><BR>
+<p class="docList">This is <tt>false</tt>, so the inner query <tt>SELECT</tt>s a second row &lt;Mary, Hindi&gt;:</p><pre>
+    X.LANGUAGE = Hindi
+    Z.LANGUAGE = Hindi
+    Y.NAME = Mary
+    Z.NAME = Mary
+</pre><BR>
+<p class="docList">This is <tt>true</tt>, so the inner query is <tt>TRue</tt>. (Notice that the <tt>X.LANGUAGE</tt> has not changed yet; the outer query <tt>[X]</tt> is still on the first row.)</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Because the inner query returns a row (is <tt>true</tt>), the <tt>NOT EXISTS</tt> of the middle query translates this to <tt>false</tt> and continues with the next row in the middle query.</P><p class="docList">The middle query now <tt>SELECT</tt>s &lt;Mary, French&gt; and the inner query begins again with &lt;Joe, Hindi&gt; seeing:</P><pre>
+    X.LANGUAGE = Hindi
+    Z.LANGUAGE = Hindi
+    Y.NAME     = Mary
+    Z.NAME     = Joe
+</pre><br>
+<p class="docList">This is <tt>false</tt>, so the inner query <tt>SELECT</tt>s a second row &lt;Mary, Hindi&gt;:</P><pre>
+    X.LANGUAGE = Hindi
+    Z.LANGUAGE = Hindi
+    Y.NAME     = Mary
+    Z.NAME     = Mary
+</pre><BR>
+<p class="docList">This is <tt>true</tt>, so the inner query is <tt>true</tt>.</p></div></li><LI><div style="font-weight:normal"><p class="docList">Because the inner query is <tt>true</tt>, the <tt>NOT EXISTS</tt> of the middle query again converts this <tt>true</tt> to <tt>false</tt> and wants to continue, but the middle query is out of rows. Thus the middle query is <tt>false</tt>.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Because the middle query is <tt>false</tt>, and because we are testing</p><pre>
+"SELECT distinct name, language
+ FROM Cap1 x
+ WHERE NOT EXISTS
+    (SELECT 'X' FROM Cap1 y ...",
+</pre><br>
+<p class="docList">the <tt>false</tt> from the middle query is translated to <tt>true</tt> for the outer query and the row &lt;Joe, Hindi&gt; is <tt>SELECT</tt>ed for the result set. Note that "Hindi" occurs with both "Joe" and "Mary."</p></div></li><li><div style="font-weight:normal"><p class="docList">The second row in the outer query will repeat the previous steps for &lt;Mary, Hindi&gt;. The value "Hindi" will be seen to occur with both "Joe" and "Mary" as &lt;Mary, Hindi&gt; is added to the result set.</p></div></li><li><div style="font-weight:normal"><p class="docList">The third row in the outer query begins with &lt;Mary, French&gt;. The middle query <tt>SELECT</tt>s &lt;Joe, Hindi&gt; and the inner query <tt>SELECT</tt>s &lt;Joe, Hindi&gt;. The inner query sees the following:</p><pre>
+   X.LANGUAGE = French
+   Z.LANGUAGE = Hindi
+   Y.NAME     = Joe
+   Z.NAME     = Mary
+</pre><br>
+<p class="docList">This is <tt>false</tt>, so the inner query <tt>SELECT</tt>s a second row, &lt;Mary, Hindi&gt;:</p><pre>
+   X.LANGUAGE = French
+   Z.LANGUAGE = Hindi
+   Y.NAME     = Joe
+   Z.NAME     = Mary
+</pre><br>
+<p class="docList">This is <tt>false</tt>, so the inner query <tt>SELECT</tt>s a third row, &lt;Mary, French&gt;:</p><pre>
+   X.LANGUAGE = French
+   Z.LANGUAGE = French
+   Y.NAME     = Joe
+   Z.NAME     = Mary
+</pre><br>
+<p class="docList">This is also <tt>false</tt>. The inner query returns no rows (fails). The inner query evaluates to <tt>false</tt>, which causes the middle query to returns rows (see <tt>TRue</tt>) because of the <tt>NOT EXISTS</tt>. Because the middle query sees <tt>true</tt>, it is finished and evaluated to <tt>true</tt>. Because the middle query evaluates to <tt>TRue</tt>, the <tt>NOT EXISTS</tt> in the outer query changes this to <tt>false</tt> and <tt>X.LANGUAGE = French</tt> fails because <tt>X.LANGUAGE = French</tt> did not occur with all the values of <tt>NAME</tt>.</p></div></li></ol></div>
+<p class="docText">Consider again the "for all" query presented in Example 2:</P>
+<pre>
+SELECT name, language
+FROM   Cap1 x
+WHERE NOT EXISTS
+     (SELECT 'X'
+       FROM Cap1 y
+       WHERE NOT EXISTS
+         (SELECT 'X'
+              FROM    Cap1 z
+              WHERE   x.language = z. language
+              AND     y.name = z.name))
+ORDER BY language
+</pre><br>
+
+<p class="docText">A clue as to what a query of this kind means can be found in the inner query where the outer query is tested. In the phrase that says <tt>WHERE</tt> <tt><i>x.language</I></tt> <tt>=</tt> <tt><i>z. language</I></tt><tt>...</tt>, the <tt><i>x.language</I></tt> is where the query is testing which <span class="docEmphasis">language occurs for all</span> names.</P>
+<p class="docText">This query is a SQL realization of a relational division exercise. Relational division is a "for all" operation just like that illustrated earlier. In relational algebra, the query must be set up into a divisor, dividend, and quotient in this pattern:</P>
+<dl class="docList"><dd>Quotient (B) <img src=images/U2190.jpg border=0> Dividend(A, B) divided by Divisor (A).</dd></dl>
+<p class="docText">If the question is "What language for <span class="docEmphasis">all</span> names?" then the Divisor, A, is <tt>names</tt>, and the Quotient, B, is <tt>language</tt>. It is most prudent to set up SQL like relational algebra with a two-column table (like <tt>Cap</tt> or <tt>Cap1</tt>) for the Dividend and then treat the Divisor and the Quotient appropriately. Our query will have the column for language, <tt>x.language</tt>, in the inner query, as <tt>language</tt> will be the quotient. We have chosen to also report <tt>name</tt> in the result set.</P>
+
+
+<a name="learnsqlsvr05-CHP-10-SECT-4.3"></a>
+<h4 id="title-IDARTC45" class="docSection2Title">10.4.3. Example 3</H4>
+<p class="docText">Note that the preceding query is completely different from the following query, which asks, "Which <span class="docEmphasis">students</span> speak all languages?":</P>
+<pre>
+SELECT DISTINCT name, language
+FROM   Cap1 x
+WHERE NOT EXISTS
+             (SELECT 'X'
+             FROM Cap1 y
+             WHERE NOT EXISTS
+                     (SELECT 'X'
+                          FROM     Cap1 z
+                          WHERE    y.language = z.language
+                          AND      x.name = z.name))
+ORDER BY language
+</pre><br>
+
+<p class="docText">This query produces the following output:</P>
+<pre>
+name         language
+------------ ------------
+Mary         French
+Mary         Hindi
+&nbsp;
+(2 row(s) affected)
+</pre><BR>
+
+<p class="docText">Note that the inner query contains <tt>x.name</tt>, which means the question was "Which names occur for <span class="docEmphasis">all</span> languages?" or, put another way, "Which students speak all languages?" The "all" goes with languages for <tt>x.name</tt>.</p>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

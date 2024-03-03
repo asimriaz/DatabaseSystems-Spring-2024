@@ -1,0 +1,196 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 7.6.&nbsp; The Difference Operation</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-6"></a>
+                <h3 id="title-IDAYD1T5" class="docSection1Title">7.6. The Difference Operation</H3><a
+                    name="IDX-CHP-7-0425"></a>
+                <a name="IDX-CHP-7-0426"></a>
+                <a name="IDX-CHP-7-0427"></a>
+
+                <p class="docText">Because SQL Server does not support the <tt>MINUS</tt> predicate, we will show the
+                    set difference operation using a <tt>NOT..IN</tt> with two examples.</p>
+                <a name="learnsqlsvr05-CHP-7-SECT-6.1"></a>
+                <h4 id="title-IDARE1T5" class="docSection2Title">7.6.1. Example 1</H4>
+                <p class="docText">Suppose that set A is the set of students in classes 2, 3, or 4 and set B is the set
+                    of students in class 2. We could use the <tt>NOT..IN</tt> predicate to remove the students in set B
+                    from set A (a difference operation) by typing the following query:</p>
+                <pre>
+    SELECT sname, class
+    FROM   Student
+    WHERE class IN (2,3,4)
+      AND NOT class IN (2)
+</pre><BR>
+
+                <p class="docText">which produces the following output (17 rows):</p>
+                <pre>
+    sname                class
+    -------------------- ------
+    Mary                 4
+    Kelly                4
+    Donald               4
+    Chris                4
+    Jake                 4
+    Susan                3
+    Monica               3
+    Phoebe               3
+    Holly                4
+    Rachel               3
+    Jerry                4
+    Cramer               3
+    Harrison             4
+    Francis              4
+    Losmith              3
+    Gus                  3
+    Benny                4
+
+    (17 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-7-SECT-6.2"></a>
+                <H4 id="title-IDADF1T5" class="docSection2Title">7.6.2. Example 2</H4>
+                <p class="docText">To illustrate another difference operation, we will use views with the
+                    <tt>NOT..IN</tt> to give the effect of a difference operation. Suppose for example, you wanted to
+                    find the names of those students who do not major in <tt>COSC</tt> or <tt>MATH</tt> but delete from
+                    that set those students who have made an A in some course.</P>
+                <p class="docText">First, using the <tt>NOT..IN</tt>, we will create a view (<tt>view1</tt>) of the
+                    names and majors of the students who are not <tt>COSC</tt> or <tt>MATH</tt> majors using the
+                    following query:</p>
+                <pre>
+    CREATE VIEW view1 AS
+    SELECT sname, major
+    FROM   Student
+    WHERE  major NOT IN ('COSC', 'MATH')
+</pre><BR>
+
+                <p class="docText"><tt>View1</tt> will have the same 28 rows of output as shown earlier in this chapter.
+                </P>
+                <p class="docText">Then, using the <tt>IN</tt> predicate, we will create another view (<tt>view2</tt>)
+                    of names and majors of students who have received As using the following query:</p>
+                <pre>
+    CREATE VIEW view2 AS
+    SELECT Student.sname, Student.major
+    FROM   Student
+    WHERE  Student.stno IN
+      (SELECT g.student_number
+       FROM   Grade_report g
+       WHERE  g.grade = 'A')
+</pre><BR>
+
+                <p class="docText">If we type:</P>
+                <pre>
+    SELECT *
+    FROM view2;
+</pre><br>
+
+                <p class="docText">We get the following 14 rows of output:</p>
+                <pre>
+    sname                major
+    -------------------- -----
+    Lineas               ENGL
+    Mary                 COSC
+    Brenda               COSC
+    Richard              ENGL
+    Lujack               COSC
+    Donald               ACCT
+    Lynette              POLY
+    Susan                ENGL
+    Holly                POLY
+    Sadie                MATH
+    Jessica              POLY
+    Steve                ENGL
+    Cedric               ENGL
+    Jerry                COSC
+
+    (14 row(s) affected)
+</pre><br>
+
+                <p class="docText">Then, to find those students who are not majoring in <tt>COSC</tt> or <tt>MATH</tt>,
+                    and remove from that set those who made an A in some course, the difference operation could be
+                    approached using the <tt>NOT..IN</tt> as follows, using the views created earlier:</p>
+                <pre>
+    SELECT sname
+    FROM view1
+    WHERE sname NOT IN
+      (SELECT sname
+      FROM view2)
+</pre><BR>
+
+                <p class="docText">This query produces the following output (19 rows):</p>
+                <pre>
+    sname
+    --------------------
+    Ken
+    Romona
+    Harley
+    Chris
+    Bill
+    Phoebe
+    Rachel
+    George
+    Cramer
+    Fraiser
+    Harrison
+    Francis
+    Smithly
+    Sebastian
+    Losmith
+    Genevieve
+    Lindsay
+    Gus
+    Benny
+
+    (19 row(s) affected)
+</pre><br>
+
+                <p class="docText">This query has the same effect as <tt>view1--view2</tt> (all students who are not
+                    majoring in <tt>COSC</tt> or <tt>MATH</tt>, <tt>MINUS</tt> students who made an A in some course).
+                </P>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-7-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

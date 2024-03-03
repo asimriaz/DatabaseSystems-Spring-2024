@@ -1,0 +1,82 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 3.4.&nbsp; The UPDATE Command</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-4"></a>
+<H3 id="title-IDAPHD05" class="docSection1Title">3.4. The UPDATE Command</H3><a name="IDX-CHP-3-0185"></a> 
+<a name="IDX-CHP-3-0186"></a> 
+
+<p class="docText">Another common command used for setting/changing data values in a table is the <tt>UPDATE</tt> command. As with <tt>INSERT INTO .. SELECT</tt>, you often <tt>UPDATE</tt> more than one row. To examine how the <tt>UPDATE</tt> command works, we will use the tables we created in the previous section.</P>
+<p class="docText">The general format for the <tt>UPDATE</tt> command is:</P>
+<pre>
+UPDATE TableName
+SET fieldname...
+</pre><br>
+
+<p class="docText">For example, if you want to set <span class="docEmphasis">all</span> salaries in the table <tt>Emp2</tt> to zero, you may do so with one <tt>UPDATE</tt> command:</p>
+<pre>
+UPDATE Emp2
+SET sal = 0
+</pre><br>
+
+<p class="docText">Now, if you type:</P>
+<pre>
+SELECT *
+FROM Emp2
+</pre><BR>
+
+<p class="docText">You will get:</P>
+<pre>
+addr                 sal          empno
+-------------------- ------------ -----------
+123 4th St.          0.00         101
+27 Shillingford      0.00         103
+95 Oxford Rd         0.00         105
+23 Pesterfield Cr    0.00         114
+465 Easter Ave       0.00          95
+&nbsp;
+(5 row(s) affected)
+</pre><BR>
+
+<p class="docText">This <tt>UPDATE</tt> command sets all salaries in all rows of the <tt>Emp2</tt> table to zero, regardless of previous values. As with any statement that affects all rows, this may be viewed as a dangerous command and caution should be observed.</P>
+<p class="docText">It is often useful to include a <tt>WHERE</tt> clause in the <tt>UPDATE</tt> command so that values are set selectively. For example, if we assume that employee numbers are unique, we can <tt>UPDATE</tt> a specific employee from the <tt>Employee</tt> table with the following statement:</p>
+<pre>
+UPDATE Employee
+SET    salary = 0
+WHERE  employee_number=101
+</pre><BR>
+
+<p class="docText">This query produces the following output:</p>
+<pre>
+names                address              employee_number salary
+-------------------- -------------------- --------------- ------------
+Joe Smith            123 4th St.          101                0.00
+Pradeep Saha         27 Shillingford      103             3300.00
+Sumit Kumar          95 Oxford Rd         105             1200.00
+Joya Das             23 Pesterfield Cr    114             2290.00
+Terry Livingstone    465 Easter Ave       95              3390.00
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+<p class="docText">Only employee number 101's row is updated. Once again, note that we do not use the quotes around 101, since <tt>employee_number</tt> is defined as an <tt>INT</tt> column (a numeric column). Quotes would have to be used around any character or string columns.</P>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-3-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

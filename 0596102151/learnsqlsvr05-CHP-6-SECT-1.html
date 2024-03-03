@@ -1,0 +1,159 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 6.1.&nbsp; Query Development</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-6-SECT-1"></a>
+<h3 id="title-IDADQV5G" class="docSection1Title">6.1. Query Development</H3>
+<p class="docText">Queries are sometimes developed after some initial experimentation, yet other times they are the result of modifying previously stored queries. The best way to understand how the query building process works is to look at an example. Suppose we want to find the names of all students in the <tt>Student_course</tt> database who major in computer science (COSC) and have earned a grade of B in some course. To do so, we can follow these steps:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">Type the following query to find students who major in computer science:</P><pre>
+    SELECT *
+    FROM   Student
+    WHERE  major = 'COSC'
+</pre><br>
+<p class="docList">This query produces the following 10 rows of output:</P><pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    3      Mary                 COSC  4      1978-07-16 00:00:00
+    5      Zelda                COSC  NULL   1978-02-12 00:00:00
+    8      Brenda               COSC  2      1977-08-13 00:00:00
+    14     Lujack               COSC  1      1977-02-12 00:00:00
+    17     Elainie              COSC  1      1976-08-12 00:00:00
+    31     Jake                 COSC  4      1978-02-12 00:00:00
+    121    Hillary              COSC  1      1977-07-16 00:00:00
+    128    Brad                 COSC  1      1977-09-10 00:00:00
+    130    Alan                 COSC  2      1977-07-16 00:00:00
+    142    Jerry                COSC  4      1978-03-12 00:00:00
+
+    (10 row(s) affected)
+</pre><br>
+</div></LI><LI><div style="font-weight:normal"><p class="docList">To find the student rows in the preceding output who have earned a B in a course, we first need to add the <tt>Grade_report</tt> table, shown in <a class="docLink" href="#learnsqlsvr05-CHP-6-FIG-1">Figure 6-1</a>, with a join (to get the grades of those students who are computer science majors).</P><a name="learnsqlsvr05-CHP-6-FIG-1"></a><P><center>
+<h5 class="docFigureTitle">Figure 6-1. Table definition of the Grade_report table</H5>
+<img border="0" alt="" width="272" height="76" SRC="images/learnsqlsvr05_0601.jpg">
+</center></P><p class="docList">The join query now looks like (note the choice of columns in the <tt>SELECT</tt> statement, so that we can see the student names, majors, sections and grades):</p><pre>
+SELECT   stu.sname, stu.major, g.section_id, g.grade
+FROM     Student stu, Grade_report g
+WHERE    stu.major = 'COSC'
+  AND       stu.stno = g.student_number
+</pre><BR>
+<p class="docList">This query produces 48 rows of output (of which we show the first 20 rows):</P><pre>
+sname                major section_id grade
+-------------------- ----- ---------- -----
+Mary                 COSC  85         A
+Mary                 COSC  87         B
+Mary                 COSC  90         B
+Mary                 COSC  91         B
+Mary                 COSC  92         B
+Mary                 COSC  96         B
+Mary                 COSC  101        NULL
+Mary                 COSC  133        NULL
+Mary                 COSC  134        NULL
+Mary                 COSC  135        NULL
+Zelda                COSC  90         C
+Zelda                COSC  94         C
+Zelda                COSC  95         B
+Brenda               COSC  85         A
+Brenda               COSC  92         A
+Brenda               COSC  94         C
+Brenda               COSC  95         B
+Brenda               COSC  96         C
+Brenda               COSC  102        B
+Brenda               COSC  133        NULL
+.
+.
+.
+(48 row(s) affected)
+</pre><br>
+</div></li><li><div style="font-weight:normal"><p class="docList">To add the condition for Bs, we need to add another <tt>AND</tt> clause in the <tt>WHERE</tt> condition, by adding a fifth line to the query:</p><pre>
+SELECT  stu.sname, major, section_id, grade
+FROM    Student stu, Grade_report g
+WHERE   stu.major = 'COSC'
+  AND      stu.stno = g.student_number
+  AND      g.grade = 'B'
+</pre><BR>
+<p class="docList">This query produces the following 14 rows of output:</p><pre>
+sname                major section_id grade
+-------------------- ----- ---------- -----
+Mary                 COSC  87         B
+Mary                 COSC  90         B
+Mary                 COSC  91         B
+Mary                 COSC  92         B
+Mary                 COSC  96         B
+Zelda                COSC  95         B
+Brenda               COSC  95         B
+Brenda               COSC  102        B
+Lujack               COSC  102        B
+Lujack               COSC  145        B
+Lujack               COSC  158        B
+Hillary              COSC  90         B
+Hillary              COSC  94         B
+Hillary              COSC  95         B
+&nbsp;
+(14 row(s) affected)
+</pre><br>
+</div></LI><LI><div style="font-weight:normal"><p class="docList">To get only the student names from the preceding output, we reduce the result set by typing:</P><pre>
+SELECT  stu.sname
+FROM    Student stu, Grade_report g
+WHERE   stu.major = 'COSC'
+  AND      stu.stno = g.student_number
+  AND      g.grade = 'B'
+</pre><br>
+<p class="docList">This query produces the following output, a list of all the students who are majoring in COSC and received a grade of B:</p><pre>
+sname
+--------------------
+Mary
+Mary
+Mary
+Mary
+Mary
+Zelda
+Brenda
+Brenda
+Lujack
+Lujack
+Lujack
+Hillary
+Hillary
+Hillary
+&nbsp;
+(14 row(s) affected)
+</pre><br>
+<p class="docList">The point of this process is that it allows us to test as we go, verify that the query works up to that point, and ensure that we have a reasonable result before we move to the next enhancement.</p></div></li><li><div style="font-weight:normal"><p class="docList">To get the answer in a more reasonable "easy-to-read" orderly manner, a final presentation using <tt>DISTINCT</tt> (to find the distinct names) and <tt>ORDER BY</tt> (to order by names) could be added to the query, as follows:</p><pre>
+SELECT  DISTINCT(stu.sname)
+FROM    Student stu, Grade_report g
+WHERE   stu.major = 'COSC'
+  AND      stu.stno = g.student_number
+  AND      g.grade = 'B'
+  ORDER BY stu.sname
+</pre><br>
+<p class="docList">which would give:</p><pre>
+sname
+--------------------
+Brenda
+Hillary
+Lujack
+Mary
+Zelda
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+<p class="docList">But note that the <tt>DISTINCT</tt> and <tt>ORDER BY</tt> do not have to be used together. When the <tt>DISTINCT</tt> is used, the <tt>ORDER BY</tt> is not necessary. <tt>DISTINCT</tt> automatically orders the result set. So writing the previous query without the <tt>ORDER BY</tt> clause would give you the same output. Try it.</p></div></li></ol></div>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-6-SECT-2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

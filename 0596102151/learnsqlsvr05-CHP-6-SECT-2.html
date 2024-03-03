@@ -1,0 +1,301 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 6.2.&nbsp; Parentheses in SQL Expressions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-6-SECT-2"></a>
+                <h3 id="599419-869" class="docSection1Title">6.2. Parentheses in SQL Expressions</H3><a
+                    name="IDX-CHP-6-0366"></a>
+                <a name="IDX-CHP-6-0367"></a>
+
+                <p class="docText">As queries get longer, they can become very ambiguous to humans without the
+                    appropriate use of parentheses. In programming languages like C, you can write a statement like
+                    this:</p>
+                <pre>
+    x = y + z * w
+</pre><br>
+
+                <p class="docText">How is this statement computed? The answer depends on precedence rules. Usually in
+                    programming languages (and in SQL), clauses in parentheses have the highest precedence. The authors
+                    of this book advocate <span class="docEmphasis">fully</span> parenthesized expressions for three
+                    reasons:</P>
+                <ul>
+                    <LI>
+                        <p class="docList">It makes the expression easier to debug.</p>
+                    </LI>
+                    <LI>
+                        <p class="docList">It tells anyone else who looks at your expression that it is written as you
+                            intended, because you explicitly and unambiguously wrote the expression in a fully
+                            parenthesized way.</P>
+                    </LI>
+                    <li>
+                        <p class="docList">There is no guarantee that another SQL language will behave like the one you
+                            learned.</P>
+                    </LI>
+                </ul>
+                <p class="docText">In SQL, the precedence problem occurs when <tt>AND</tt> and <tt>OR</tt> are used in
+                    the same query. For example, what does the following query request? Does <tt>AND</tt> or <tt>OR</tt>
+                    have precedence or is the rule "left to right"?</P>
+                <pre>
+    SELECT  *
+    FROM    Student
+    WHERE   class = 3 OR class = 4 AND stno &lt; 100
+</pre><BR>
+
+                <p class="docText">This query produces the following 12 rows of output:</p>
+                <pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    3      Mary                 COSC  4      1978-07-16 00:00:00
+    13     Kelly                MATH  4      1980-08-12 00:00:00
+    20     Donald               ACCT  4      1977-10-15 00:00:00
+    24     Chris                ACCT  4      1978-02-12 00:00:00
+    31     Jake                 COSC  4      1978-02-12 00:00:00
+    49     Susan                ENGL  3      1980-03-11 00:00:00
+    62     Monica               MATH  3      1980-10-14 00:00:00
+    122    Phoebe               ENGL  3      1980-04-15 00:00:00
+    131    Rachel               ENGL  3      1980-04-15 00:00:00
+    143    Cramer               ENGL  3      1980-04-15 00:00:00
+    151    Losmith              CHEM  3      1981-01-15 00:00:00
+    160    Gus                  ART   3      1978-10-15 00:00:00
+
+    (12 row(s) affected)
+</pre><br>
+
+                <p class="docText">The point is that you do not have to know the precedence rules to write an
+                    unambiguous expression. If you use parentheses appropriately, you make the expression clear and
+                    unambiguous. Consider the following examples. If we type the following:</p>
+                <pre>
+    SELECT  *
+    FROM    Student
+    WHERE   class = 3 OR (class = 4 AND stno &lt; 100)
+</pre><br>
+
+                <p class="docText">we get the following 12 rows of output:</P>
+                <pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    3      Mary                 COSC  4      1978-07-16 00:00:00
+    13     Kelly                MATH  4      1980-08-12 00:00:00
+    20     Donald               ACCT  4      1977-10-15 00:00:00
+    24     Chris                ACCT  4      1978-02-12 00:00:00
+    31     Jake                 COSC  4      1978-02-12 00:00:00
+    49     Susan                ENGL  3      1980-03-11 00:00:00
+    62     Monica               MATH  3      1980-10-14 00:00:00
+    122    Phoebe               ENGL  3      1980-04-15 00:00:00
+    131    Rachel               ENGL  3      1980-04-15 00:00:00
+    143    Cramer               ENGL  3      1980-04-15 00:00:00
+    151    Losmith              CHEM  3      1981-01-15 00:00:00
+    160    Gus                  ART   3      1978-10-15 00:00:00
+
+    (12 row(s) affected)
+</pre><br>
+
+                <p class="docText">The preceding query has the parentheses around the <tt>AND</tt> clause, the result of
+                    which is that the <tt>AND</tt> is performed first. The following query has the parentheses around
+                    the <tt>OR</tt> clause, meaning that the <tt>OR</tt> is performed first:</p>
+                <pre>
+    SELECT  *
+    FROM    Student
+    WHERE   (class = 3 OR class = 4) AND stno &lt; 100
+</pre><BR>
+
+                <p class="docText">This query results in the following seven rows of output:</P>
+                <pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    3      Mary                 COSC  4      1978-07-16 00:00:00
+    13     Kelly                MATH  4      1980-08-12 00:00:00
+    20     Donald               ACCT  4      1977-10-15 00:00:00
+    24     Chris                ACCT  4      1978-02-12 00:00:00
+    31     Jake                 COSC  4      1978-02-12 00:00:00
+    49     Susan                ENGL  3      1980-03-11 00:00:00
+    62     Monica               MATH  3      1980-10-14 00:00:00
+
+    (7 row(s) affected)
+</pre><BR>
+
+                <p class="docText">As the preceding two query statements demonstrate, appropriate placement of
+                    parentheses eliminates any ambiguity in queries that contain both <tt>AND</tt> and <tt>OR</tt>.</p>
+                <a name="learnsqlsvr05-CHP-6-SECT-2.1"></a>
+                <h4 id="title-IDA5C4XD" class="docSection2Title">6.2.1. Operator Precedence</h4><a
+                    name="IDX-CHP-6-0368"></a>
+                <a name="IDX-CHP-6-0369"></a>
+                <a name="IDX-CHP-6-0370"></a>
+
+                <p class="docText">In SQL Server , when complex expressions use multiple operators, precedence rules
+                    determine the sequence in which the operations are performed. The order of execution can
+                    significantly affect the resulting value (as you saw in the example in the preceding section).
+                    Although we can usually control precedence with parentheses, it is important to learn, or have at
+                    least a reference, to the order of precedence.</p>
+                <p class="docText">Operators have the following precedence (the following list is shown from the highest
+                    level of precedence to the lowest level of precedence):</p>
+                <pre>
+    * (multiply), / (divide), % (modulo)
+    + (add), + (concatenate), - (subtract)
+    =, &gt;, &lt;, &gt;=, &lt;=, != (not equal to), !&gt;, !&lt;
+    NOT
+    AND
+    BETWEEN, IN, LIKE, OR
+    = (assignment)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-6-SECT-2.2"></a>
+                <h4 id="title-IDA1D4XD" class="docSection2Title">6.2.2. Data Type Precedence</h4><a
+                    name="IDX-CHP-6-0371"></a>
+                <a name="IDX-CHP-6-0372"></a>
+                <a name="IDX-CHP-6-0373"></a>
+
+                <p class="docText">When an operator combines two expressions of different data types, the data type
+                    precedence rules specify which data type is converted to the other. The data type with the lower
+                    precedence is converted to the data type with the higher precedence. Here we list the precedence
+                    order for SQL Server data types (again shown from the highest level of precedence to the lowest
+                    level of precedence):</p>
+                <ul>
+                    <li>
+                        <p class="docList"><tt>SQL_VARIANT</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>DATETIME</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>SMALLDATETIME</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>FLOAT</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>REAL</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>DECIMAL</tt></P>
+                    </li>
+                    <LI>
+                        <p class="docList"><tt>MONEY</tt></P>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>SMALLMONEY</tt></p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>BIGINT</tt></p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>INT</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>SMALLINT</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>TINYINT</tt></p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>BIT</tt></P>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>NTEXT</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>TEXT</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>IMAGE</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>UNIQUEIDENTIFIER</tt></p>
+                    </li>
+                    <li>
+                        <p class="docList"><tt>NVARCHAR</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>NCHAR</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>VARCHAR</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>CHAR</tt></p>
+                    </LI>
+                    <li>
+                        <p class="docList"><tt>BINARY</tt></P>
+                    </li>
+                </UL>
+                <p class="docText">This order means that if a number of an <tt>INT</tt> data type is multiplied to a
+                    number that is of a <tt>FLOAT</tt> data type, the result would be a <tt>FLOAT</tt> data type. To
+                    illustrate something like this, we will use the <tt>Employee</tt> table that we created in the last
+                    chapter. The design of the <tt>Employee</tt> table is shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-6-FIG-2">Figure 6-2</a>.</P>
+                <p class="docText">Note that the data type of the <tt>hours</tt> column is <tt>SMALLINT</tt>. If we
+                    multiply this column (<tt>hours</tt>) by 0.75 (a <tt>FLOAT</tt>), we get a <tt>FLOAT</tt> data type
+                    in the result set, as shown here:</P>
+                <pre>
+    SELECT  names, hours, 'Hours * .75' = hours *  .75
+    FROM    Employee
+</pre><BR>
+
+                <a name="learnsqlsvr05-CHP-6-FIG-2"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 6-2. Table definition of the Employee table</H5>
+                        <img border="0" alt="" id="217066145005" width="201" height="76"
+                            SRC="images/learnsqlsvr05_0602.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">This query gives us:</P>
+                <pre>
+    names                hours  Hours * .75
+    -------------------- ------ --------------------------------------
+    Sumon Bagui          40     30.00
+    Sudip Bagui          30     22.50
+    Priyashi Saha        NULL   NULL
+    Ed Evans             10     7.50
+    Genny George         40     30.00
+
+    (5 row(s) affected)
+</pre><br>
+
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-6-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

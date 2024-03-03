@@ -1,0 +1,27 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 7.12.&nbsp; Optional Exercise</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-11.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-12"></a>
+<h3 id="title-IDAOF0V5" class="docSection1Title">7.12. Optional Exercise</H3>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList"><i>De Morgan's Theorem.</I>In the binary case, DeMorgan's Theorem tells us that <tt>[not(A and B)] = [not(A) or not(B)]</tt>. For example, suppose that A is the set of rows where students are juniors and B is the set of rows where students are females. And suppose that you were asked the question, "Find the students who are not (female and juniors)." Clearly this is the set <tt>[not(A and B)]</tt>. You can answer this question by finding the set of students who are not juniors <tt>[not(A)]</tt> and then or-ing this with the set of students who are not females <tt>[not(B)]</tt>. At times it is easier to find one or the other of the results via a query, and the point here is that the two methods of finding a result is equivalent.</p><p class="docList"><span class="docEmphasis">Question:</span> Find the result set for all sections that are offered in building 13 and call this set A. Find the result set for all sections that are offered in building 36 and call this set B. Construct the SQL to find the following result sets:</P><div style="font-weight:bold"><ol class="docList" type="a"><li><div style="font-weight:normal"><p class="docList">The result of set A <tt>OR</tt> set B (use <tt>WHERE</tt> building = 13 or building = 36).</P></div></LI><LI><div style="font-weight:normal"><p class="docList">The result of the complement of (a): <tt>NOT</tt>(set A <tt>OR</tt> set B).</P></div></li><LI><div style="font-weight:normal"><p class="docList">The result of <tt>NOT(set A) AND NOT(set B)</tt>.</P></div></li><LI><div style="font-weight:normal"><p class="docList">The count of all rows in the <tt>Section</tt> table.</P></div></li></ol></div><p class="docList">Is the count in d = a + b? Is the result of c the same as the result of b? Explain why or why not in each case (Hint: You may apply the De Morgan's Theorem which states that <tt>NOT(set A or set B) = NOT(set A)</tt> and <tt>NOT(set b)</tt>.</p></div></li></ol></div>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-11.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

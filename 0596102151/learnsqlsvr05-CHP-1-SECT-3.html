@@ -1,0 +1,161 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 1.3.&nbsp; The Query Editor</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-1-SECT-3"></a>
+                <H3 id="588026-895" class="docSection1Title">1.3. The Query Editor</H3><a name="IDX-CHP-1-0020"></a>
+                <a name="IDX-CHP-1-0021"></a>
+                <a name="IDX-CHP-1-0022"></a>
+
+                <p class="docText">The most important thing you do in SQL Server , or in any other database for that
+                    matter, is query the database. Queries in SQL Server are typed in the query editor. The query editor
+                    can be opened in two ways, as discussed in the following subsections: (a) by right-clicking,<a
+                        name="IDX-CHP-1-0023"></a>
+                    and (b) by using the New Query button.</P>
+                <a name="learnsqlsvr05-CHP-1-SECT-3.1"></a>
+                <H4 id="title-IDALGZZBB" class="docSection2Title">1.3.1. Opening the Query Editor by Right-Clicking</h4>
+                <p class="docText">Select the <tt>Student_course</tt> database and right-click, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-1-FIG-11">Figure 1-11</a>. Select New Query.</p>
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-12">Figure 1-12</a> shows the query
+                    editor, which can be used to create queries and other SQL scripts and execute them against SQL
+                    Server databases.</p>
+                <p class="docText">The first query will be called <tt>SQLQuery1.sql</tt> by default. Later we will show
+                    you how to change the name of the query when saving it.</P>
+                <p class="docText">If the query editor is opened in this way, the <tt>Student_course</tt> database
+                    automatically becomes the database against which the queries are executed, because you initially
+                    selected <tt>Student_course</tt> and then right-clicked. If we want to work in our
+                    <tt>Student_course</tt> database, we have to make sure that the <tt>Student_course</tt> database is
+                    active. If the <tt>Student_course</tt> database is not active, we have to activate itwe show you how
+                    to do this in different ways in the following sections.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-11"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 1-11. Opening the query editor</H5>
+                        <img border="0" alt="" id="217066145005" width="550" height="366"
+                            SRC="images/learnsqlsvr05_0111.jpg">
+                    </center>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-1-FIG-12"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-12. The query editor</H5>
+                        <img border="0" alt="" id="217066145005" width="550" height="332"
+                            SRC="images/learnsqlsvr05_0112.jpg">
+                    </center>
+                </P><br>
+
+                <a name="learnsqlsvr05-CHP-1-SECT-3.2"></a>
+                <h4 id="title-IDAQIZZBB" class="docSection2Title">1.3.2. Opening the Query Editor Using the New Query
+                    Button</h4>
+                <p class="docText">You can also open the query editor by selecting the New Query button<a
+                        name="IDX-CHP-1-0024"></a>
+                    from the top menu (leftmost icon), as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-13">Figure 1-13</a>.</p>
+                <a name="learnsqlsvr05-CHP-1-FIG-13"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-13. Using the New Query icon</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="248"
+                            SRC="images/learnsqlsvr05_0113.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">If you used the New Query icon from <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-13">Figure 1-13</a> (without selecting the
+                    <tt>Student_course</tt> database), you will get <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-14">Figure 1-14</a>. Here, note that the <tt>Student_course</tt>
+                    database is not the active database; <tt>master</tt> is the active database, because SQL Server
+                    defaults to master.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-14"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-14. The query screen</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="257"
+                            SRC="images/learnsqlsvr05_0114.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">But we want to use the <tt>Student_course</tt> database that we just created, so we
+                    have to activate the <tt>Student_course</tt> database. Click on the drop-down icon of the Combo box
+                    beside <tt>master</tt> and select <tt>Student_course</tt>, as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-15">Figure 1-15</a>. This step activates or opens the
+                    <tt>Student_cou</tt>rse database.</p>
+                <a name="learnsqlsvr05-CHP-1-FIG-15"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-15. Selecting the Student_course database</h5>
+                        <img border="0" alt="" id="217066145005" width="499" height="309"
+                            SRC="images/learnsqlsvr05_0115.jpg">
+                    </center>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-1-SECT-3.3"></a>
+                <h4 id="title-IDAOLZZBB" class="docSection2Title">1.3.3. Opening or Activating the Database Using USE
+                </h4><a name="IDX-CHP-1-0025"></a>
+
+                <p class="docText">You can also activate or open the <tt>Student_course</tt> database by typing in the
+                    following in the query editor (as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-16">Figure 1-16</a>):</p>
+                <pre>
+    USE Student_course
+</pre><br>
+
+                <a name="learnsqlsvr05-CHP-1-FIG-16"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-16. Using USE</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="358"
+                            SRC="images/learnsqlsvr05_0116.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">Then, click the <tt>Execute</tt> button (it is on the menu bar above the query editor
+                    screen). You will get the following message in the results pane (as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-16">Figure 1-16</a>):</P>
+                <pre>
+    Command(s) completed successfully
+</pre><BR>
+
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-2.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-4.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

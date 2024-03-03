@@ -1,0 +1,89 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 4.4.&nbsp; Self Joins</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-4"></a>
+<H3 id="title-IDAOU0Z5" class="docSection1Title">4.4. Self Joins</H3>
+<p class="docText">On some occasions, you will need to join a table with itself. Joining a table with itself is known as a <span class="docEmphasis">self join</span>.</P>
+<p class="docText">In a regular join, a row of a table (Table A) is joined with a row of another table (Table B) if the column value used for the join in Table A matches the column value used for the join in Table B. One row of a table is processed at a time. But, if the information that you need is contained in several different rows of the same table, for example if you need to compare row1, column1, with row2, column1, you will need to join the table with itself.</P>
+<p class="docText">Suppose that we want to find all the students who are more senior than other students. We have to join the <tt>Student</tt> table with itself. Logically, we need to take a row from the <tt>Student</tt> table and look through the rest of the <tt>Student</tt> table to see which rows fit the criterion ("more senior"). To accomplish this, we will use two versions of the <tt>Student</tt> table. Here is our query:</p>
+<pre>
+SELECT 'SENIORITY' = x.sname + ' is in a higher class than ' + y.sname
+FROM Student AS x, Student AS y
+WHERE y.class = 3
+AND x.class &gt; y.class
+</pre><br>
+
+<p class="docText">First we alias the <tt>Student</tt> table as <tt>x</tt>, and then we alias another instance of the <tt>Student</tt> table as <tt>y</tt>. Then we join where <tt>x.class</tt> is greater than <tt>y.class</tt> and we added the <tt>WHERE</tt> qualifier <tt>y.class = 3</tt>, so this effectively gives us only the seniors. We restricted the result to "just seniors" to keep the result set smaller). The use of the &gt; sign is also an example of a non-equi-join.</p>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><TD valign="top"><p class="docText">+ is a string concatenation operator in SQL Server. String concatenation is discussed in detail in the next chapter.</p></td></TR></table></TD></tr></table></p><br>
+<p class="docText">This query produces the 70 rows of output (of which we show a sample):</p>
+<pre>
+SENIORITY
+-------------------------------------------------------------
+Mary is in a higher class than Susan
+Kelly is in a higher class than Susan
+Donald is in a higher class than Susan
+Chris is in a higher class than Susan
+Jake is in a higher class than Susan
+Holly is in a higher class than Susan
+Jerry is in a higher class than Susan
+Harrison is in a higher class than Susan
+Francis is in a higher class than Susan
+Benny is in a higher class than Susan
+Mary is in a higher class than Monica
+Kelly is in a higher class than Monica
+Donald is in a higher class than Monica
+.
+.
+.
+Mary is in a higher class than Phoebe
+Kelly is in a higher class than Phoebe
+Donald is in a higher class than Phoebe
+.
+.
+.
+Mary is in a higher class than Rachel
+Kelly is in a higher class than Rachel
+Donald is in a higher class than Rachel
+.
+.
+.
+Mary is in a higher class than Cramer
+Kelly is in a higher class than Cramer
+Donald is in a higher class than Cramer
+.
+.
+.
+(70 row(s) affected)
+</pre><BR>
+
+<p class="docText">In this join, all the rows where <tt>x.class</tt> is greater than <tt>y.class</tt> (which is restricted to 3) are joined to the rows that have <tt>y.class = 3</tt>. So Mary, the first row that has <tt>x.class = 4</tt>, is joined to the first row where class = 3 (<tt>y.class = 3</tt>), which is Susan. Then, the next row in the <tt>Student</tt> table with <tt>x.class = 4</tt> is Kelly, so Kelly is joined to Susan (<tt>y.class = 3</tt>), etc.</p>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><td><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><TR><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">To more fully understand how the self join is working, view the data in the <tt>Student</tt> table.</p></td></tr></table></td></tr></table></p><br>
+<p class="docText">The alternative <tt>INNER JOIN</tt> syntax for this non-equi-join is:</p>
+<pre>
+SELECT 'SENIORITY' = x.sname + ' is more senior than ' + y.sname
+FROM Student AS x INNER JOIN Student AS y
+ON x.class &gt; y.class
+WHERE y.class = 3
+</pre><br>
+
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-4-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

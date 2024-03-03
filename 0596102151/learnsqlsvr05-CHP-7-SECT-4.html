@@ -1,0 +1,107 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 7.4.&nbsp; Handling UNION and UNION ALL Situations with an Unequal Number of Columns</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-7-SECT-4"></a>
+<h3 id="title-IDAG1ZXD" class="docSection1Title">7.4. Handling UNION and UNION ALL Situations with an Unequal Number of Columns</H3><a name="IDX-CHP-7-0412"></a> 
+<a name="IDX-CHP-7-0413"></a> 
+<a name="IDX-CHP-7-0414"></a> 
+<a name="IDX-CHP-7-0415"></a> 
+<a name="IDX-CHP-7-0416"></a> 
+<a name="IDX-CHP-7-0417"></a> 
+<a name="IDX-CHP-7-0418"></a> 
+
+<p class="docText">As has been mentioned earlier, in order to successfully <tt>UNION</tt> or <tt>UNION ALL</tt> result sets, the result sets being unioned have to have the same number of columns. That is, all queries in a <tt>UNION</tt> or <tt>UNION ALL</tt> operation must return the same number of columns. But what if all the queries being used in the <tt>UNION</tt> or <tt>UNION ALL</tt> do not return the same number of columns?</p>
+<p class="docText">If we want to union two result sets that do not have the same number of columns, we have to use <tt>NULL</tt> (or other) values in the column-places as place holders. For example, from our <tt>Student_course</tt> database, if we want to union the <tt>Course</tt> table and the <tt>Prereq</tt> table with all the columns, under normal circumstances, this would not be possible, because the <tt>Course</tt> table has four columns and the <tt>Prereq</tt> table has only two. Therefore, to perform a <tt>UNION ALL</tt> operation, we would have to place <tt>NULL</tt> values or some other values in the columns that will be empty, as follows (this example uses <tt>NULL</tt> as a place holder):</p>
+<pre>
+    SELECT c.*, NULL
+    FROM Course c
+    WHERE c.credit_hours = 4
+    UNION ALL
+    SELECT NULL, p.course_number, NULL, NULL, p.prereq
+    FROM Prereq p
+</pre><BR>
+
+<p class="docText">This query produces the following 18 rows of output:</p>
+<pre>
+    COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT
+    -------------------- ------------- ------------ ------------- --------
+    INTRO TO COMPUTER SC COSC1310      4            COSC          NULL
+    DATA STRUCTURES      COSC3320      4            COSC          NULL
+    ADA - INTRODUCTION   COSC5234      4            COSC          NULL
+    CALCULUS 1           MATH1501      4            MATH          NULL
+    SOCIALISM AND COMMUN POLY4103      4            POLY          NULL
+    POLITICS OF CUBA     POLY5501      4            POLY          NULL
+    NULL                 ACCT3333      NULL         NULL          ACCT2220
+    NULL                 CHEM3001      NULL         NULL          CHEM2001
+    NULL                 COSC3320      NULL         NULL          COSC1310
+    NULL                 COSC3380      NULL         NULL          COSC3320
+    NULL                 COSC3380      NULL         NULL          MATH2410
+    NULL                 COSC5234      NULL         NULL          COSC3320
+    NULL                 ENGL1011      NULL         NULL          ENGL1010
+    NULL                 ENGL3401      NULL         NULL          ENGL1011
+    NULL                 ENGL3520      NULL         NULL          ENGL1011
+    NULL                 MATH5501      NULL         NULL          MATH2333
+    NULL                 POLY2103      NULL         NULL          POLY1201
+    NULL                 POLY5501      NULL         NULL          POLY4103
+
+    (18 row(s) affected)
+</pre><BR>
+
+<p class="docText">We can also use other values (other than <tt>NULL</tt>) as placeholders, as shown here:</p>
+<pre>
+    SELECT c.*, COU_NUM = 'XXXXXXXXXXXX'
+    FROM Course c
+    WHERE c.credit_hours = 4
+    UNION ALL
+    SELECT 'XXXXXXXXXXXXX', p.course_number, 00000000000, 'XXXXXXXXXXXXX', p.prereq
+    FROM Prereq p
+</pre><BR>
+
+<p class="docText">This query gives the same output as the previous query, but this time we have used a series of Xs and 0s as placeholders instead of <tt>NULL</tt> (we have 18 rows of output):</P>
+<pre>
+    COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT COU_NUM
+    -------------------- ------------- ------------ ------------- ------------
+    INTRO TO COMPUTER SC COSC1310      4            COSC          XXXXXXXXXXXX
+    DATA STRUCTURES      COSC3320      4            COSC          XXXXXXXXXXXX
+    ADA - INTRODUCTION   COSC5234      4            COSC          XXXXXXXXXXXX
+    CALCULUS 1           MATH1501      4            MATH          XXXXXXXXXXXX
+    SOCIALISM AND COMMUN POLY4103      4            POLY          XXXXXXXXXXXX
+    POLITICS OF CUBA     POLY5501      4            POLY          XXXXXXXXXXXX
+    XXXXXXXXXXXXX        ACCT3333      0            XXXXXXXXXXXXX ACCT2220
+    XXXXXXXXXXXXX        CHEM3001      0            XXXXXXXXXXXXX CHEM2001
+    XXXXXXXXXXXXX        COSC3320      0            XXXXXXXXXXXXX COSC1310
+    XXXXXXXXXXXXX        COSC3380      0            XXXXXXXXXXXXX COSC3320
+    XXXXXXXXXXXXX        COSC3380      0            XXXXXXXXXXXXX MATH2410
+    XXXXXXXXXXXXX        COSC5234      0            XXXXXXXXXXXXX COSC3320
+    XXXXXXXXXXXXX        ENGL1011      0            XXXXXXXXXXXXX ENGL1010
+    XXXXXXXXXXXXX        ENGL3401      0            XXXXXXXXXXXXX ENGL1011
+    XXXXXXXXXXXXX        ENGL3520      0            XXXXXXXXXXXXX ENGL1011
+    XXXXXXXXXXXXX        MATH5501      0            XXXXXXXXXXXXX MATH2333
+    XXXXXXXXXXXXX        POLY2103      0            XXXXXXXXXXXXX POLY1201
+    XXXXXXXXXXXXX        POLY5501      0            XXXXXXXXXXXXX POLY4103
+
+    (18 row(s) affected)
+</pre><BR>
+
+<p class="docText"><tt>NULL</tt> does not have a data type, so it can be used as a placeholder for both numeric and character columns. But when using other values as placeholders, the data types have to match. Hence we used <tt>'XX...'</tt> (in the query with the single quotes) for the character columns, and <tt>000</tt>s (in the query without quotes) for the numeric columns.</P>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-7-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

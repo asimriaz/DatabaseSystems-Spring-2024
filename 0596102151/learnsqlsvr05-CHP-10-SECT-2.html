@@ -1,0 +1,76 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 10.2.&nbsp; Correlated Subqueries</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-10-SECT-2"></a>
+<h3 id="title-IDAX120GB" class="docSection1Title">10.2. Correlated Subqueries</H3><a name="IDX-CHP-10-0461"></a> 
+
+<p class="docText">As stated at the beginning of the chapter, a <span class="docEmphasis">correlated subquery</span> is an inner subquery whose information is referenced by the main, outer query such that the inner query may be thought of as being executed repeatedly.</p>
+<p class="docText">Correlated subqueries present a different execution scenario to the database manipulation language (DML) than do ordinary, noncorrelated subqueries. The correlated subquery cannot stand alone, as it depends on the outer query; therefore, completing the subquery prior to execution of the outer query is not an option. The efficiency of the correlated subquery varies; it may be worthwhile to test the efficiency of correlated subqueries versus joins or sets.</p>
+<P><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><tr><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></TD><TD valign="top"><p class="docText">One situation in which you cannot avoid correlation is the "for all" query, which is discussed later in this chapter.</P></td></TR></table></TD></tr></table></P><BR>
+<p class="docText">To illustrate how a correlated subquery works, the following is an example of the non-correlated subquery from the previous section revised as a correlated subquery:</p>
+<pre>
+SELECT  s.sname
+FROM    Student s
+WHERE   s.stno IN
+  (SELECT    gr.student_number
+   FROM      Grade_report gr
+   WHERE     gr.student_number = s.stno
+   AND       gr.grade = 'A')
+</pre><br>
+
+<p class="docText">This query produces the following output (14 rows), which is the same as the output of the noncorrelated subquery (shown earlier):</p>
+<pre>
+sname
+--------------------
+Lineas
+Mary
+Brenda
+Richard
+Lujack
+Donald
+Lynette
+Susan
+Holly
+Sadie
+Jessica
+Steve
+Cedric
+Jerry
+&nbsp;
+(14 row(s) affected)
+</pre><br>
+
+<p class="docText">In this example, the inner query (the part in parentheses) references the outer oneobserve the use of <tt>s.stno</tt> in the <tt>WHERE</tt> clause of the inner query. Rather than thinking of this query as creating a set of student numbers that have As, each row from the outer query can be considered to be <tt>SELECT</tt>ed individually and tested against all rows of the inner query one at a time until it is determined whether a given student number is in the inner set and whether that student earned an A.</P>
+<p class="docText">This query was illustrated with and without correlation. You might think that a correlated subquery is less efficient than doing a simple subquery, because the simple subquery is done once, whereas the correlated subquery is done once for each outer row. However, the internal handling of how the query executes depends on the SQL and the optimizer for that database engine.</p>
+<p class="docText">The correlated subquery acts like a nested <tt>DO</tt> loop in a programming language, where the first row from the <tt>Student</tt> table is <tt>SELECT</tt>ed and tested against all the rows in the <tt>Grade_report</tt> table, and then the second <tt>Student</tt> row is <tt>SELECT</tt>ed and tested against all rows in the <tt>Grade_report</tt> table. The following is the <tt>DO</tt> loop in pseudocode:</p>
+<pre>
+LOOP1: For each row in Student  s  DO
+      LOOP2: For each row in Grade_report  gr  DO
+             IF (gr.student_number = s.stno) THEN
+                   IF (gr.grade = 'B') THEN TRUE
+      END LOOP2;
+     IF TRUE, THEN Student row is SELECTed
+END LOOP1
+</pre><BR>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-10-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>

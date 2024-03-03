@@ -1,0 +1,98 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 1.4.&nbsp; Creating Tables Using the Load Script</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-1-SECT-4"></a>
+                <H3 id="title-IDA0NMFAB" class="docSection1Title">1.4. Creating Tables Using the Load Script</H3><a
+                    name="IDX-CHP-1-0026"></a>
+                <a name="IDX-CHP-1-0027"></a>
+
+                <p class="docText">A table is used to store data in a database, and, a database is typically composed of
+                    many tables.</P>
+                <p class="docText">After the <tt>Student_course</tt> database is opened or activated, you need to create
+                    tables in the <tt>Student_course</tt> database and insert data into the tables. To do this, run
+                    (execute) the load script, <I>SQLServer2005_load.sql</i>, that you downloaded and saved to your
+                    working directory.</p>
+                <p class="docText">Go to the directory where you saved the load script, <i>SQLServer2005_load.sql</I>.
+                    Double-click <I>SQLServer2005_load.sql</I>. Then, select the whole script and copy it. This script
+                    will be pasted into SQL Server's query editor. Open SQL Server's query editor as shown in <a
+                        class="docLink" href="learnsqlsvr05-CHP-1-SECT-3.html#learnsqlsvr05-CHP-1-FIG-12">Figure
+                        1-12</a>. Make sure that the <tt>Student_course</tt> database is active. Paste the load script
+                    into the query editor, as shown in the <a class="docLink" href="#learnsqlsvr05-CHP-1-FIG-17">Figure
+                        1-17</a>.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-17"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-17. Pasting the load script into the query editor</H5>
+                        <img border="0" alt="" id="217066145005" width="550" height="383"
+                            SRC="images/learnsqlsvr05_0117.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">Once the script has been pasted into the query editor, execute this script by
+                    clicking the <tt>Execute</tt> button or the F5 shortcut key. This script takes only a few seconds to
+                    execute. You will get the results shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-1-FIG-18">Figure 1-18</a>--on the bottom part of the screen under the
+                    Messages tab.</P>
+                <a name="learnsqlsvr05-CHP-1-FIG-18"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 1-18. Executed load script</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="386"
+                            SRC="images/learnsqlsvr05_0118.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">This script creates the tables <tt>Cap</tt>, <tt>Course</tt>,
+                    <tt>Department_to_major</tt>, <tt>Dependent</tt>, <tt>Grade_report</tt>, <tt>Plants</tt>,
+                    <tt>Prereq</tt>, <tt>Room</tt>, <tt>Section</tt>, <tt>Student</tt>, and <tt>teststu</tt>, in the
+                    <tt>Student_course</tt> database and inserts data into them. The tables in the
+                    <tt>Student_course</tt> database are laid out in Appendix A. We also present the T-SQL for the load
+                    script in Appendix B.</P>
+                <p class="docText">To view the tables that were created by the load script, expand the
+                    <tt>Student_course</tt> node and then expand the Tables node. You will get the screen shown in <a
+                        class="docLink" href="learnsqlsvr05-CHP-1-SECT-5.html#learnsqlsvr05-CHP-1-FIG-19">Figure
+                        1-19</a>. Every table shows up as a node under <tt>Stu</tt>dent_course.</p>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-1-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

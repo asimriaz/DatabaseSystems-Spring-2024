@@ -1,0 +1,1204 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 11.3.&nbsp; Constraints</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-2.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-4.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-11-SECT-3"></a>
+                <h3 id="title-IDAIGD55" class="docSection1Title">11.3. Constraints</H3>
+                <p class="docText">As with indexes, constraints can be added to tables. As explained previously,
+                    constraints are added to give tables more integrity. In this section, we discuss some of the
+                    constraints available in SQL Server : the <tt>NOT NULL</tt><a name="IDX-CHP-11-0480"></a>
+                    constraint, the <tt>PRIMARY KEY</tt> constraint, the <tt>UNIQUE</tt> constraint, the <tt>CHECK</tt>
+                    constraint, and a few referential constraints.</p>
+                <a name="learnsqlsvr05-CHP-11-SECT-3.1"></a>
+                <h4 id="title-IDA3GD55" class="docSection2Title">11.3.1. The NOT NULL Constraint</H4><a
+                    name="IDX-CHP-11-0481"></a>
+
+                <p class="docText">The <tt>NOT NULL</tt> constraint is an integrity <tt>CONSTRAINT</tt> that allows the
+                    database creator to deny the creation of a row where a column would have a null value. Usually, a
+                    null signifies a missing data item. As discussed in previous chapters, nulls in databases present an
+                    interpretation problemdo they mean not applicable, not available, unknown, or what? If a situation
+                    in which a null is present could affect the integrity of the database, then the table creator can
+                    deny anyone the ability to insert nulls into the table for that column. To deny nulls, we can create
+                    a table with the <tt>NOT NULL</tt> constraint on a column(s) after the data type. The following
+                    example shows how to include the <tt>NOT NULL</tt> constraint using a <tt>CREATE TABLE</tt>
+                    statement:</p>
+                <pre>
+CREATE TABLE Test2
+ (name                 VARCHAR(20),
+  ssn                  CHAR(9),
+  dept_number          INT NOT NULL,
+  acct_balance         SMALLMONEY)
+</pre><BR>
+
+                <p class="docText">In this newly created table, <tt>Test2</tt>, the <tt>dept_number</tt> column, now has
+                    a <tt>NOT NULL</tt> constraint included (and the Allow Nulls option is unchecked, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-4">Figure 11-4</a>).</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-4"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-4. Table definition of Test2</H5>
+                        <img border="0" alt="" id="217066145005" width="343" height="123"
+                            SRC="images/learnsqlsvr05_1104.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">The <tt>NOT NULL</tt> constraint can also be added to the column after the table has
+                    been created. You can check the Allow Nulls option of the <tt>dept_number</tt> column in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-4">Figure 11-4</a>, or you can use SQL to do
+                    this. To do this in SQL, you will have to use the <tt>ALTER TABLE</tt> command, as we illustrate in
+                    the following example.</P>
+                <p class="docText">Suppose that we created the <tt>Test2</tt> table as follows:</P>
+                <pre>
+CREATE TABLE Test2
+  (name             VARCHAR(20),
+   ssn              CHAR(9),
+   dept_number      INT,
+   acct_balance     SMALLMONEY)
+</pre><br>
+
+                <p class="docText">Now, we want to add a <tt>NOT NULL</tt> constraint (using SQL) after the table has
+                    been created. To do so, we must use the <tt>ALTER COLUMN</tt> option within the <tt>ALTER TABLE</tt>
+                    statement, with the following general syntax:</P>
+                <pre>
+ALTER TABLE <tt><I>Tablename</i></tt>
+ALTER COLUMN <tt><i>column_name column_type</i></tt>(<tt><i>size</I></tt>) NOT NULL
+</pre><br>
+
+                <p class="docText">So, to set the <tt>dept_number</tt> column in the <tt>Test2</tt> table to <tt>NOT
+                        NULL</tt>, we would type the following:</p>
+                <pre>
+ALTER table Test2
+ALTER COLUMN dept_number INTEGER NOT NULL
+</pre><BR>
+
+                <p class="docText">This query will give us the same table definition that we got in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-4">Figure 11-4</a>.</P>
+                <p class="docText">But you need to understand the following three things about the <tt>ALTER COLUMN</tt>
+                    extension of the <tt>ALTER TABLE</tt> statement:</P>
+                <ul>
+                    <li>
+                        <p class="docList">The column <tt><i>type</i></tt> and <tt><i>size</i></tt> must <span
+                                class="docEmphasis">always</span> be typed after the column <tt><i>name</i></tt>. For
+                            example, the following statement will cause SQL Server to announce a syntax error:</p>
+                        <pre>
+ALTER TABLE Test2
+ALTER COLUMN name NOT NULL
+</pre><br>
+                    </li>
+                </ul>
+                <p class="docText">You will get following error message:</p>
+                <pre>
+Msg 156, Level 15, State 1, Line 2
+Incorrect syntax near the keyword 'NOT'.
+</pre><br>
+
+                <ul>
+                    <LI>
+                        <p class="docList">If you type only the column <tt><i>type</i></tt>, without the column
+                            <tt><I>size</i></tt>, the column <tt><i>size</I></tt> will reset to the default maximum size
+                            of the data type.</p>
+                    </li>
+                    <LI>
+                        <p class="docList">You cannot put a <tt>NOT NULL</tt> constraint on a column that already
+                            contains nulls.</p>
+                    </LI>
+                </ul>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.2"></a>
+                <H4 id="title-IDA3LD55" class="docSection2Title">11.3.2. The PRIMARY KEY Constraint</H4><a
+                    name="IDX-CHP-11-0482"></a>
+                <a name="IDX-CHP-11-0483"></a>
+
+                <p class="docText">When creating a table, a <tt>PRIMARY KEY</tt> constraint will prevent duplicate
+                    values for the column(s) defined as a primary key. Internally, the designation of a primary key also
+                    creates a primary key index.</P>
+                <p class="docText">Designation of a primary key will be necessary for the referential integrity
+                    constraints that follow. The designation of a primary key also automatically puts the <tt>NOT
+                        NULL</tt> constraint in the definition of the column(s), as you will see in an example later in
+                    the chapter. A fundamental rule of relational database is that primary keys cannot be null.</P>
+                <p class="docText">One of the following three options can be used to set the primary key.</p>
+                <a name="learnsqlsvr05-CHP-11-SECT-3.2.1"></a>
+                <H5 id="title-IDAXMD55" class="docSection3Title">11.3.2.1. Option 1</H5>
+                <p class="docText">The first option is to declare the primary key while creating the table, in the
+                    <tt>CREATE TABLE</tt> statement. Here, the <tt>PRIMARY KEY</tt> constraint is added to the column
+                    upon creation:</p>
+                <pre>
+CREATE TABLE Test2a
+  (ssn    CHAR(9)       CONSTRAINT ssn_pk PRIMARY KEY,
+   name   VARCHAR2(20),  etc.
+</pre><BR>
+
+                <p class="docText"><tt>ssn_pk</tt> is the name of the <tt>PRIMARY KEY</tt> constraint for the
+                    <tt>ssn</tt> column. It is conventional to name all <tt>CONSTRAINT</tt>s (although most people often
+                    do not bother to name <tt>NOT NULL</tt> constraints).</P>
+                <p class="docText">The following two options of setting the primary key are preferable because they
+                    provide greater flexibility.</p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.2.2"></a>
+                <h5 id="title-IDAVND55" class="docSection3Title">11.3.2.2. Option 2</h5>
+                <p class="docText">The second option available to create a primary key is called the <i>table
+                        format</I>, in which the <tt>CREATE TABLE</tt> looks like the following:</p>
+                <pre>
+CREATE TABLE Test2a
+  (ssn              CHAR(9),
+    blah blah ..,
+    acct_balance    NUMBER,
+    CONSTRAINT ssn_pk PRIMARY KEY (ssn))
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.2.3"></a>
+                <H5 id="title-IDAFOD55" class="docSection3Title">11.3.2.3. Option 3</H5>
+                <p class="docText">The third option available to create a primary key is to add the stipulation of the
+                    <tt>PRIMARY KEY</tt> post hoc by using the <tt>ALTER TABLE</tt> command. The syntax for the
+                    <tt>PRIMARY KEY</tt> in the <tt>ALTER TABLE</tt> command would be as follows:</P>
+                <pre>
+ALTER TABLE Tablename
+ADD CONSTRAINT constraint_name PRIMARY KEY (column_name(s))
+</pre><br>
+
+                <p class="docText">So, to make <tt>ssn</tt> a primary key column in <tt>Test2</tt>, we could type the
+                    following:</p>
+                <pre>
+ALTER TABLE Test2
+ADD CONSTRAINT ssn_pk PRIMARY KEY (ssn)
+</pre><br>
+
+                <p class="docText">But, once you type in that syntax, you will receive the following error message:</p>
+                <pre>
+Msg 8111, Level 16, State 1, Line 1
+Cannot define PRIMARY KEY constraint on nullable column in table 'Test2'.
+Msg 1750, Level 16, State 0, Line 1
+Could not create constraint. See previous errors.
+</pre><br>
+
+                <p class="docText">This error occurs because SQL Server does not allow you to define a primary key on a
+                    column that has not been specified as <tt>NOT NULL</tt>. So, we need to first make <tt>ssn</tt> a
+                    column that will not accept nulls as follows:</p>
+                <pre>
+ALTER TABLE Test2
+ALTER COLUMN ssn CHAR(9) NOT NULL
+</pre><br>
+
+                <p class="docText">The design of the <tt>Test2</tt> table will now be as in shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-5">Figure 11-5</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-5"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-5. New table definition of Test2</h5>
+                        <img border="0" alt="" id="217066145005" width="337" height="97"
+                            SRC="images/learnsqlsvr05_1105.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">Now we can type the following command to create the primary key:</p>
+                <pre>
+ALTER TABLE Test2
+ADD CONSTRAINT ssn_pk PRIMARY KEY (ssn)
+</pre><br>
+
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-6">Figure 11-6</a> shows the
+                    primary key constraint that we just created (note the key icon on the left of the <tt>ssn</tt>
+                    column).</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-6"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-6. Primary key constraint</H5>
+                        <img border="0" alt="" id="217066145005" width="339" height="101"
+                            SRC="images/learnsqlsvr05_1106.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">You can view this <tt>ssn_pk</tt> constraint by clicking the + sign beside
+                    <tt>Test2</tt>, and then clicking the + sign beside the Keys node. You will get the results shown in
+                    <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-7">Figure 11-7</a>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-7"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-7. The ssn_pk constraint</H5>
+                        <img border="0" alt="" id="217066145005" width="109" height="124"
+                            SRC="images/learnsqlsvr05_1107.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">You can modify, rename, delete, or refresh this <tt>ssn_pk</tt> constraint by
+                    right-clicking <tt>ssn_pk</tt>, as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-8">Figure 11-8</a>.</p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.2.4"></a>
+                <H5 id="title-IDAFSD55" class="docSection3Title">11.3.2.4. Concatenated primary keys</H5>
+                <p class="docText">In relational databases, it is sometimes necessary to define more than one column as
+                    the primary key. When more than one column makes up a primary key, it is called a <span
+                        class="docEmphasis">concatenated</span> primary key. In SQL Server , however, you cannot
+                    directly designate a concatenated primary key with a statement like the following:</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-8"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-8. Changing constraint properties</H5>
+                        <img border="0" alt="" id="217066145005" width="225" height="172"
+                            SRC="images/learnsqlsvr05_1108.jpg">
+                    </center>
+                </P><br>
+                <pre>
+CREATE TABLE Test2a
+  (ssn      CHAR(9)       PRIMARY KEY,
+   salary   INT           PRIMARY KEY)
+</pre><BR>
+
+                <p class="docText">This query will give the following error message:</P>
+                <pre>
+Msg 8110, Level 16, State 0, Line 1
+Cannot add multiple PRIMARY KEY constraints to table 'Test2a'.
+</pre><br>
+
+                <p class="docText">In SQL Server , you can define the concatenated primary key in the following way:</p>
+                <pre>
+CREATE TABLE Test2a
+  (ssn       CHAR(9),
+   salary    INT,
+   CONSTRAINT ssn_salary_pk      PRIMARY KEY  (ssn, salary))
+</pre><br>
+
+                <p class="docText">The table definition of the <tt>Test2a</tt> table will now be as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-9">Figure 11-9</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-9"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-9. Table definition of Test2a</h5>
+                        <img border="0" alt="" id="217066145005" width="341" height="81"
+                            SRC="images/learnsqlsvr05_1109.jpg">
+                    </center>
+                </P><BR>
+                <p class="docText">Or, you can create the concatenated primary key in two separate statements, first
+                    with a <tt>CREATE TABLE</tt>:</P>
+                <pre>
+CREATE TABLE Test2b
+  (ssn      CHAR(9)     NOT NULL,
+   salary   INT         NOT NULL)
+</pre><br>
+
+                <p class="docText">Then, with an <tt>ALTER TABLE</tt>:</p>
+                <pre>
+ALTER TABLE Test2b
+ADD CONSTRAINT ssn_salary_pk1 PRIMARY KEY (ssn, salary)
+</pre><br>
+
+                <p class="docText">This query will produce the same table definition as was shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-9">Figure 11-9</a>.</p>
+                <p class="docText">We called this latter constraint <tt>ssn_salary_pk1</tt>, because you cannot have
+                    another constraint called <tt>ssn_salary_pk</tt> (which was a constraint created for table
+                    <tt>Test2a</tt>). <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-10">Figure 11-10</a> shows the
+                    constraints created for table <tt>Test2b</tt>. Note that the constraint shows up not only as a key
+                    constraint, but also as an index.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-10"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-10. Viewing the constraints</h5>
+                        <img border="0" alt="" id="217066145005" width="204" height="140"
+                            SRC="images/learnsqlsvr05_1110.jpg">
+                    </center>
+                </p><br>
+                <p class="docText"><span class="docEmphStrong">Another example of a concatenated primary key</span>.
+                    Suppose that we have a new table in our database, <tt>Grade1</tt>, which has columns
+                    <tt>student_number</tt>, <tt>section_id</tt>, and <tt>grade</tt>. Further suppose that a
+                    <tt>grade</tt> cannot be determined by either the <tt>student_number</tt> or <tt>section_id</tt>
+                    alone. Because both these columns (together) are required to uniquely identify a <tt>grade</tt>, the
+                    <tt>student_number</tt> and <tt>section_id</tt> will have to be the concatenated primary key of the
+                    <tt>Grade1</tt> table.</p>
+                <p class="docText">The <tt>CREATE TABLE</tt> and <tt>ALTER TABLE</tt> sequence for creating the
+                    <tt>Grade1</tt> table with the concatenated primary key as is shown next. First we create the
+                    <tt>Grade1</tt> table:</p>
+                <pre>
+CREATE TABLE Grade1
+  (student_number    CHAR(9) NOT NULL,
+   section_id        CHAR(9) NOT NULL,
+   grade             CHAR(1))
+</pre><br>
+
+                <p class="docText">Then we define the concatenated primary key:</p>
+                <pre>
+ALTER TABLE Grade1 ADD CONSTRAINT snum_section_pk
+     PRIMARY KEY (student_number, section_id)
+</pre><br>
+
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-11">Figure 11-11</a> gives the
+                    table definition of table <tt>Grade1</tt>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-11"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-11. Table definition of Grade1</H5>
+                        <img border="0" alt="" id="217066145005" width="337" height="97"
+                            SRC="images/learnsqlsvr05_1111.jpg">
+                    </center>
+                </p><br>
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-12">Figure 11-12</a> shows the
+                    constraint <tt>snum_section_pk</tt>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-12"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-12. The snum_section_pk constraint</H5>
+                        <img border="0" alt="" id="217066145005" width="156" height="124"
+                            SRC="images/learnsqlsvr05_1112.jpg">
+                    </center>
+                </p><BR>
+
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.3"></a>
+                <h4 id="title-IDAKYD55" class="docSection2Title">11.3.3. The UNIQUE Constraint</H4><a
+                    name="IDX-CHP-11-0484"></a>
+                <a name="IDX-CHP-11-0485"></a>
+
+                <p class="docText">Like <tt>PRIMARY KEY</tt>, <tt>UNIQUE</tt> is another column integrity constraint.
+                    <tt>UNIQUE</tt> is different from <tt>PRIMARY KEY</tt> in three ways:</P>
+                <UL>
+                    <LI>
+                        <p class="docList"><tt>UNIQUE</tt> keys can exist in addition to (or without) the <tt>PRIMARY
+                                KEY</tt>.</p>
+                    </LI>
+                    <LI>
+                        <p class="docList"><tt>UNIQUE</tt> does <span class="docEmphasis">not</span> necessitate <tt>NOT
+                                NULL</tt>, whereas <tt>PRIMARY KEY</tt> does.</p>
+                    </LI>
+                    <LI>
+                        <p class="docList">There can be more than one <tt>UNIQUE</tt> key, but only one <tt>PRIMARY
+                                KEY</tt>.</p>
+                    </li>
+                </ul>
+                <p class="docText">As an example of using the <tt>UNIQUE</tt> constraint, suppose that we created a
+                    table of names and occupational titles in which everyone was supposed to have a unique title.
+                    Further suppose that the table had an employee number as a primary key. The statement to create the
+                    table might look like the following:</p>
+                <pre>
+CREATE TABLE Emp
+ (empno      INT,
+  name       VARCHAR(20),
+  title      VARCHAR(20),
+  CONSTRAINT   empno_pk     PRIMARY KEY (empno),
+  CONSTRAINT   title_uk     UNIQUE (title))
+</pre><BR>
+
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-13">Figure 11-13</a> shows the
+                    table definition of the newly created <tt>Emp</tt> table.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-13"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-13. Table definition of Emp</H5>
+                        <img border="0" alt="" id="217066145005" width="340" height="99"
+                            SRC="images/learnsqlsvr05_1113.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">From <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-13">Figure 11-13</a>, we can
+                    see that both the <tt>empno</tt> and <tt>title</tt> fields will not allow nulls, as <tt>empno</tt>
+                    is defined as a primary key and <tt>title</tt> is defined as unique.</p>
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-14">Figure 11-14</a> shows the
+                    <tt>empno_pk</tt> and <tt>title_uk</tt> constraints of the <tt>Emp</tt> table.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-14"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-14. Showing the empno_pk and title_uk constraints</h5>
+                        <img border="0" alt="" id="217066145005" width="123" height="92"
+                            SRC="images/learnsqlsvr05_1114.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">In SQL Server , when you declare a <tt>PRIMARY KEY</tt><a name="IDX-CHP-11-0486"></a>
+                    or <tt>UNIQUE</tt> constraint, internally a unique index is created just as if you had used the
+                    <tt>CREATE INDEX</tt> command. In terms of internal storage and maintenance of indexes in SQL Server
+                    , there is no difference between unique indexes created using the <tt>CREATE INDEX</tt> command and
+                    indexes created using the <tt>UNIQUE</tt> constraint. In fact, an index is a type of a constraint.
+                    When it comes to the query optimizer, how the index was created is irrelevant to the query
+                    optimizer. The query optimizer makes decisions based on the presence of a unique index.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">Discussing the query optimizer is beyond the scope of this
+                                            book.</p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.4"></a>
+                <h4 id="title-IDA22D55" class="docSection2Title">11.3.4. The CHECK Constraint</H4><a
+                    name="IDX-CHP-11-0487"></a>
+                <a name="IDX-CHP-11-0488"></a>
+                <a name="IDX-CHP-11-0489"></a>
+
+                <p class="docText">In addition to the <tt>NOT NULL</tt>, <tt>PRIMARY KEY</tt> and <tt>UNIQUE</tt>
+                    constraints, we can also include a <tt>CHECK</tt> constraint on our column definitions in SQL Server
+                    . A <tt>CHECK</tt> constraint will disallow a value that is outside the bounds of the
+                    <tt>CHECK</tt>. Consider the following example:</p>
+                <pre>
+CREATE TABLE StudentA
+ (ssn         CHAR(9),
+  class       INT
+    CONSTRAINT class_ck CHECK (class BETWEEN 1 AND 4),
+  name         VARCHAR(20))
+</pre><BR>
+
+                <p class="docText">This query will give the table definition of table <tt>StudentA</tt> as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-15">Figure 11-15</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-15"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-15. Table definition of StudentA</H5>
+                        <img border="0" alt="" id="217066145005" width="335" height="97"
+                            SRC="images/learnsqlsvr05_1115.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">To view the <tt>CHECK</tt> constraint, click the + sign beside table
+                    <tt>StudentA</tt>, and then click the + sign beside Constraints, and you will get <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-16">Figure 11-16</a>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-16"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-16. The CHECK constraint</H5>
+                        <img border="0" alt="" id="217066145005" width="113" height="92"
+                            SRC="images/learnsqlsvr05_1116.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">Once the <tt>CHECK</tt> constraint has been added, we could not, for example,
+                    successfully execute the following <tt>INSERT</tt>:</p>
+                <pre>
+INSERT INTO StudentA VALUES ('123456789', 5, 'Smith')
+</pre><br>
+
+                <p class="docText">We would get the following error message:</p>
+                <pre>
+Msg 547, Level 16, State 0, Line 1
+The INSERT statement conflicted with the CHECK constraint "class_ck". The conflict
+occurred in database "Student_course", table "dbo.StudentA", column 'class'.
+The statement has been terminated.
+</pre><BR>
+
+                <p class="docText">This error occurs because the values of the column <tt>class</tt> have to be between
+                    1 and 4 (and we tried to insert 5). We could however, enter a null value for class, which
+                    technically does not violate the integrity constraint (unless we specify so by making class also
+                    <tt>NOT NULL</tt>).</p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.5"></a>
+                <h4 id="title-IDAFAE55" class="docSection2Title">11.3.5. Deleting a Constraint</H4><a
+                    name="IDX-CHP-11-0490"></a>
+
+                <p class="docText">The following is the general SQL syntax to delete any named constraint:</P>
+                <pre>
+ALTER TABLE Tablename
+DROP CONSTRAINT constraint_name
+</pre><BR>
+
+                <p class="docText">For example, in table <tt>Test2a</tt> we created a constraint called
+                    <tt>ssn_salary_pk</tt>, which made both the <tt>ssn</tt> and <tt>salary</tt> columns primary keys of
+                    <tt>Test2a</tt>. If we want to delete this constraint, which means making both the <tt>ssn</tt> and
+                    <tt>salary</tt> columns just regular columns (and not primary keys), we would type the following:
+                </p>
+                <pre>
+ALTER TABLE Test2a
+DROP CONSTRAINT ssn_salary_pk
+</pre><br>
+
+                <p class="docText">Now the table definition of table <tt>Test2a</tt> will appear as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-17">Figure 11-17</a>. As can be seen from <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-17">Figure 11-17</a>, the primary keys are no
+                    longer marked, as was shown in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-9">Figure
+                        11-9</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-17"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-17. Primary keys no longer marked</h5>
+                        <img border="0" alt="" id="217066145005" width="337" height="77"
+                            SRC="images/learnsqlsvr05_1117.jpg">
+                    </center>
+                </p><br>
+                <p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-18">Figure 11-18</a> also shows no
+                    constraints<a name="IDX-CHP-11-0491"></a>
+                    for table <tt>Test2a</tt>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-18"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-18. Constraint deleted</h5>
+                        <img border="0" alt="" id="217066145005" width="109" height="108"
+                            SRC="images/learnsqlsvr05_1118.jpg">
+                    </center>
+                </p><br>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6"></a>
+                <h4 id="title-IDABDE55" class="docSection2Title">11.3.6. Referential Integrity Constraints</H4><a
+                    name="IDX-CHP-11-0492"></a>
+
+                <p class="docText">A relational database consists of relations (tables) and relationships between
+                    tables. To define a relationship between two tables, we create a referential integrity<a
+                        name="IDX-CHP-11-0493"></a>
+                    constraint. A referential integrity constraint is one in which a row in one table (with a foreign
+                    key) cannot exist unless a value (column) in that row refers to a primary key value (column) in
+                    another table. This is a primary key-foreign key relationship between two tables. For example,
+                    suppose we have the following two tables:</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">A foreign key is a column in one table that is used to link
+                                            that table to another table in which that column is a primary key.
+                                            Relationships are implemented in relational databases through foreign
+                                            keys/primary key relationships.</P>
+                                    </td>
+                                </TR>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </P><BR>
+                <a name="learnsqlsvr05-CHP-11-TABLE-1"></a>
+                <P>
+                <table cellspacing="0" FRAME="hsides" RULES="all" cellpadding="4" width="100%">
+                    <caption>
+                        <h5 class="docTableTitle">Table 11-1. Department table</H5>
+                    </caption>
+                    <colgroup span="2">
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <TR>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">Deptno</p>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">Deptname</P>
+                            </th>
+                        </TR>
+                    </thead>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">1</p>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Accounting</p>
+                        </td>
+                    </TR>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">2</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Personnel</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">3</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Development</p>
+                        </td>
+                    </tr>
+                </table>
+                </p><BR>
+                <a name="learnsqlsvr05-CHP-11-TABLE-2"></a>
+                <p>
+                <table cellspacing="0" FRAME="hsides" RULES="all" cellpadding="4" width="100%">
+                    <caption>
+                        <h5 class="docTableTitle">Table 11-2. Employee table</H5>
+                    </caption>
+                    <colgroup span="3">
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">empno</p>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">Empname</P>
+                            </th>
+                            <th class="thead" scope="col" align="left">
+                                <p class="docText">Dept</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">100</P>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Jones</P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">2</p>
+                        </TD>
+                    </TR>
+                    <tr>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">101</P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Smith</p>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">1</p>
+                        </td>
+                    </TR>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">102</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Adams</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">1</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">104</p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Harris</p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">3</p>
+                        </TD>
+                    </tr>
+                </table>
+                </p><BR>
+                <p class="docText">To maintain referential integrity, it would be inappropriate to enter a row (tuple)
+                    in the <tt>Employee</tt> table that did not have an existing department number already defined in
+                    the <tt>Department</tt> table. To try to insert the following row into the <tt>Employee</tt> table
+                    would be a violation of the integrity of the database, because department number 4 does not exist
+                    (that is, it has no integrity):</p>
+                <pre>
+&lt;105,'Walsh',4&gt;
+</pre><br>
+
+                <p class="docText">Likewise, it would be invalid to try to change a value in an existing row (that is,
+                    perform an <tt>UPDATE</tt>) to make it equal to a value that does not exist. If, for example, we
+                    tried to change:</P>
+                <pre>
+&lt;100,'Jones',2&gt;
+</pre><br>
+
+                <p class="docText">to:</P>
+                <pre>
+&lt;100,'Jones',5&gt;
+</pre><br>
+
+                <p class="docText">This operation would violate database integrity, because there is no department 5.
+                </P>
+                <p class="docText">Finally, it would be invalid to delete a row in the <tt>Department</tt> table that
+                    contains a value for a department number that is already in the <tt>Employee</tt> table. For
+                    example, if:</P>
+                <pre>
+&lt;2,'Personnel'&gt;
+</pre><BR>
+
+                <p class="docText">were deleted from the <tt>Department</tt> table, then the row:</P>
+                <pre>
+&lt;100,'Jones',2&gt;
+</pre><br>
+
+                <p class="docText">would refer to a nonexistent department. It therefore would be a reference or
+                    relationship with no integrity.</P>
+                <p class="docText">In each case (<tt>INSERT</tt>, <tt>UPDATE</tt>, and <tt>DELETE</tt>), we say that
+                    there needs to be a referential integrity constraint on the <tt>dept</tt> column in the
+                    <tt>Employee</tt> table referencing <tt>deptno</tt> in the <tt>Department</tt> table. When this
+                    primary key (<tt>deptno</tt> in the <tt>Department</tt> table)-foreign key (<tt>dept</tt> in the
+                    <tt>Employee</tt> table) relationship is defined, we have defined the relationship of the
+                    <tt>Employee</tt> table to the <tt>Department</tt> table.</P>
+                <p class="docText">In the <tt>INSERT</tt> and <tt>UPDATE</tt> cases discussed earlier, you would expect
+                    (correctly) that the usual action of the system would be to deny the action. In SQL Server , in the
+                    case of the <tt>DELETE</tt> and <tt>UPDATE</tt> commands, there is an option available that will
+                    allow us to <tt>CASCADE</tt> the <tt>DELETE</tt> or <tt>UPDATE</tt> operations respectively. Whereas
+                    an "ordinary" referential integrity constraint would simply disallow the deletion of a row where the
+                    referenced row would be orphaned, a <tt>CASCADE</tt>d delete would delete the referencing row as
+                    well. If, for example, in the previous data we deleted department 3, in a <tt>CASCADE</tt>d delete
+                    situation, the referencing row in the <tt>Employee</tt> table, &lt;104,Harris,3&gt;, would be
+                    deleted as well.</p>
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6.1"></a>
+                <H5 id="title-IDALME55" class="docSection3Title">11.3.6.1. Defining the referential integrity constraint
+                </H5>
+                <p class="docText">To enable a referential integrity constraint, it is necessary for the column that is
+                    being referenced to be first defined as a primary key. In the preceding <tt>Employee-Department</tt>
+                    example, we have to first create the <tt>Department</tt> table with a primary key. The <tt>CREATE
+                        TABLE</tt> statement for the <tt>Department</tt> table (the <span
+                        class="docEmphasis">referenced</span> table) could look like this:</p>
+                <pre>
+CREATE TABLE Department
+ (deptno       INT,
+  deptname     VARCHAR(20),
+  CONSTRAINT   deptno_pk   PRIMARY KEY (deptno))
+</pre><br>
+
+                <p class="docText">The table definition of the <tt>Department</tt> table would then be as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-19">Figure 11-19</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-19"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-19. Table definition of Department table</h5>
+                        <img border="0" alt="" id="217066145005" width="337" height="81"
+                            SRC="images/learnsqlsvr05_1119.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">The constraints for the <tt>Department</tt> table would be as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-20">Figure 11-20</a>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-20"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-20. Constraint of the Department table</h5>
+                        <img border="0" alt="" id="217066145005" width="125" height="124"
+                            SRC="images/learnsqlsvr05_1120.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">The <tt>Employee</tt> table (the <span class="docEmphasis">referencing</span> table
+                    containing the foreign key) would then be created using this statement:</p>
+                <pre>
+CREATE TABLE Employee
+  (empno   INT CONSTRAINT   empno_pk1 PRIMARY KEY,
+   empname VARCHAR(20),
+   dept    INT CONSTRAINT   dept_fk     REFERENCES   Department(deptno))
+</pre><br>
+
+                <p class="docText">The table definition of the <tt>Employee</tt> table would then be as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-21">Figure 11-21</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-21"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-21. Table definition of the Employee table</h5>
+                        <img border="0" alt="" id="217066145005" width="339" height="95"
+                            SRC="images/learnsqlsvr05_1121.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">Now, to view the referential integrity constraints of the <tt>Employee</tt> table,
+                    click the + sign beside <tt>Employee</tt> and then click the + sign beside Keys, you will get <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-22">Figure 11-22</a>.</p>
+                <p class="docText">To modify the foreign key, right-click <tt>dept_fk</tt> and select Modify, as shown
+                    in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-23">Figure 11-23</a>.</p>
+                <p class="docText">You will get the results shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-24">Figure 11-24</a>. You can expand the Table And Columns
+                    Specification option (under General), and you will be able to see what the foreign key base table is
+                    (that is, the table with the foreign key, which in this case is the <tt>Employee</tt> table), what
+                    the foreign key columns are (in this case, dept), what the primary/unique key base table is (that
+                    is, the table with the primary key, which in this case is <tt>Department</tt>), the primary/unique
+                    key column (which in this case is deptno). You can change these options by clicking on the ... icon
+                    on the right of General.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-22"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-22. Viewing the referential integrity constraints of the
+                            Employee table</h5><a name="IDX-CHP-11-0494"></a>
+
+                        <img border="0" alt="" id="217066145005" width="127" height="140"
+                            SRC="images/learnsqlsvr05_1122.jpg">
+                    </center>
+                </P><br>
+                <a name="learnsqlsvr05-CHP-11-FIG-23"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-23. Modifying the foreign key</h5>
+                        <img border="0" alt="" id="217066145005" width="256" height="204"
+                            SRC="images/learnsqlsvr05_1123.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">The <tt>CREATE TABLE Employee...</tt> statement defines a column, dept, to be of type
+                    <tt>INT</tt>, but the statement goes further in defining dept to be a <span
+                        class="docEmphasis">foreign</span> key that references another table, <tt>Department</tt>.
+                    Again, within the <tt>Department</tt> table, the referenced column, <tt>deptno</tt>, has to be an
+                    already-defined primary key.</p>
+                <p class="docText">Also note that the <tt>Department</tt> table has to be created first. If we tried to
+                    create the <tt>Employee</tt> table before the <tt>Department</tt> table with the referential
+                    <tt>CONSTRAINT</tt>, we would be trying to reference a nonexistent table and this would also cause
+                    an error.</P>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6.2"></a>
+                <h5 id="title-IDAH0E55" class="docSection3Title">11.3.6.2. Adding the foreign key after tables are
+                    created</H5>
+                <p class="docText">As we have seen with other constraints, the foreign key can be added after tables are
+                    created. To do so, we must first have set up the primary key of the referenced table. The syntax of
+                    the <tt>ALTER TABLE</tt> command to add a foreign key to a referencing table would look like this:
+                </P>
+                <pre>
+ALTER TABLE xxx
+  ADD CONSTRAINT dept_fk
+  FOREIGN KEY (dept)
+  REFERENCES Department(deptno)
+</pre><BR>
+
+                <a name="learnsqlsvr05-CHP-11-FIG-24"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-24. The dept_fk foreign key</H5>
+                        <img border="0" alt="" id="217066145005" width="550" height="355"
+                            SRC="images/learnsqlsvr05_1124.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">The (optional) name of the <tt>CONSTRAINT</tt> is <tt>dept_fk</tt>. Note that the
+                    column's data types in the references clause must agree with the column's data types in the
+                    referenced table.</P>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6.3"></a>
+                <H5 id="title-IDAI1E55" class="docSection3Title">11.3.6.3. DELETE and the referential CONSTRAINT</h5><a
+                    name="IDX-CHP-11-0495"></a>
+                <a name="IDX-CHP-11-0496"></a>
+
+                <p class="docText">There are a couple of options in the <tt>DELETE</tt> option of a foreign key
+                    referential constraint in SQL Server --<tt>CASCADE</tt> and <tt>NO ACTION</tt>. Both of these
+                    options specify what action takes place on a row if that row has a referential relationship and the
+                    referenced row is deleted from the parent table. First we discuss the default, which is <tt>NO
+                        ACTION</tt>, and then we look at the <tt>CASCADE</tt> option.</p>
+                <p class="docText"><span class="docEmphStrong">ON DELETE NO ACTION</span>. If the <tt>NO ACTION</tt>
+                    alternative is used in the <tt>ON DELETE</tt> option of the <tt>CREATE TABLE</tt> command, and we
+                    try to delete a row from the parent table (in this case, the <tt>Department</tt> table) that has a
+                    referencing row in the dependent table (in this case, the <tt>Employee</tt> table), then SQL Server
+                    will raise an error and the delete action on the row in the parent table will be undone. The <tt>NO
+                        ACTION</tt> option on the <tt>ON DELETE</tt> option is the default.</p>
+                <p class="docText">The <tt>ON DELETE NO ACTION</tt> option is added after the <tt>REFERENCES</tt> clause
+                    of a <tt>CREATE TABLE</tt> command. The <tt>CREATE TABLE</tt> command with the <tt>ON DELETE NO
+                        ACTION</tt> would be as shown in the next example.</p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">In order to create the following <tt>Employee</tt> table, you
+                                            will need to delete the previous one.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <pre>
+CREATE TABLE Employee
+  (empno     INT     CONSTRAINT   empno_pk2 PRIMARY KEY,
+   empname   VARCHAR(20),
+   dept      INT      REFERENCES   Department(deptno)
+            ON DELETE NO ACTION)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">Make sure that you have created the <tt>Department</tt> table
+                                            first before you attempt to create this <tt>Employee</tt> table.</p>
+                                    </td>
+                                </TR>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><br>
+                <p class="docText">The design of the <tt>Employee</tt> table will now be as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-25">Figure 11-25</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-25"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-25. Viewing the referential integrity constraints of the
+                            Employee table</H5>
+                        <img border="0" alt="" id="217066145005" width="238" height="92"
+                            SRC="images/learnsqlsvr05_1125.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">Then, to view the <tt>ON DELETE NO ACTION</tt>, from <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-25">Figure 11-25</a>, right-click on EFK_Employee_dept_33D4B598
+                    and select Modify, similar to what is shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-23">Figure 11-23</a>. You will get <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-26">Figure 11-26</a>, the Foreign Key Relationships screen. On
+                    this screen, under Table Designer, expand the "INSERT And UPDATE Specification" option, and you will
+                    see the Delete Rule as No Action, shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-26">Figure 11-26</a>.</P>
+                <p class="docText"><span class="docEmphStrong">ON DELETE CASCADE</span>. The <tt>ON DELETE CASCADE</tt>
+                    option may be added after the <tt>REFERENCES</tt> clause of a <tt>CREATE TABLE</tt> command, as
+                    shown here:</P>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">In order to create the following <tt>Employee</tt> table, you
+                                            will need to delete the previous one.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+                <pre>
+CREATE TABLE Employee
+  (empno     INT     CONSTRAINT   empno_pk3 PRIMARY KEY,
+   empname   VARCHAR(20),
+   dept      INT      REFERENCES   Department(deptno)
+             ON DELETE CASCADE)
+</pre><BR>
+
+                <p class="docText">The table definition of the <tt>Employee</tt> table will be similar to what was shown
+                    in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-21">Figure 11-21</a>.</P>
+                <a name="learnsqlsvr05-CHP-11-FIG-26"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-26. Viewing the ON DELETE NO ACTION</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="355"
+                            SRC="images/learnsqlsvr05_1126.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">The <tt>ON DELETE CASCADE</tt> option will be included in the referential integrity
+                    constraint. To view the <tt>ON DELETE CASCADE</tt>, from the Foreign Key Relationships screen, once
+                    again expand the "INSERT And UPDATE Specification" option, and you will see the Delete Rule as
+                    Cascade, shown in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-27">Figure 11-27</a>.</p>
+                <p class="docText"><tt>CASCADE</tt> will allow the deletions in the dependent table (in this case, the
+                    <tt>Employee</tt> table) that are affected by the deletions of the tuples in the referenced table
+                    (in this case, the <tt>Department</tt> table). Suppose, for example, that we had <tt>deptno = 3</tt>
+                    in the <tt>Department</tt> table. Also suppose that we had employees in department 3. If we deleted
+                    department 3 in the <tt>Department</tt> table, then with <tt>CASCADE</tt> we would also delete all
+                    employees in the <tt>Employee</tt> table with <tt>dept = 3</tt>.</p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6.4"></a>
+                <h5 id="title-IDAWBF55" class="docSection3Title">11.3.6.4. UPDATE and the referential CONSTRAINT</h5><a
+                    name="IDX-CHP-11-0497"></a>
+                <a name="IDX-CHP-11-0498"></a>
+
+                <p class="docText">Both the <tt>CASCADE</tt> and <tt>NO ACTION</tt> options are also available with the
+                    <tt>ON UPDATE</tt> option of a foreign key referential constraint enforcement in SQL Server . Both
+                    these options specify what action takes place on a row if that row has a referential relationship
+                    and the referenced row is updated in the parent table. In the following discussion, we show the
+                    syntax of these two options.</p>
+                <p class="docText"><span class="docEmphStrong">ON UPDATE NO ACTION</span>. Just as with the <tt>ON
+                        DELETE</tt> option, if the <tt>NO ACTION</tt> option is used with the <tt>ON UPDATE</tt> option
+                    of the <tt>CREATE TABLE</tt> command, and we try to update a row from the parent table (in this
+                    case, the <tt>Department</tt> table) that has a referencing row in the dependent table (in this
+                    case, the <tt>Employee</tt> table), then SQL Server will raise an error and the update action on the
+                    row in the parent table will be rolled back. The <tt>NO ACTION</tt> option on the <tt>ON UPDATE</tt>
+                    option is the default.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-27"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 11-27. Viewing the ON DELETE CASCADE option</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="355"
+                            SRC="images/learnsqlsvr05_1127.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">Just as in the <tt>ON DELETE NO ACTION</tt> option, the <tt>ON UPDATE NO ACTION</tt>
+                    option is added after the <tt>REFERENCES</tt> clause of a <tt>CREATE TABLE</tt> command. The
+                    <tt>CREATE TABLE</tt> command with the <tt>ON UPDATE NO ACTION</tt> would be as shown here:</P>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">In order to create the following <tt>Employee</tt> table, you
+                                            will need to delete the previous one.</p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </P><BR>
+                <pre>
+CREATE TABLE Employee
+  (empno     INT     CONSTRAINT   empno_pk4 PRIMARY KEY,
+   empname   VARCHAR(20),
+   dept      INT      REFERENCES   Department(deptno)
+             ON UPDATE NO ACTION)
+</pre><BR>
+
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <TD valign="top">
+                                        <p class="docText">Make sure you have created the <tt>Department</tt> table
+                                            first before you attempt to create this <tt>Employee</tt> table.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">Once again, the design of the <tt>Employee</tt> table will be similar to what was
+                    shown in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-21">Figure 11-21</a>.</P>
+                <p class="docText">The <tt>ON UPDATE NO ACTION</tt> option will be included in the referential integrity
+                    constraint. View the <tt>ON UPDATE NO ACTION</tt> as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-27">Figure 11-27</a>. <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-27">Figure 11-27</a> also shows the Update Rule.</P>
+                <p class="docText"><span class="docEmphStrong">ON UPDATE CASCADE</span>. The <tt>ON UPDATE CASCADE</tt>
+                    option is also added after the <tt>REFERENCES</tt> clause of a <tt>CREATE TABLE</tt> command, as
+                    shown here:</P>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">In order to create the following <tt>Employee</tt> table, you
+                                            will need to delete the previous one.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <pre>
+CREATE TABLE Employee
+  (empno     INT     CONSTRAINT   empno_pk5 PRIMARY KEY,
+   empname   VARCHAR(20),
+   dept      INT      REFERENCES   Department(deptno)
+             ON UPDATE CASCADE)
+</pre><br>
+
+                <p class="docText">The design of the <tt>Employee</tt> table will be similar to what was shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-11-FIG-21">Figure 11-21</a>.</P>
+                <p class="docText">The <tt>ON UPDATE CASCADE</tt> option will be included in the referential integrity
+                    constraint. To view the <tt>ON UPDATE CASCADE</tt>, from the Foreign Key Relationships screen, once
+                    again expand the "INSERT And UPDATE Specification" option, and you will see the Update Rule as
+                    Cascade, shown in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-28">Figure 11-28</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-28"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-28. Viewing the ON UPDATE CASCADE</h5>
+                        <img border="0" alt="" id="217066145005" width="550" height="354"
+                            SRC="images/learnsqlsvr05_1128.jpg">
+                    </center>
+                </p><BR>
+                <p class="docText">When <tt>CASCADE</tt> is included in the <tt>ON UPDATE</tt> option, the row is
+                    updated in the referencing table (in this case, the <tt>Employee</tt> table) if that row is updated
+                    in the parent table (in this case, the <tt>Department</tt> table).</p>
+
+                <a name="learnsqlsvr05-CHP-11-SECT-3.6.5"></a>
+                <h5 id="title-IDAQHF55" class="docSection3Title">11.3.6.5. Using the ON DELETE and ON UPDATE together
+                </H5>
+                <p class="docText">You can also use the <tt>ON DELETE</tt> and <tt>ON UPDATE</tt> options together if
+                    needed. Both the <tt>ON DELETE</tt> and <tt>ON UPDATE</tt> do not necessarily have to be set to the
+                    same option. That is, both of them do not have to be set to <tt>NO ACTION</tt> or <tt>CASCADE</tt>
+                    at the same time. You can have a <tt>NO ACTION</tt> option set for one option and a <tt>CASCADE</tt>
+                    set for the other option. For example, you may create the <tt>Employee</tt> table as follows:</p>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <TD>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <TR>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">Once again, note that before you create this
+                                            <tt>Employee</tt> table, delete the previous version.</P>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <pre>
+CREATE TABLE Employee
+  (empno     INT     CONSTRAINT   empno_pk6 PRIMARY KEY,
+   empname   VARCHAR(20),
+   dept      INT      REFERENCES   Department(deptno)
+             ON UPDATE CASCADE
+             ON DELETE NO ACTION)
+</pre><br>
+
+                <p class="docText">Once again, the table definition of the <tt>Employee</tt> table would then be as
+                    shown in <a class="docLink" href="#learnsqlsvr05-CHP-11-FIG-21">Figure 11-21</a>.</p>
+                <p class="docText">Both the <tt>ON UPDATE CASCADE</tt> option and the <tt>ON DELETE NO ACTION</tt>
+                    option will be included in the referential integrity constraint. Once again, from the Foreign Key
+                    Relationships screen, expand the "INSERT And UPDATE Specification" option, and you will see the
+                    Delete Rule as well as Update Rule.</P>
+                <p class="docText">The foreign key relationships figure will be as shown in <a class="docLink"
+                        href="#learnsqlsvr05-CHP-11-FIG-29">Figure 11-29</a>.</p>
+                <a name="learnsqlsvr05-CHP-11-FIG-29"></a>
+                <p>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 11-29. Setting the ON DELETE and ON UPDATE together</H5>
+                        <img border="0" alt="" id="217066145005" width="550" height="356"
+                            SRC="images/learnsqlsvr05_1129.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">So, in summary, SQL Server gives you quite a bit of flexibility in setting up your
+                    referential integrity constraints.</p>
+
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-2.html><img src="images/prev.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-11-SECT-4.html><img src="images/next.gif" width="60" height="17"
+                            border="0" align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

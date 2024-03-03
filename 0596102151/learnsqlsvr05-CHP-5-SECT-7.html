@@ -1,0 +1,388 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.7.&nbsp; Summary</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-5-SECT-7"></a>
+                <h3 id="599419-862" class="docSection1Title">5.7. Summary</H3>
+                <p class="docText">This chapter provided an overview of the functions available in SQL Server . In
+                    this chapter, we looked at several of SQL Server's aggregate, row-level and other functions. We also
+                    presented conversion as well as date functions.</p>
+                <a name="learnsqlsvr05-CHP-5-SECT-7.1"></a>
+                <h4 id="title-IDAEXNFAB" class="docSection2Title">5.7.1. Table of Functions</H4>
+                <p>
+                <table cellspacing="0" border="1" RULES="all" cellpadding="4" width="100%">
+                    <colgroup span="2">
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <TR>
+                            <th class="thead" scope="col" align="center" colspan="2">
+                                <p class="docText">Aggregate Functions</p>
+                            </th>
+                        </TR>
+                    </thead>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>AVG</tt></P>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Averages a group of row values.</P>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>COUNT</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Counts the total number of rows in a result set.</P>
+                        </td>
+                    </tr>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>MAX</tt></P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the highest of all values from a column.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>MIN</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the lowest of all values from a column.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>SUM</tt></P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Adds all the values in a column.</P>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="center" colspan="2">
+                            <p class="docText">Row-level Functions</p>
+                        </TD>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>ABS</tt></P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Returns an absolute value.</P>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>CEILING</tt></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the next larger integer value.</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>FLOOR</tt></p>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Returns the next lower integer value.</P>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>ISNULL</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns a true value if a data item contains a <tt>NULL</tt>.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>NULLIF</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns a <tt>NULL</tt> if a certain condition is met in an expression.
+                            </P>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>ROUND</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Rounds numbers to a specified number of decimal places.</p>
+                        </TD>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>STR</tt></P>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Converts from a number to a character data type.</P>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>SQRT</tt></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the square root of positive numeric values.</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>SQUARE</tt></p>
+                        </TD>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Returns the square of a number.</P>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="center" colspan="2">
+                            <p class="docText">String Functions</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>CHARINDEX</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the starting position of a specified pattern.</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>LEFT</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the left portion of a string up to a given number of characters.
+                            </p>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>LEN</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the length of a string.</P>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>LIKE</tt></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Option that matches a particular pattern.</P>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>LOWER</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Converts a string to lower case.</p>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>RIGHT</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the right portion of a string.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>RTRIM</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Removes blanks from the right end of a string.</p>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>SUBSTRING</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns part of a string.</p>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>UPPER</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Displays all output in upper case.</P>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="center" colspan="2">
+                            <p class="docText">Date Functions</P>
+                        </TD>
+                    </tr>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>DATEADD</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Adds to a specified part of a date.</p>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>DATEDIFF</tt></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the difference between two dates.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>DATEPART</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the specified part of the date requested.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>DAY</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Extracts a day from a date.</p>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>GEtdATE</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns the current system date and time.</P>
+                        </td>
+                    </TR>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>MONTH</tt></P>
+                        </td>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText">Extracts the month from a date.</P>
+                        </td>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>SET DATEFORMAT</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Changes the format in which SQL Server reads in dates.</P>
+                        </td>
+                    </tr>
+                    <TR>
+                        <TD class="docTableCell" align="left">
+                            <p class="docText"><tt>YEAR</tt></P>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Extracts the year from a date.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="center" colspan="2">
+                            <p class="docText">Conversion Functions</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>CAST</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Changes a data type of a column in a result set.</P>
+                        </td>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>CONVERT</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Explicitly converts to a given data type in a result set.</p>
+                        </TD>
+                    </tr>
+                    <TR>
+                        <td class="docTableCell" align="center" colspan="2">
+                            <p class="docText">Other Functions</P>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>DISTINCT</tt></P>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Omits rows that contain duplicate data.</P>
+                        </TD>
+                    </tr>
+                    <tr>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>PERCENT</tt></p>
+                        </TD>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Return a certain percentage of records that fall at the top of a range
+                                specified.</p>
+                        </TD>
+                    </TR>
+                    <TR>
+                        <td class="docTableCell" align="left">
+                            <p class="docText"><tt>TOP</tt></p>
+                        </td>
+                        <td class="docTableCell" align="left">
+                            <p class="docText">Returns a specified number of records from the top of a result set.</p>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-6.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-8.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

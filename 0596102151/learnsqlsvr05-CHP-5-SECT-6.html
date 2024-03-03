@@ -1,0 +1,517 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.6.&nbsp; DATE Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-5-SECT-6"></a>
+                <h3 id="title-IDATGWIP" class="docSection1Title">5.6. DATE Functions</H3>
+                <p class="docText">Using the <tt>DATETIME</tt> and <tt>SMALLDATETIME</tt> data type, SQL Server
+                    gives you the opportunity to use several date functions like <tt>DAY</tt>, <tt>MONTH</tt>,
+                    <tt>YEAR</tt>, <tt>DATEADD</tt>, <tt>DATEDIFF</tt>, <tt>DATEPART</tt>, and <tt>GEtdATE</tt> for
+                    extracting and manipulating dates (adding dates, taking the differences between dates, finding the
+                    day/month/year from dates, and so on).
+                </p>
+                <p class="docText">Before we start discussing date functions, we will create a table,
+                    <tt>DateTable</tt>, using the <tt>SMALLDATETIME</tt> data type. Then we will discuss date formats
+                    and formatting dates.
+                </P>
+                <a name="learnsqlsvr05-CHP-5-SECT-6.1"></a>
+                <h4 id="title-IDAVHWIP" class="docSection2Title">5.6.1. Creating a Table with the DATETIME Data Type
+                </H4>
+                <p class="docText">Suppose that you define <tt>SMALLDATETIME</tt> types in a table like this:</p>
+                <pre>
+    CREATE TABLE DateTable     (birthdate        SMALLDATETIME,
+                                school_date      SMALLDATETIME,
+                                names            VARCHAR(20))
+</pre><BR>
+
+                <p class="docText">Data can now be entered into the birthdate and <tt>school_date</tt> columns, which
+                    are both <tt>SMALLDATETIME</tt> columns, and into the <tt>names</tt> column. Inserting dates is
+                    usually done by using an implicit conversion of character strings to dates. Following would be an
+                    example of an <tt>INSERT</tt> into <tt>DateTable</tt>:</P>
+                <pre>
+    INSERT INTO DateTable
+    VALUES ('10-oct-01', '12/01/2006', 'Mala Sinha')
+</pre><BR>
+
+                <p class="docText">You will get:</P>
+                <pre>
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Note that single quotes are required around date values. As <tt>SMALLDATETIME</tt> is
+                    not really a character column, the character strings representing date are implicitly converted
+                    provided that the character string is in a form recognizable by SQL Server.</P>
+                <p class="docText">Now if you type:</P>
+                <pre>
+    SELECT *
+    FROM   DateTable
+</pre><br>
+
+                <p class="docText">The following appears in the <tt>DateTable</tt> table:</P>
+                <pre>
+    birthdate             school_date             names
+    --------------------- ----------------------- --------------------
+    2001-10-10 00:00:00   2006-12-01 00:00:00     Mala Sinha
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">The <tt>DateTable</tt> table has not been created for you. Create it and insert the
+                    following data into it:</p>
+                <pre>
+    birthdate               school_date             names
+    ----------------------- ----------------------- ------------------
+    2001-10-10 00:00:00     2006-12-01 00:00:00     Mala Sinha
+    2002-02-02 00:00:00     2006-03-02 00:00:00     Mary Spencer
+    2002-10-02 00:00:00     2005-02-04 00:00:00     Bill Cox
+    1998-12-29 00:00:00     2004-05-05 00:00:00     Jamie Runner
+    1999-06-16 00:00:00     2003-03-03 00:00:00     Seema Kapoor
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.2"></a>
+                <h4 id="title-IDAQJWIP" class="docSection2Title">5.6.2. Default Date Formats and Changing Date Formats
+                </h4><a name="IDX-CHP-5-0339"></a>
+                <a name="IDX-CHP-5-0340"></a>
+                <a name="IDX-CHP-5-0341"></a>
+                <a name="IDX-CHP-5-0342"></a>
+                <a name="IDX-CHP-5-0343"></a>
+
+                <p class="docText">By default, SQL Server reads and displays the dates in the <span
+                        class="docEmphasis">yyyy</span>/<span class="docEmphasis">mm</span>/<span
+                        class="docEmphasis">dd</span> format. We can change the format in which SQL Server <span
+                        class="docEmphasis">reads</span> in dates by using <tt>SET DATEFORMAT</tt>. <tt>DATEFORMAT</tt>
+                    controls only how SQL Server interprets date constants that are entered by you, but does not
+                    control how date values are displayed. For example, to have SQL Server first read the day, then
+                    month, and then year, we would type:</P>
+                <pre>
+    SET DATEFORMAT dmy
+    SELECT 'Format is yyyy/mon/dd' = CONVERT(datetime, '10/2/2003')
+</pre><br>
+
+                <p class="docText">And we will get:</p>
+                <pre>
+    Format is yyyy/mon/dd
+    -----------------------
+    2003-02-10 00:00:00.000
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">In SQL Server , if incorrect dates are used, we will get an out-of-range error.
+                    For example, if we tried to do the following insert with the 32nd day of a month:</P>
+                <pre>
+    INSERT INTO DateTable
+    VALUES ('10-oct-01', '32/01/2006', 'Mita Sinha')
+</pre><BR>
+
+                <p class="docText">We would get the following error message:</p>
+                <pre>
+    Msg 296, Level 16, State 3, Line 1
+    The conversion of char data type to smalldatetime data type resulted in an out-of-
+    range smalldatetime value.
+    The statement has been terminated.
+</pre><br>
+
+                <p class="docText">In SQL Server , if two-digit year dates are entered, SQL Server's default
+                    behavior is to interpret the year as 19<span class="docEmphasis">yy</span> if the value is greater
+                    than or equal to 50 and as 20<span class="docEmphasis">yy</span> if the value is less than 50.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3"></a>
+                <h4 id="title-IDARLWIP" class="docSection2Title">5.6.3. Date Functions</h4>
+                <p class="docText">In this section we discuss some useful SQL Server date
+                    functions--<tt>DATEADD</tt>,<a name="IDX-CHP-5-0344"></a>
+                    <a name="IDX-CHP-5-0345"></a>
+                    <tt>DATEDIFF</tt>, <tt>DATEPART</tt>, <tt>YEAR</tt>, <tt>MONTH</tt>, <tt>DAY</tt>, and
+                    <tt>GEtdATE</tt>.
+                </p>
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.1"></a>
+                <h5 id="title-IDATMWIP" class="docSection3Title">5.6.3.1. The DATEADD function</h5><a
+                    name="IDX-CHP-5-0346"></a>
+
+                <p class="docText">The <tt>DATEADD</tt> function produces a date by adding a specified number to a
+                    specified part of a date.</p>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">The date parts are: <tt>dd</tt> for day, <tt>mm</tt> for
+                                            month, and <tt>yy</tt> for year.</p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">The format for the <tt>DATEADD</tt> function is:</P>
+                <pre>
+    DATEADD(<tt><i>datepart</I></tt>, <tt><i>number</I></tt>, <tt><I>date_field</I></tt>)
+</pre><BR>
+
+                <p class="docText"><tt><i>datepart</I></tt> would be either <tt>dd</tt>, <tt>mm</tt>, or <tt>yy</tt>.
+                    <tt><I>number</i></tt> would be the number that you want to add to the <tt><I>datepart</I></tt>.
+                    <tt><i>date_field</i></tt> would be the date field that you want to add to.
+                </p>
+                <p class="docText">For example, to add 2 days to the <tt>birthdate</tt> of every person in
+                    <tt>DateTable</tt> we would type:
+                </p>
+                <pre>
+    SELECT names, 'Add 2 days to birthday' = DATEADD(dd, 2, birthdate)
+    FROM   Datetable
+</pre><BR>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names                Add 2 days to birthday
+    -------------------- -----------------------
+    Mala Sinha           2001-10-12 00:00:00
+    Mary Spencer         2002-02-04 00:00:00
+    Bill Cox             2002-10-04 00:00:00
+    Jamie Runner         1998-12-31 00:00:00
+    Seema Kapoor         1999-06-18 00:00:00
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">You can also subtract two days from the <tt>birthdate</tt> of every person in
+                    <tt>DateTable</tt> by adding a -2 (minus or negative 2) instead of a positive 2, as shown by the
+                    following query:
+                </P>
+                <pre>
+    SELECT names, 'Add 2 days to birthday' = DATEADD(dd, -2, birthdate)
+    FROM   Datetable
+</pre><BR>
+
+                <p class="docText">This query would give:</P>
+                <pre>
+    names                Add 2 days to birthday
+    -------------------- -----------------------
+    Mala Sinha           2001-10-08 00:00:00
+    Mary Spencer         2002-01-31 00:00:00
+    Bill Cox             2002-09-30 00:00:00
+    Jamie Runner         1998-12-27 00:00:00
+    Seema Kapoor         1999-06-14 00:00:00
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.2"></a>
+                <h5 id="title-IDAGPWIP" class="docSection3Title">5.6.3.2. The DATEDIFF function</h5><a
+                    name="IDX-CHP-5-0347"></a>
+                <a name="IDX-CHP-5-0348"></a>
+                <a name="IDX-CHP-5-0349"></a>
+
+                <p class="docText">The <tt>DATEDIFF</tt> function returns the difference between two parts of a date.
+                    The format for the <tt>DATEDIFF</tt> function is:</p>
+                <pre>
+    DATEDIFF(<tt><i>datepart</i></tt>, <tt><i>date_field1</i></tt>, <tt><i>date_field2</i></tt>)
+</pre><br>
+
+                <p class="docText">Here again, <tt><i>datepart</i></tt> would be either <tt>dd</tt>, <tt>mm</tt>, or
+                    <tt>yy</tt>. And, <tt><i>date_field1</i></tt> and <tt><I>date_field2</i></tt> would be the two date
+                    fields that you want to find the difference between.
+                </p>
+                <p class="docText">For example, to find the number of months between the two fields, birthdate and
+                    school_date of every person in <tt>DateTable</tt>, we would type:</P>
+                <pre>
+    SELECT names, 'Months between birth date and school date' = DATEDIFF(mm, birthdate,
+    school_date)
+    FROM Datetable
+</pre><br>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names                Months between birth date and school date
+    -------------------- -----------------------------------------
+    Mala Sinha           62
+    Mary Spencer         49
+    Bill Cox             28
+    Jamie Runner         65
+    Seema Kapoor         45
+
+    (5 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.3"></a>
+                <h5 id="title-IDAIRWIP" class="docSection3Title">5.6.3.3. The DATEPART function</h5><a
+                    name="IDX-CHP-5-0350"></a>
+                <a name="IDX-CHP-5-0351"></a>
+                <a name="IDX-CHP-5-0352"></a>
+                <a name="IDX-CHP-5-0353"></a>
+
+                <p class="docText">The <tt>DATEPART</tt> function returns the specified part of the date requested. The
+                    format for the <tt>DATEPART</tt> function is:</P>
+                <pre>
+    DATEPART(<tt><i>datepart</I></tt>, <tt><i>date_field</I></tt>)
+</pre><BR>
+
+                <p class="docText">Here too, <tt><I>datepart</I></tt> would be either <tt>dd</tt>, <tt>mm</tt>, or
+                    <tt>yy</tt>. And, <tt><i>date_field</I></tt> would be the date field that you want to request the
+                    <tt>dd</tt>, <tt>mm</tt>, or <tt>yy</tt> from.
+                </P>
+                <p class="docText">For example, to find year from the <tt>birthdate</tt> of every person in
+                    <tt>DateTable</tt> we would type:
+                </p>
+                <pre>
+    SELECT names, 'YEARS' = DATEPART(yy, birthdate)
+    FROM   Datetable
+</pre><BR>
+
+                <p class="docText">This query would give:</P>
+                <pre>
+    names                YEARS
+    -------------------- -----------
+    Mala Sinha           2001
+    Mary Spencer         2002
+    Bill Cox             2002
+    Jamie Runner         1998
+    Seema Kapoor         1999
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.4"></a>
+                <h5 id="title-IDAPTWIP" class="docSection3Title">5.6.3.4. The YEAR function</h5><a
+                    name="IDX-CHP-5-0354"></a>
+                <a name="IDX-CHP-5-0355"></a>
+
+                <p class="docText">The <tt>YEAR(column)</tt> function will extract the year from a value stored as a
+                    <tt>SMALLDATETIME</tt> data type. For example, to extract the year from the <tt>school_date</tt>
+                    column of every person in <tt>DateTable</tt>, type:
+                </p>
+                <pre>
+    SELECT names, YEAR(school_date) AS [Kindergarten Year]
+    FROM   Datetable
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    names                Kindergarten Year
+    -------------------- -----------------
+    Mala Sinha           2006
+    Mary Spencer         2006
+    Bill Cox             2005
+    Jamie Runner         2004
+    Seema Kapoor         2003
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">We can also use the <tt>YEAR</tt> function in date calculations. For example, if you
+                    want to find the number of years between when a child was born (<tt>birthdate</tt>) and when the
+                    child went to kindergarten (the <tt>school_date</tt> column) from <tt>DateTable</tt>, type the
+                    following query:</P>
+                <pre>
+    SELECT names, YEAR(school_date)-YEAR(birthdate) AS [Age in Kindergarten]
+    FROM   DateTable
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</P>
+                <pre>
+    names                Age in Kindergarten
+    -------------------- -------------------
+    Mala Sinha           5
+    Mary Spencer         4
+    Bill Cox             3
+    Jamie Runner         6
+    Seema Kapoor         4
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Here, the <tt>YEAR(birthdate)</tt> was subtracted from <tt>YEAR(school_date).</tt>
+                </p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.5"></a>
+                <h5 id="title-IDAIVWIP" class="docSection3Title">5.6.3.5. The MONTH function</h5><a
+                    name="IDX-CHP-5-0356"></a>
+                <a name="IDX-CHP-5-0357"></a>
+                <a name="IDX-CHP-5-0358"></a>
+                <a name="IDX-CHP-5-0359"></a>
+
+                <p class="docText">The <tt>MONTH</tt> function will extract the month from a date. Then, to add six
+                    months to the birth month of every person in <tt>DateTable</tt>, we can first extract the month by
+                    <tt>MONTH(birthdate)</tt>, and then add six to it, as shown here:
+                </p>
+                <pre>
+    SELECT names, birthdate, MONTH(birthdate) AS [Birth Month], ((MONTH(birthdate)) + 6 )
+    AS     [Sixth month]
+    FROM   DateTable
+</pre><br>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    names              birthdate               Birth Month Sixth month
+    ------------------ ----------------------- ----------- -----------
+    Mala Sinha         2001-10-10 00:00:00     10          16
+    Mary Spencer       2002-02-02 00:00:00     2           8
+    Bill Cox           2002-10-02 00:00:00     10          16
+    Jamie Runner       1998-12-29 00:00:00     12          18
+    Seema Kapoor       1999-06-16 00:00:00     6           12
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.6"></a>
+                <h5 id="title-IDAQWWIP" class="docSection3Title">5.6.3.6. The DAY function</h5><a
+                    name="IDX-CHP-5-0360"></a>
+                <a name="IDX-CHP-5-0361"></a>
+
+                <p class="docText">The <tt>DAY</tt> function extracts the day of the month from a date. For example, to
+                    find the day from the <tt>birthdate</tt> of every person in <tt>DateTable</tt>, type the following
+                    query:</p>
+                <pre>
+    SELECT names, birthdate, DAY([birthdate]) AS [Date]
+    FROM   DateTable
+</pre><br>
+
+                <p class="docText">which produces the following output:</p>
+                <pre>
+    names                birthdate               Date
+    -------------------- ----------------------- -----------
+    Mala Sinha           2001-10-10 00:00:00     10
+    Mary Spencer         2002-02-02 00:00:00     2
+    Bill Cox             2002-10-02 00:00:00     2
+    Jamie Runner         1998-12-29 00:00:00     29
+    Seema Kapoor         1999-06-16 00:00:00     16
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.7"></a>
+                <h5 id="title-IDAQXWIP" class="docSection3Title">5.6.3.7. The GETDATE function</H5><a
+                    name="IDX-CHP-5-0362"></a>
+                <a name="IDX-CHP-5-0363"></a>
+                <a name="IDX-CHP-5-0364"></a>
+
+                <p class="docText">The <tt>GEtdATE</tt> function returns the current system date and time.</p>
+                <p class="docText">For example:</P>
+                <pre>
+    SELECT 'Today ' = GETDATE(  )
+</pre><br>
+
+                <p class="docText">will give:</p>
+                <pre>
+    Today
+    -----------------------
+    2006-01-17 23:17:52.340
+
+    (1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To find the number of years since everyone's <tt>birthdate</tt> entered in our
+                    <tt>Datetable</tt>, and the current date, we could type:
+                </p>
+                <pre>
+    SELECT names, 'Number of years ' = DATEDIFF(yy, birthdate, GETDATE(  ))
+    FROM   Datetable
+</pre><br>
+
+                <p class="docText">This query will give us:</P>
+                <pre>
+    names                Number of years
+    -------------------- ----------------
+    Mala Sinha           5
+    Mary Spencer         4
+    Bill Cox             4
+    Jamie Runner         8
+    Seema Kapoor         7
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-6.3.8"></a>
+                <H5 id="title-IDACZWIP" class="docSection3Title">5.6.3.8. Inserting the current date and time</h5>
+                <p class="docText">Using the <tt>GETDATE( )</tt> function, we can insert or update the current date and
+                    time into a column. To illustrate this, we will add a new record (row) to our <tt>DateTable</tt>,
+                    inserting the current date and time into the <tt>birthdate</tt> column of this row using the
+                    <tt>GETDATE( )</tt> function, and then add five years to the current date for the
+                    <tt>school_date</tt> column of this new row. So type:
+                </P>
+                <pre>
+    INSERT INTO DateTable
+    VALUES (GETDATE(), GETDATE(  )+YEAR(5), 'Piyali Saha')
+</pre><BR>
+
+                <p class="docText">Then type:</p>
+                <pre>
+    SELECT *
+    FROM   DateTable
+</pre><BR>
+
+                <p class="docText">This query produces the following output (note the insertion of the sixth row):</P>
+                <pre>
+    birthdate               school_date             names
+    ---------------------   ---------------------   ------------------
+    2001-10-10 00:00:00     2006-12-01 00:00:00     Mala Sinha
+    2002-02-02 00:00:00     2006-03-02 00:00:00     Mary Spencer
+    2002-10-02 00:00:00     2005-02-04 00:00:00     Bill Cox
+    1998-12-29 00:00:00     2004-05-05 00:00:00     Jamie Runner
+    1999-06-16 00:00:00     2003-03-03 00:00:00     Seema Kapoor
+    2006-01-17 23:19:00     2011-04-01 23:19:00     Piyali Saha
+
+    (6 row(s) affected)
+</pre><br>
+
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-5.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-7.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

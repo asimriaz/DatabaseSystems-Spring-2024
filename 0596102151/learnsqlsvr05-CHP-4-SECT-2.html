@@ -1,0 +1,168 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 4.2.&nbsp; The Cartesian Product</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-4-SECT-2"></a>
+                <H3 id="title-IDAMSH15" class="docSection1Title">4.2. The Cartesian Product</H3>
+                <p class="docText">In a SQL statement, a Cartesian product<a name="IDX-CHP-4-0224"></a>
+                    is where every row of the first table in the <tt>FROM</tt> clause is joined with each and every row
+                    of the second table in the <tt>FROM</tt> clause. A Cartesian product is produced when the
+                    <tt>WHERE</tt> form of the <tt>JOIN</tt> is used without the <tt>WHERE</tt>. An example of a
+                    Cartesian product (join) would be:</P>
+                <pre>
+SELECT *
+FROM Course c, Prereq p
+</pre><BR>
+
+                <p class="docText">The preceding command combines all the data in both the tables and makes a new result
+                    set. All rows in the <tt>Course</tt> table are matched with all rows in the <tt>Prereq</tt> table (a
+                    Cartesian product). This produces 384 rows of output, of which we show the first 10 rows here:</p>
+                <pre>
+COURSE_NAME          COURSE_NUMBER CREDIT_HOURS OFFERING_DEPT COURSE_NUMBER PREREQ
+-------------------- ------------- ------------ ------------- ------------- -------
+ACCOUNTING I         ACCT2020      3            ACCT          ACCT3333     ACCT2220
+ACCOUNTING II        ACCT2220      3            ACCT          ACCT3333     ACCT2220
+MANAGERIAL FINANCE   ACCT3333      3            ACCT          ACCT3333     ACCT2220
+ACCOUNTING INFO SYST ACCT3464      3            ACCT          ACCT3333     ACCT2220
+INTRO TO CHEMISTRY   CHEM2001      3            CHEM          ACCT3333     ACCT2220
+ORGANIC CHEMISTRY    CHEM3001      3            CHEM          ACCT3333     ACCT2220
+INTRO TO COMPUTER SC COSC1310      4            COSC          ACCT3333     ACCT2220
+TURBO PASCAL         COSC2025      3            COSC          ACCT3333     ACCT2220
+ADVANCED COBOL       COSC2303      3            COSC          ACCT3333     ACCT2220
+DATA STRUCTURES      COSC3320      4            COSC          ACCT3333     ACCT2220
+.
+.
+.
+ (384 row(s) affected)
+</pre><br>
+
+                <p class="docText">As we pointed out earlier, before combining tables, it is a good idea to get a count
+                    of the number of rows one might expect. This can be done by:</p>
+                <pre>
+SELECT COUNT(*) AS [COUNT OF CARTESIAN]
+FROM Course c, Prereq p
+</pre><BR>
+
+                <p class="docText">which produces the following output:</P>
+                <pre>
+COUNT OF CARTESIAN
+------------------
+384
+&nbsp;
+(1 row(s) affected)
+</pre><BR>
+
+                <p class="docText">From these results, we can see that the results of a Cartesian "join" will be a
+                    relation, say Q, which will have <span class="docEmphasis">n*m</span> rows (where <span
+                        class="docEmphasis">n</span> is the number of rows from the first relation, and <span
+                        class="docEmphasis">m</span> is the number of rows from the second relation). In the preceding
+                    example, the result set has 384 rows (32 times 12), with all possible combinations of rows from the
+                    <tt>Course</tt> table and the <tt>Prereq</tt> table. If we compare these results with the results of
+                    the earlier query (with the <tt>WHERE</tt> clause), we can see that both the results have the same
+                    structure, but the earlier one has been row-filtered by the <tt>WHERE</tt> clause to include only
+                    those rows where there is equality between <tt>Course.course_number</tt> and
+                    <tt>Prereq.course_number</tt>. Put another way, the earlier results make more sense because they
+                    present only those rows that correspond to one another. In this example, the Cartesian product
+                    produces extra, meaningless rows.</P>
+                <p class="docText">Oftentimes, the Cartesian product is the result of a user having forgotten to use an
+                    appropriate <tt>WHERE</tt> clause in the <tt>SELECT</tt> statement when formulating a join using the
+                    <tt>WHERE</tt> format. Note that if the <tt>JOIN</tt> or <tt>INNER JOIN</tt> syntax (ANSI
+                    <tt>JOIN</tt> syntax) is used, one cannot avoid the <tt>ON</tt> clause (no <tt>ON</tt> clause
+                    produces a syntax error). Hence, producing a Cartesian product inadvertently in SQL Server using the
+                    <tt>JOIN</tt>/<tt>INNER JOIN</tt> is much harder to do.</P>
+                <a name="learnsqlsvr05-CHP-4-SECT-2.1"></a>
+                <h4 id="title-IDACVH15" class="docSection2Title">4.2.1. Uses of the Cartesian Product</H4><a
+                    name="IDX-CHP-4-0225"></a>
+
+                <p class="docText">Though the Cartesian product is generally regarded as not so useful in SQL per se, if
+                    harnessed properly, a Cartesian product can be used to produce exceptionally useful result sets, for
+                    example:</p>
+                <ul>
+                    <LI>
+                        <p class="docList">The Cartesian product can be used to generate sample or test data.</P>
+                    </li>
+                    <li>
+                        <p class="docList">The simplest Cartesian product of two sets is a two-dimensional table or a
+                            cross-tabulation whose cells may be used to enter frequencies or to designate possibilities.
+                        </p>
+                    </li>
+                    <LI>
+                        <p class="docList">The Cartesian product is needed if you want a collection of all ordered <span
+                                class="docEmphasis">n</span>-tuples (rows with <i>n</i> columns) that can be formed so
+                            that they contain one element of the first set, one element of the second set, . . ., and
+                            one element of the <span class="docEmphasis">n</span>th set. For example, if set (or table)
+                            <span class="docEmphasis">X</span> is the 13-element set { A, K, Q, J, 10, 9, 8, 7, 6, 5, 4,
+                            3, 2} and set (or table) <span class="docEmphasis">Y</span> is the 4-element set {spades,
+                            hearts, diamonds, clubs}, then the Cartesian product of those two sets is the 52-element set
+                            { (A, spades), (K, spades), . . ., (2, spades), (A, hearts), . . ., (3, clubs), (2, clubs)
+                            }.</p>
+                    </li>
+                </UL>
+
+                <a name="learnsqlsvr05-CHP-4-SECT-2.2"></a>
+                <H4 id="title-IDAFWH15" class="docSection2Title">4.2.2. CROSS JOIN Used to Generate a Cartesian Product
+                </h4><a name="IDX-CHP-4-0226"></a>
+                <a name="IDX-CHP-4-0227"></a>
+
+                <p class="docText">In SQL Server, a <tt>CROSS JOIN</tt> can be used to return a Cartesian product of two
+                    tables. The form of the <tt>CROSS JOIN</tt> is:</p>
+                <pre>
+SELECT *
+FROM Table1 CROSS JOIN Table2
+</pre><br>
+
+                <p class="docText">Using our database, <tt>Student_course</tt>, the following <tt>CROSS JOIN</tt> would
+                    produce the same result (Cartesian product) as the query (without the <tt>WHERE</tt> clause) used in
+                    the earlier section:</p>
+                <pre>
+SELECT *
+FROM Course CROSS JOIN Prereq p
+</pre><br>
+
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-4-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

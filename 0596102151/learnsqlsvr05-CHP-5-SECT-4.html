@@ -1,0 +1,933 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 5.4.&nbsp; String Functions</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-5-SECT-4"></a>
+                <H3 id="588026-958" class="docSection1Title">5.4. String Functions</H3><a name="IDX-CHP-5-0293"></a>
+
+                <p class="docText">SQL Server has several functions that operate on strings; for example, functions
+                    for the extraction of part of a string, functions to find the length of a string, functions to find
+                    matching characters in strings, etc. In this section, we explore some of these common and useful
+                    string functions. String functions are not aggregatesthey are row-level functions, as they operate
+                    on one value in one row at a time. String functions are read-only functions and will not change the
+                    underlying data in the database unless <tt>UPDATE</tt>s are performed. We start our discussion of
+                    string functions with string concatenation<a name="IDX-CHP-5-0294"></a>
+                    <a name="IDX-CHP-5-0295"></a>
+                    .
+                </P>
+                <a name="learnsqlsvr05-CHP-5-SECT-4.1"></a>
+                <H4 id="title-IDA0WG15" class="docSection2Title">5.4.1. String Concatenation</h4>
+                <p class="docText">String manipulations often require <span class="docEmphasis">concatenation</span>,
+                    which means to connect things together. In this section we look at the string concatenation operator
+                    available in SQL Server , the +.</p>
+                <p class="docText">To see an example of concatenation, using the <tt>Employee</tt> table, we will first
+                    list the names of the employees using the following statement:</p>
+                <pre>
+    SELECT names
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</P>
+                <pre>
+    names
+    ---------------
+    Sumon Bagui
+    Sudip Bagui
+    Priyashi Saha
+    Ed Evans
+    Genny George
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Now, suppose you would like to concatenate each of the names with ", Esq." Type the
+                    following:</P>
+                <pre>
+    SELECT names + ', Esq.' AS [Employee Names]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query produces:</p>
+                <pre>
+    Employee Names
+    ---------------------
+    Sumon Bagui, Esq.
+    Sudip Bagui, Esq.
+    Priyashi Saha, Esq.
+    Ed Evans, Esq.
+    Genny George, Esq.
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">As another example, suppose you want to add a series of dots (<tt>.....</tt>) to the
+                    left side of the <tt>names</tt> column. You would type:</p>
+                <pre>
+    SELECT ('.....'+ names) AS [Employee Names]
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">to produce the following result set:</P>
+                <pre>
+    Employee Names
+    --------------------
+    .....Sumon Bagui
+    .....Sudip Bagui
+    .....Priyashi Saha
+    .....Ed Evans
+    .....Genny George
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">Similarly, to add <tt>.....</tt> to the right side of <tt>names</tt> column, type:
+                </p>
+                <pre>
+    SELECT (names + '.....') AS [Employee Names]
+    FROM    Employee
+</pre><br>
+
+                <p class="docText">This query returns:</p>
+                <pre>
+    Employee Names
+    --------------------
+    Sumon Bagui.....
+    Sudip Bagui.....
+    Priyashi Saha.....
+    Ed Evans.....
+    Genny George.....
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.2"></a>
+                <H4 id="title-IDAWYG15" class="docSection2Title">5.4.2. String Extractors</h4>
+                <p class="docText">SQL has several string extractor functions. This section briefly describes some of
+                    the more useful string extractors, like <tt>SUBSTRING</tt>,<a name="IDX-CHP-5-0296"></a>
+                    <a name="IDX-CHP-5-0297"></a>
+                    <tt>LEFT</tt>, <tt>RIGHT</tt>, <tt>LTRIM</tt>, <tt>RTRIM</tt>, and <tt>CHARINDEX</tt>. Now suppose
+                    (again) that the <tt>Employee</tt> table has the following data:
+                </p>
+                <pre>
+    names           wage         hours
+    --------------- ------------ -----------
+    Sumon Bagui     10.0000      40
+    Sudip Bagui     15.0000      30
+    Priyashi Saha   18.0000      NULL
+    Ed Evans        NULL         10
+    Genny George    20.0000      40
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">And suppose you want to display the names in the following format:</p>
+                <pre>
+    Employee Names
+    ------------------------
+    Sumon, B.
+    Sudip, B.
+    Priyashi, S.
+    Ed, E.
+    Genny, G.
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">You can achieve this output by using a combination of the string functions to break
+                    down <tt>names</tt> into parts, re-assemble (concatenate) those parts, and then concatenate a comma
+                    and period in their respective (appropriate) locations. Before we completely solve this particular
+                    problem, in the next few sections we will explain the string functions that you will need to get
+                    this output. Then we will show you how to get this result.</P>
+                <a name="learnsqlsvr05-CHP-5-SECT-4.2.1"></a>
+                <h5 id="title-IDAD0G15" class="docSection3Title">5.4.2.1. The SUBSTRING function</h5><a
+                    name="IDX-CHP-5-0298"></a>
+                <a name="IDX-CHP-5-0299"></a>
+                <a name="IDX-CHP-5-0300"></a>
+                <a name="IDX-CHP-5-0301"></a>
+
+                <p class="docText">The <tt>SUBSTRING</tt> function returns part of a string. Following is the format for
+                    the <tt>SUBSTRING</tt> function:</p>
+                <pre>
+    SUBSTRING(<tt><i>stringexpression</i></tt>, <tt><i>startposition</i></tt>, <tt><i>length</i></tt>)
+</pre><br>
+
+                <p class="docText"><tt><i>stringexpression</i></tt> is the column that we will be using,
+                    <tt><i>startposition</i></tt> tells SQL Server where in the <tt><I>stringexpression</i></tt> to
+                    start retrieving characters from, and <tt><i>length</i></tt> tells SQL Server how many characters to
+                    extract. All three parameters are <span class="docEmphasis">required</span> in SQL Server's
+                    <tt>SUBSTRING</tt> function. For example, type the following:
+                </P>
+                <pre>
+    SELECT names, SUBSTRING(names,2,4) AS [middle of names]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query returns:</P>
+                <pre>
+    names           middle of names
+    --------------- ---------------
+    Sumon Bagui     umon
+    Sudip Bagui     udip
+    Priyashi Saha   riya
+    Ed Evans        d Ev
+    Genny George    enny
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText"><tt>SUBSTRING(names,2,4)</tt> started from the second position in the column,
+                    <tt>names</tt>, and extracted four characters starting from position 2.
+                </P>
+                <p class="docText">Strings in SQL Server are indexed from 1. If you start at position 0, the
+                    following query will show you what you will get:</p>
+                <pre>
+    SELECT names, "first letter of names" = SUBSTRING(names,0,2)
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">You will get:</p>
+                <pre>
+    names           first letter of names
+    --------------- ---------------------
+    Sumon Bagui     S
+    Sudip Bagui     S
+    Priyashi Saha   P
+    Ed Evans        E
+    Genny George    G
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">In the previous output, we got the first letter of the names because the
+                    <tt>SUBSTRING</tt> function started extracting characters starting from position zero (the position
+                    before the first letter) and went two character positionswhich picked up the first letter of the
+                    <tt>names field.</tt>
+                </P>
+                <p class="docText">We could have also achieved the same output with:</P>
+                <pre>
+    SELECT names, "first letter of names" = SUBSTRING(names,1,1)
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">Here the <tt>SUBSTRING</tt> function would start extracting characters starting from
+                    position 1 and go only one character position, hence ending up with only one characterwhich picks up
+                    the first letter of the <tt>names field.</tt></P>
+                <p class="docText">SQL Server's <tt>SUBSTRING</tt> function actually allows you to start at a negative
+                    position relative to the string. For example, if you typed:</p>
+                <pre>
+    SELECT names, "first letter of names" = SUBSTRING(names,-1,3)
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">You would get the same output as the previous query also, because you are starting
+                    two positions before the first character of <tt>names</tt>, and going three character places, so you
+                    get the first letter of the name.</p>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.2.2"></a>
+                <h5 id="title-IDAK3G15" class="docSection3Title">5.4.2.2. The LEFT and RIGHT functions</H5><a
+                    name="IDX-CHP-5-0302"></a>
+                <a name="IDX-CHP-5-0303"></a>
+                <a name="IDX-CHP-5-0304"></a>
+                <a name="IDX-CHP-5-0305"></a>
+
+                <p class="docText">These functions return a portion of a string, starting from either the left or right
+                    side of <tt><I>stringexpression</i></tt>. Following are the general formats for the <tt>LEFT</tt>
+                    and <tt>RIGHT</tt> functions respectively:</p>
+                <pre>
+    LEFT(<tt><i>stringexpression</i></tt>, <tt><I>n</i></tt>)
+</pre><br>
+
+                <p class="docText">Or:</p>
+                <pre>
+    RIGHT(<tt><i>stringexpression</I></tt>, <tt><I>n</i></tt>)
+</pre><br>
+
+                <p class="docText">The <tt>LEFT</tt> function starts from the <tt>LEFT</tt> of the
+                    <tt><i>stringexpression</i></tt> or column and returns <tt><i>n</i></tt> characters, and the
+                    <tt>RIGHT</tt> function starts from the right of the <tt><i>stringexpression</i></tt> or column and
+                    returns <tt><i>n</i></tt> characters.
+                </p>
+                <p class="docText">For example, to get the first three characters from the <tt>names</tt> column, type:
+                </p>
+                <pre>
+    SELECT names, LEFT(names,3) AS [left]
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query produces:</p>
+                <pre>
+    names           left
+    --------------- ----
+    Sumon Bagui     Sum
+    Sudip Bagui     Sud
+    Priyashi Saha   Pri
+    Ed Evans        Ed
+    Genny George    Gen
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <p class="docText">To get the last three characters from the <tt>names</tt> column (here the count will
+                    start from the right of the column, <tt>names</tt>), type:</p>
+                <pre>
+    SELECT names, RIGHT(names,3) AS [right]
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query produces:</p>
+                <pre>
+    names           right
+    --------------- -------
+    Sumon Bagui     gui
+    Sudip Bagui     gui
+    Priyashi Saha   aha
+    Ed Evans        ans
+    Genny George    rge
+
+    (5 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.2.3"></a>
+                <H5 id="title-IDALAH15" class="docSection3Title">5.4.2.3. The LTRIM and RTRIM functions</H5><a
+                    name="IDX-CHP-5-0306"></a>
+                <a name="IDX-CHP-5-0307"></a>
+                <a name="IDX-CHP-5-0308"></a>
+                <a name="IDX-CHP-5-0309"></a>
+                <a name="IDX-CHP-5-0310"></a>
+                <a name="IDX-CHP-5-0311"></a>
+                <a name="IDX-CHP-5-0312"></a>
+                <a name="IDX-CHP-5-0313"></a>
+
+                <p class="docText"><tt>LTRIM</tt> removes blanks from the beginning (left) of a string. For example, if
+                    three blank spaces appear to the left of a string such as <tt>' Ranu'</tt>, you can remove the blank
+                    spaces with the following query:</P>
+                <pre>
+    SELECT LTRIM('  Ranu') AS names
+</pre><BR>
+
+                <p class="docText">which produces:</p>
+                <pre>
+    names
+    -------
+    Ranu
+
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">It does not matter how many blank spaces precede the non-blank character. All leading
+                    blanks will be excised.</p>
+                <p class="docText">Similarly, <tt>RTRIM</tt> removes blanks from the end (right) of a string. For
+                    example, if blank spaces appear to the right of Ranu in the <tt>names</tt> column, you could remove
+                    the blank spaces using the <tt>RTRIM</tt>, and then concatenate "Saha" with the + sign, as shown
+                    here:</P>
+                <pre>
+    SELECT RTRIM('Ranu   ') + ' Saha' AS names
+</pre><BR>
+
+                <p class="docText">This query produces:</P>
+                <pre>
+    names
+    ------------
+    Ranu Saha
+
+    (1 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.2.4"></a>
+                <H5 id="title-IDAUCH15" class="docSection3Title">5.4.2.4. The CHARINDEX function</h5><a
+                    name="IDX-CHP-5-0314"></a>
+                <a name="IDX-CHP-5-0315"></a>
+                <a name="IDX-CHP-5-0316"></a>
+
+                <p class="docText">The <tt>CHARINDEX</tt> function returns the starting position of a specified pattern.
+                    For example, if we wish to find the position of a space in the employee names in the
+                    <tt>Employee</tt> table, we could type:
+                </P>
+                <pre>
+    SELECT names, "Position of Space in Employee Names" = CHARINDEX(' ',names)
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query would give:</p>
+                <pre>
+    names           Position of Space in Employee Names
+    --------------- -----------------------------------
+    Sumon Bagui     6
+    Sudip Bagui     6
+    Priyashi Saha   9
+    Ed Evans        3
+    Genny George    6
+
+    (5 row(s) affected)
+</pre><BR>
+
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">In Oracle, <tt>CHARINDEX</tt> is called <tt>INSTR</tt>.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </p><br>
+                <p class="docText">Now that you know how to use quite a few string extractor functions, you can combine
+                    them to produce the following output, which will require a nesting of string functions:</p>
+                <pre>
+    Employee Names
+    ------------------------
+    Sumon, B.
+    Sudip, B.
+    Priyashi, S.
+    Ed, E.
+    Genny, G.
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">Following is the query to achieve the preceding output:</p>
+                <pre>
+    SELECT "Employee Names" = SUBSTRING(names,1,CHARINDEX(' ',names)-1) + ', ' +
+    SUBSTRING(names, CHARINDEX(' ',names)+1,1) + '.'
+    FROM    Employee
+</pre><br>
+
+                <p class="docText">In this query, we get the first name with the <tt>SUBSTRING(names,1,CHARINDEX('
+                        ',names)-1)</tt> portion. <tt>SUBSTRING</tt> begins in the first position of <tt>names</tt>.
+                    <tt>CHARINDEX(' ',names)</tt> finds the first space. We need only the characters up to the first
+                    space, so we use <tt>CHARINDEX(' ',names) -1</tt>. We then concatenate the comma and a space with
+                    <tt>+ (', ' )</tt>. Then, to extract the first character after the first space in the original
+                    <tt>names</tt> column, we use <tt>SUBSTRING(names, CHARINDEX(' ',names)+1,1)</tt>, followed by
+                    concatenation of a period.
+                </p>
+                <p class="docText">To display the names in a more useful mannerthat is, the last name, comma, and then
+                    the first initialwe would have to use the following query:</p>
+                <pre>
+    SELECT "Employee Names" = SUBSTRING(names, (CHARINDEX(' ',names)+1 ), (CHARINDEX(' ',
+    names))) + ', ' + SUBSTRING(names,1,1) + '.'
+    FROM    Employee
+</pre><br>
+
+                <p class="docText">which would produce the following output:</p>
+                <pre>
+    Employee Names
+    ------------------------
+    Bagui, S.
+    Bagui, S.
+    Saha, P.
+    Eva, E.
+    George, G.
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">In this query, we get the last name with <tt>SUBSTRING(names, (CHARINDEX(' ',names)+1
+                        )</tt>, <tt>(CHARINDEX(' ', names)))</tt>. The <tt>SUBSTRING</tt> begins at the space and picks
+                    up the rest of the characters after the space. Then a comma and a space are concatenated, and then
+                    the first letter of the first name and a period are concatenated.</p>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.3"></a>
+                <h4 id="title-IDANFH15" class="docSection2Title">5.4.3. The UPPER and LOWER Functions</h4><a
+                    name="IDX-CHP-5-0317"></a>
+                <a name="IDX-CHP-5-0318"></a>
+                <a name="IDX-CHP-5-0319"></a>
+                <a name="IDX-CHP-5-0320"></a>
+
+                <p class="docText">To produce all the fields in the result set (output) in uppercase or in lowercase,
+                    you can use the <tt>UPPER</tt> or <tt>LOWER</tt> functions. For example, to produce all the names in
+                    the <tt>Employee</tt> table in uppercase, type:</P>
+                <pre>
+    SELECT UPPER(names) AS [NAMES IN CAPS]
+    FROM   Employee
+</pre><br>
+
+                <p class="docText">This query produces the following output:</p>
+                <pre>
+    NAMES IN CAPS
+    ------------------------
+    SUMON BAGUI
+    SUDIP BAGUI
+    PRIYASHI SAHA
+    ED EVANS
+    GENNY GEORGE
+
+    (5 row(s) affected)
+</pre><br>
+
+                <p class="docText">To produce all the names in lowercase, you would type:</P>
+                <pre>
+    SELECT LOWER(names) AS [NAMES IN SMALL]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">To further illustrate the nesting of functions, and to produce, in all uppercase, the
+                    first name followed by the first letter of the last name, type:</P>
+                <pre>
+    SELECT "Employee Names" = UPPER(SUBSTRING(names,1,CHARINDEX(' ',names)-1)) + ', ' +
+    SUBSTRING(names,CHARINDEX(' ',names)+1,1) + '.'
+    FROM    Employee
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</P>
+                <pre>
+    Employee Names
+    -----------------------------------
+    SUMON, B.
+    SUDIP, B.
+    PRIYASHI, S.
+    ED, E.
+    GENNY, G.
+
+    (5 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.4"></a>
+                <h4 id="title-IDAEHH15" class="docSection2Title">5.4.4. The LEN Function</h4><a
+                    name="IDX-CHP-5-0321"></a>
+                <a name="IDX-CHP-5-0322"></a>
+                <a name="IDX-CHP-5-0323"></a>
+                <a name="IDX-CHP-5-0324"></a>
+                <a name="IDX-CHP-5-0325"></a>
+
+                <p class="docText">The <tt>LEN</tt> function returns the length (number of characters) of a desired
+                    string excluding trailing blanks. For example, to list the lengths of the full names (including any
+                    spaces) in the <tt>Employee</tt> table, type:</P>
+                <pre>
+    SELECT names, LEN(names) AS [Length of Names]
+    FROM   Employee
+</pre><BR>
+
+                <p class="docText">This query produces the following output:</P>
+                <pre>
+    names           Length of Names
+    --------------- ---------------
+    Sumon Bagui     11
+    Sudip Bagui     11
+    Priyashi Saha   13
+    Ed Evans        8
+    Genny George    12
+
+    (5 row(s) affected)
+</pre><BR>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5"></a>
+                <H4 id="title-IDARIH15" class="docSection2Title">5.4.5. Matching Substrings Using LIKE</h4><a
+                    name="IDX-CHP-5-0326"></a>
+                <a name="IDX-CHP-5-0327"></a>
+                <a name="IDX-CHP-5-0328"></a>
+                <a name="IDX-CHP-5-0329"></a>
+
+                <p class="docText">Often we want to use part of a string as a condition in a query. For example,
+                    consider the <tt>Section</tt> table (from our <tt>Student_course</tt> database), which has the
+                    following data:</P>
+                <pre>
+    SECTION_ID COURSE_NUM SEMESTER YEAR INSTRUCTOR BLDG   ROOM
+    ---------- ---------- -------- ---- ---------- ------ ------
+    85         MATH2410   FALL     98   KING       36     123
+    86         MATH5501   FALL     98   EMERSON    36     123
+    87         ENGL3401   FALL     98   HILLARY    13     101
+    .
+    .
+    .
+</pre><br>
+
+                <p class="docText">We might want to know something about Math coursescourses with the prefix
+                    <tt>MATH</tt>. In this situation, we need an operator that can determine whether a substring exists
+                    in an attribute. Although we have seen how to handle this type of question with both the
+                    <tt>SUBSTRING</tt> and <tt>CHARINDEX</tt> functions, another common way to handle this situation in
+                    a <tt>WHERE</tt> clause is by using the <tt>LIKE</tt> function.
+                </p>
+                <p class="docText">Using <tt>LIKE</tt> as an "existence" match entails finding whether a character
+                    string exists in a string or valueif the string exists, the row is <tt>SELECT</tt>ed for inclusion
+                    in the result set. Again of course, we could use <tt>SUBSTRING</tt> and/or <tt>CHARINDEX</tt> for
+                    this, but <tt>LIKE</tt> is a powerful, common and flexible alternative. This existence-type of the
+                    <tt>LIKE</tt> query is useful when the position of the character string sought may be in various
+                    places in the substring. SQL Server uses the wildcard character, <tt>%</tt>, at the beginning
+                    or end of a <tt>LIKE</tt>-string, when looking for the existence of substrings. For example, suppose
+                    we want to find all names that have "Smith" in our <tt>Student</tt> table, type the following:
+                </P>
+                <pre>
+    SELECT *
+    FROM   Student
+    WHERE  sname = 'SMITH'
+</pre><BR>
+
+                <p class="docText">which produces the following output:</p>
+                <pre>
+    STNO  SNAME        MAJOR  CLASS  BDATE
+    ----- ----------- ------  -----  -------------------------------
+    88    Smith        NULL   NULL   10/15/1979 12:00:00 AM
+
+    (1 row(s) affected)
+</pre><br>
+
+                <p class="docText">Note that the case (upper or lower) in the statement <tt>WHERE sname = 'SMITH'</tt>
+                    does not matter, because SQL Server is handled as if it is all uppercase (this is by default,
+                    and can be changed), although it is displayed in mixed case (and even if it had been entered in
+                    mixed case). In other words, we can say that data in SQL Server is <span
+                        class="docEmphasis">not</span> case-sensitive by default.</p>
+                <p class="docText">To count how many people have a name of "Smith," type:</p>
+                <pre>
+    SELECT COUNT(*) AS Count
+    FROM   Student
+    WHERE  sname = 'Smith'
+</pre><BR>
+
+                <p class="docText">which produces:</p>
+                <pre>
+    Count
+    -----------
+    1
+
+    (1 row(s) affected)
+</pre><br>
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5.1"></a>
+                <h5 id="title-IDAILH15" class="docSection3Title">5.4.5.1. Using the wildcard character with LIKE</h5>
+                <p class="docText">The percentage sign (<tt>%</tt>) is SQL Server's wildcard character. For example, if
+                    we wanted to find all the names that had some form of "Smith" in their names from the Student table,
+                    we would use <tt>%</tt> on both ends of "Smith," as shown here:</P>
+                <pre>
+    SELECT *
+    FROM   Student
+    WHERE  sname LIKE '%Smith%'
+</pre><BR>
+
+                <p class="docText">This query produces the following output, showing any "Smith" pattern in
+                    <tt>sname</tt>:
+                </p>
+                <pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    88     Smith                NULL  NULL   1979-10-15 00:00:00
+    147    Smithly              ENGL  2      1980-05-13 00:00:00
+    151    Losmith              CHEM  3      1981-01-15 00:00:00
+
+    (3 row(s) affected)
+</pre><br>
+
+                <p class="docText">To find any pattern starting with "Smith" from the <tt>Student</tt> table, you would
+                    type:</p>
+                <pre>
+    SELECT *
+    FROM   Student
+    WHERE  sname LIKE 'Smith%'
+</pre><br>
+
+                <p class="docText">This query would produce:</p>
+                <pre>
+    STNO   SNAME                MAJOR CLASS  BDATE
+    ------ -------------------- ----- ------ -----------------------
+    88     Smith                NULL  NULL   1979-10-15 00:00:00
+    147    Smithly              ENGL  2      1980-05-13 00:00:00
+
+    (2 row(s) affected)
+</pre><br>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">By default, it is not necessary to use <tt>UPPER</tt> or
+                                            <tt>LOWER</tt> before <tt>sname</tt> in the previous query since data in SQL
+                                            Server 2005 is not case sensitive. You can change this however, by changing
+                                            SQL Server's database configurations.
+                                        </p>
+                                    </TD>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </P><BR>
+                <p class="docText">To find the Math courses (any <tt>course_num</tt> starting with <tt>MATH</tt>) from
+                    the <tt>Section</tt> table, you could pose a wildcard match with a <tt>LIKE</tt> as follows:</P>
+                <pre>
+    SELECT *
+    FROM   Section
+    WHERE  course_num LIKE 'MATH%'
+</pre><BR>
+
+                <p class="docText">This query would produce the following output:</P>
+                <pre>
+    SECTION_ID COURSE_NUM SEMESTER YEAR INSTRUCTOR BLDG  ROOM
+    ---------- ---------- -------- ---- ---------- ----- -----
+    85         MATH2410   FALL     98   KING       36    123
+    86         MATH5501   FALL     98   EMERSON    36    123
+    107        MATH2333   SPRING   00   CHANG      36    123
+    109        MATH5501   FALL     99   CHANG      36    123
+    112        MATH2410   FALL     99   CHANG      36    123
+    158        MATH2410   SPRING   98   NULL       36    123
+
+    (6 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5.2"></a>
+                <h5 id="title-IDAHNH15" class="docSection3Title">5.4.5.2. Finding a range of characters</h5>
+                <p class="docText">SQL Server allows some POSIX-compliant regular expression patterns in
+                    <tt>LIKE</tt> clauses. We will illustrate some of these extensions for pattern matching.
+                </P>
+                <p class="docText"><tt>LIKE</tt> can be used to find a range of characters. For example, to find all
+                    grades between C and F in the <tt>Grade_report</tt> table, type:</P>
+                <pre>
+    SELECT DISTINCT student_number, grade
+    FROM   Grade_report
+    WHERE  grade LIKE '[c-f]'
+    AND    student_number &gt; 100
+</pre><BR>
+
+                <p class="docText">This query produces 15 rows of output:</P>
+                <pre>
+    student_number grade
+    -------------- -----
+    125            C
+    126            C
+    127            C
+    128            F
+    130            C
+    131            C
+    145            F
+    147            C
+    148            C
+    151            C
+    153            C
+    158            C
+    160            C
+    161            C
+    163            C
+
+    (15 row(s) affected)
+</pre><BR>
+
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <TR>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <TD width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></TD>
+                                    <td valign="top">
+                                        <p class="docText">By default, note that <tt>LIKE</tt> is also case-insensitive.
+                                            You can change this, however, by changing SQL Server's database
+                                            configurations.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </tr>
+                </table>
+                </p><br>
+                <p class="docText">To find all grades from the <tt>Grade_report</tt> table that are <span
+                        class="docEmphasis">not</span> between C and F, we use a caret (<tt>^</tt>) before the range we
+                    do not want to find:</p>
+                <pre>
+    SELECT DISTINCT student_number, grade
+    FROM   Grade_report
+    WHERE  grade LIKE '[^c-f]'
+    AND    student_number &gt; 100
+</pre><BR>
+
+                <p class="docText">This query produces the following 21 rows of output:</P>
+                <pre>
+    student_number grade
+    -------------- -----
+    121            B
+    122            B
+    123            A
+    123            B
+    125            A
+    125            B
+    126            A
+    126            B
+    127            A
+    127            B
+    129            A
+    129            B
+    132            B
+    142            A
+    143            B
+    144            B
+    146            B
+    147            B
+    148            B
+    155            B
+    157            B
+
+    (21 row(s) affected)
+</pre><br>
+
+                <p class="docText">As another example, to find all the courses from the <tt>Section</tt> table that
+                    start with "C," but do not have "h" as the second character, we could type:</p>
+                <pre>
+    SELECT *
+    FROM   Section
+    WHERE  course_num LIKE 'C[^h]%'
+</pre><br>
+
+                <p class="docText">This query would give the following 10 rows of output:</p>
+                <pre>
+    SECTION_ID COURSE_NUM SEMESTER YEAR INSTRUCTOR BLDG  ROOM
+    ---------- ---------- -------- ---- ---------- ----- -----
+    90         COSC3380   SPRING   99   HARDESTY   79    179
+    91         COSC3701   FALL     98   NULL       79    179
+    92         COSC1310   FALL     98   ANDERSON   79    179
+    93         COSC1310   SPRING   99   RAFAELT    79    179
+    96         COSC2025   FALL     98   RAFAELT    79    179
+    98         COSC3380   FALL     99   HARDESTY   79    179
+    102        COSC3320   SPRING   99   KNUTH      79    179
+    119        COSC1310   FALL     99   ANDERSON   79    179
+    135        COSC3380   FALL     99   STONE      79    179
+    145        COSC1310   SPRING   99   JONES      79    179
+
+    (10 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5.3"></a>
+                <h5 id="title-IDABPH15" class="docSection3Title">5.4.5.3. Finding a particular character</h5>
+                <p class="docText">To find a particular character using <tt>LIKE</tt>, we would place the character in
+                    square brackets <tt>[]</tt>. For example, to find all the names from the <tt>Student</tt> table that
+                    begin with a B or G and end in "ill," we could type:</p>
+                <pre>
+    SELECT sname
+    FROM    Student
+    WHERE sname LIKE '[BG]ill'
+</pre><br>
+
+                <p class="docText">We would get:</p>
+                <pre>
+    sname
+    --------------------
+    Bill
+
+    (1 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5.4"></a>
+                <h5 id="title-IDAXPH15" class="docSection3Title">5.4.5.4. Finding a single character or single digitthe
+                    underscore wildcard character</h5>
+                <p class="docText">A single character or digit can be found in a particular position in a string by
+                    using an underscore, <tt>_</tt>, for the wildcard in that position in the string. For example, to
+                    find all students with <tt>student_number</tt>s in the 130s (130...139) range from the
+                    <tt>Student</tt> table, type:
+                </p>
+                <pre>
+    SELECT DISTINCT student_number, grade
+    FROM   Grade_report
+    WHERE  student_number LIKE '13_'
+</pre><BR>
+
+                <p class="docText">This query would produce the following:</p>
+                <pre>
+    student_number grade
+    -------------- -----
+    130            C
+    131            C
+    132            B
+
+    (3 row(s) affected)
+</pre><br>
+
+
+                <a name="learnsqlsvr05-CHP-5-SECT-4.5.5"></a>
+                <h5 id="title-IDAQQH15" class="docSection3Title">5.4.5.5. Using NOT LIKE</H5>
+                <p class="docText">In SQL Server , the <tt>LIKE</tt> operator can be negated with the <tt>NOT</tt>.
+                    For example, to get a listing of the non math courses and the courses that do not start in "C" from
+                    the <tt>Section</tt> table, we would type:</P>
+                <pre>
+    SELECT *
+    FROM   Section
+    WHERE  course_num NOT LIKE 'MATH%'
+    AND    Course_num NOT LIKE 'C%'
+</pre><BR>
+
+                <p class="docText">This query would give the following 14 rows of output:</P>
+                <pre>
+    SECTION_ID COURSE_NUM SEMESTER YEAR INSTRUCTOR BLDG   ROOM
+    ---------- ---------- -------- ---- ---------- ------ ------
+    87         ENGL3401   FALL     98   HILLARY    13     101
+    88         ENGL3520   FALL     99   HILLARY    13     101
+    89         ENGL3520   SPRING   99   HILLARY    13     101
+    94         ACCT3464   FALL     98   RODRIGUEZ  74     NULL
+    95         ACCT2220   SPRING   99   RODRIQUEZ  74     NULL
+    97         ACCT3333   FALL     99   RODRIQUEZ  74     NULL
+    99         ENGL3401   FALL     99   HILLARY    13     101
+    100        POLY1201   FALL     99   SCHMIDT    NULL   NULL
+    101        POLY2103   SPRING   00   SCHMIDT    NULL   NULL
+    104        POLY4103   SPRING   00   SCHMIDT    NULL   NULL
+    126        ENGL1010   FALL     98   HERMANO    13     101
+    127        ENGL1011   SPRING   99   HERMANO    13     101
+    133        ENGL1010   FALL     99   HERMANO    13     101
+    134        ENGL1011   SPRING   00   HERMANO    13     101
+
+    (14 row(s) affected)
+</pre><BR>
+
+
+
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-3.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-5-SECT-5.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

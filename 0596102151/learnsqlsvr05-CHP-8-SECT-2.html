@@ -1,0 +1,151 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 8.2.&nbsp; The Subquery as a Join</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-8-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-8-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <TR>
+            <td valign="top"><a name="learnsqlsvr05-CHP-8-SECT-2"></a>
+                <h3 id="title-IDAJ43U5" class="docSection1Title">8.2. The Subquery as a Join</H3><a
+                    name="IDX-CHP-8-0434"></a>
+                <a name="IDX-CHP-8-0435"></a>
+
+                <p class="docText">An alternative way to perform the preceding query would be to use a join instead of a
+                    subquery, as follows:</p>
+                <pre>
+    SELECT  Student.sname, Student.stno
+    FROM    Student, Grade_report gr
+    WHERE   Student.stno = gr.student_number
+    AND        (gr.grade = 'B' OR gr.grade = 'A')
+</pre><br>
+
+                <p class="docText">This query produces 67 rows of output (of which we show the first 15 rows here):</P>
+                <pre>
+    sname     stno
+    --------- ------
+    Lineas    2
+    Lineas    2
+    Lineas    2
+    Lineas    2
+    Mary      3
+    Mary      3
+    Mary      3
+    Mary      3
+    Mary      3
+    Mary      3
+    Brenda    8
+    Brenda    8
+    Brenda    8
+    Richard   10
+    Kelly     13
+    .
+    .
+    .
+
+    (67 row(s) affected)
+</pre><br>
+
+                <p class="docText">Now, the question is why the join has 67 rows of output instead of 31 rows of output
+                    (produced by the subquery).</P>
+                <p class="docText">When the join version is used to combine tables, any <tt>Student-Grade_report</tt>
+                    row (tuple) that has equal student numbers and a grade of A or B is selected. Thus, you should
+                    expect many duplicate names in the output. To get the result without duplicates, add the qualifier
+                    <tt>DISTINCT</tt> to the join query as follows:</p>
+                <pre>
+    SELECT DISTINCT Student.sname, Student.stno
+    FROM    Student, Grade_report AS gr
+    WHERE   Student.stno = gr.student_number
+    AND       (gr.grade = 'B' OR gr.grade = 'A')
+</pre><BR>
+
+                <p class="docText">This query produces the following output (31 rows):</P>
+                <pre>
+    sname                stno
+    -------------------- ------
+    Lineas               2
+    Mary                 3
+    Zelda                5
+    Ken                  6
+    Mario                7
+    Brenda               8
+    Richard              10
+    Kelly                13
+    Lujack               14
+    Reva                 15
+    Harley               19
+    Donald               20
+    Chris                24
+    Lynette              34
+    Susan                49
+    Hillary              121
+    Phoebe               122
+    Holly                123
+    Sadie                125
+    Jessica              126
+    Steve                127
+    Cedric               129
+    George               132
+    Jerry                142
+    Cramer               143
+    Fraiser              144
+    Francis              146
+    Smithly              147
+    Sebastian            148
+    Lindsay              155
+    Stephanie            157
+
+    (31 row(s) affected)
+</pre><BR>
+
+                <p class="docText">When <tt>DISTINCT</tt> is used, internal sorting is performed before the result set
+                    is displayed. Such internal sorting may decrease response time for a query.</P>
+                <p class="docText">In the subquery version of the query, duplication of names does not occur in the
+                    output. This is so because you are setting up a set (the subquery) from which you will choose namesa
+                    given name is either in the subquery set or it is not. Remember that the student number
+                    (<tt>stno</tt>) is unique in the <tt>Student</tt> table.</p>
+                <p class="docText">Also, the question of which is more efficient, the join or the subquery, depends on
+                    which SQL language and database you are using. Without using extra tools, one way to test
+                    alternatives is to try the queries on the data or a subset of the data. Database systems such as SQL
+                    Server provide ways (tools) to find out how queries are executed.</P>
+
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-8-SECT-1.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-8-SECT-3.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<head>
+    <title>Section 3.5.&nbsp; The ALTER TABLE Command</title>
+    <link rel="STYLESHEET" type="text/css" href="images/style.css">
+    <link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <TD valign="top"><a name="learnsqlsvr05-CHP-3-SECT-5"></a>
+                <H3 id="title-IDAYPC05" class="docSection1Title">3.5. The ALTER TABLE Command</H3>
+                <p class="docText">In the last few sections we looked at how to add, change, and update rows in a table
+                    with the <tt>INSERT</tt> and <tt>UPDATE</tt> commands. In this section, we discuss how you can add,
+                    change (modify), and delete <span class="docEmphasis">columns</span> in a table's definition by
+                    using SQL's <tt>ALTER TABLE</tt> command. <tt>ALTER TABLE</tt> commands are known as data definition
+                    (DDL) commands, because they change the definition of a table.</P>
+                <a name="learnsqlsvr05-CHP-3-SECT-5.1"></a>
+                <H4 id="title-IDAOQC05" class="docSection2Title">3.5.1. Adding a Column to a Table</h4>
+                <p class="docText">You may add columns to a table with little difficulty. The general syntax for
+                    adding<a name="IDX-CHP-3-0187"></a>
+                    a column to a table is:</p>
+                <pre>
+ALTER TABLE<a name="IDX-CHP-3-0188"></a> 
+ Tablename
+ADD column-name type
+</pre><br>
+
+                <p class="docText">For example, to add a column called <tt>bonus</tt> (a <tt>SMALLMONEY</tt> column) to
+                    the <tt>Employee</tt> table, you type in the following:</P>
+                <pre>
+ALTER TABLE Employee
+ADD bonus SMALLMONEY
+</pre><BR>
+
+                <p class="docText">This command alters the table definition of the <tt>Employee</tt> table, as shown in
+                    <a class="docLink" href="#learnsqlsvr05-CHP-3-FIG-3">Figure 3-3</a> (to get <a class="docLink"
+                        href="#learnsqlsvr05-CHP-3-FIG-3">Figure 3-3</a>, click on the <tt>+</tt> beside the
+                    <tt>Employee</tt> table and then click on the <tt>+</tt> beside <tt>Columns</tt>--in the <tt>Object
+                        Explorer</tt> on the left side of your screen):</P>
+                <a name="learnsqlsvr05-CHP-3-FIG-3"></a>
+                <P>
+                    <center>
+                        <H5 class="docFigureTitle">Figure 3-3. Column added to Employee table</h5>
+                        <img border="0" alt="" width="207" height="119" SRC="images/learnsqlsvr05_0303.jpg">
+                    </center>
+                </P><br>
+                <p class="docText">When columns are added to existing tables, they will initially contain null values.
+                    Data may be added to the new column using an <tt>UPDATE</tt> command.</p>
+
+                <a name="learnsqlsvr05-CHP-3-SECT-5.2"></a>
+                <H4 id="title-IDA1SC05" class="docSection2Title">3.5.2. Changing a Column's Data Type in a Table</H4><a
+                    name="IDX-CHP-3-0189"></a>
+                <a name="IDX-CHP-3-0190"></a>
+                <a name="IDX-CHP-3-0191"></a>
+                <a name="IDX-CHP-3-0192"></a>
+
+                <p class="docText">In SQL Server , you can change a column's data type with existing data in it,
+                    provided that the new column data type will accommodate the existing data. The general syntax for
+                    changing a column's data type in a table is:</p>
+                <pre>
+ALTER TABLE Tablename
+ALTER COLUMN column-name new_type
+</pre><br>
+
+                <p class="docText">For example, to change the data type of the <tt>bonus</tt> column from
+                    <tt>SMALLMONEY</tt> to <tt>FLOAT</tt>, you would type the following:</p>
+                <pre>
+ALTER TABLE EMPLOYEE
+ALTER COLUMN bonus FLOAT
+</pre><br>
+
+                <p class="docText">This query would produce the table definition of the <tt>Employee</tt> table shown in
+                    <a class="docLink" href="#learnsqlsvr05-CHP-3-FIG-4">Figure 3-4</a>.</P>
+                <a name="learnsqlsvr05-CHP-3-FIG-4"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 3-4. Altered column's data type for bonus column in the
+                            Employee table</h5>
+                        <img border="0" alt="" width="339" height="141" SRC="images/learnsqlsvr05_0304.jpg">
+                    </center>
+                </p><BR>
+                <P>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54"
+                                            alt=""></td>
+                                    <td valign="top">
+                                        <p class="docText">You may have to refresh the <tt>Employee</tt> table before
+                                            you can see this change made to the table definition. To refresh the
+                                            <tt>Employee</tt> table, right click on the <tt>Employee</tt> table and then
+                                            select Refresh. Then, select the <tt>Employee</tt> table and select Modify.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </p><br>
+                <a name="learnsqlsvr05-CHP-3-SECT-5.2.1"></a>
+                <h5 id="title-IDAHVC05" class="docSection3Title">3.5.2.1. Changing a column's length in a table</H5>
+                <p class="docText">You may want to change the size of a column in a table. You typically make a column
+                    larger, and SQL Server will not have a problem with that, because larger columns will accommodate
+                    existing data. But, if you want to make a column smaller (which is unusual), sometimes SQL Server
+                    will let you do it and other times it will not.</p>
+                <p class="docText">When will SQL Server allow you to reduce the length of your column without any
+                    problems?</p>
+                <ul>
+                    <LI>
+                        <p class="docList">When you do not have any data in that column yet (it's all NULL).</P>
+                    </LI>
+                    <LI>
+                        <p class="docList">When all the data in that column is still less than the size you are changing
+                            the column to.</P>
+                    </li>
+                </ul>
+                <p class="docText">If you try to reduce the column size to a size where you would be cutting off some of
+                    the data, SQL Server will give you an error and will not let you do it.</p>
+                <p class="docText">For example, if you type in the following <tt>ALTER TABLE</tt> command, trying to
+                    change the <tt>names</tt> column of the <tt>Employee</tt> table to a size of 5 (where you would be
+                    losing some data):</P>
+                <pre>
+ALTER TABLE Employee
+ALTER COLUMN names VARCHAR(5)
+</pre><BR>
+
+                <p class="docText">You will get the following error message:</P>
+                <pre>
+Msg 8152, Level 16, State 14, Line 1
+String or binary data would be truncated.
+The statement has been terminated.
+</pre><BR>
+
+                <p class="docText">And, upon viewing the table definition of the <tt>Employee</tt> table, you will find
+                    that the column size of the <tt>names</tt> column was not altered.</P>
+                <p class="docText">If, however, you type:</p>
+                <pre>
+ALTER TABLE<a name="IDX-CHP-3-0193"></a> 
+ Employee
+ALTER COLUMN names VARCHAR(19)
+</pre><BR>
+
+                <p class="docText">You will get the message:</p>
+                <pre>
+Command(s) completed successfully.
+</pre><br>
+
+                <p class="docText">Now if you look at the table definition of the <tt>Employee</tt> table, you will see
+                    that the <tt>names</tt> column has been changed to a size of 19 characters, as shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-3-FIG-5">Figure 3-5</a>.</P>
+                <a name="learnsqlsvr05-CHP-3-FIG-5"></a>
+                <P>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 3-5. Altering a column's length in the Employee table</h5>
+                        <img border="0" alt="" width="384" height="153" SRC="images/learnsqlsvr05_0305.jpg">
+                    </center>
+                </p><br>
+                <p class="docText">But before you can view this change, you may have to refresh the <tt>Employee</tt>
+                    table.</P>
+                <p class="docText">SQL Server allowed this reduction in column size, as all the data in the
+                    <tt>names</tt> column was less than 19 characters in length.</p>
+                <p class="docText">Before you proceed to the following section, please change the size of the
+                    <tt>names</tt> column back to 20.</p>
+
+
+                <a name="learnsqlsvr05-CHP-3-SECT-5.3"></a>
+                <h4 id="title-IDALYC05" class="docSection2Title">3.5.3. Deleting a Column from a Table</h4><a
+                    name="IDX-CHP-3-0194"></a>
+                <a name="IDX-CHP-3-0195"></a>
+
+                <p class="docText">The following is the general syntax for deleting<a name="IDX-CHP-3-0196"></a>
+                    a column from a table:</P>
+                <pre>
+ALTER TABLE Tablename
+DROP column column-name
+</pre><BR>
+
+                <p class="docText">For example, to delete the column called <tt>bonus</tt> from the <tt>Employee</tt>
+                    table, type the following:</p>
+                <pre>
+ALTER TABLE Employee
+DROP column bonus
+</pre><br>
+
+                <p class="docText">This query produces the definition of the <tt>Employee</tt> table shown in <a
+                        class="docLink" href="#learnsqlsvr05-CHP-3-FIG-6">Figure 3-6</a>, which matches the original
+                    design for the table shown in <a class="docLink"
+                        href="learnsqlsvr05-CHP-3-SECT-2.html#learnsqlsvr05-CHP-3-FIG-2">Figure 3-2</a>.</p>
+                <a name="learnsqlsvr05-CHP-3-FIG-6"></a>
+                <p>
+                    <center>
+                        <h5 class="docFigureTitle">Figure 3-6. Design of Employee table after dropping a column</h5>
+                        <img border="0" alt="" width="340" height="119" SRC="images/learnsqlsvr05_0306.jpg">
+                    </center>
+                </p><br>
+                <p>
+                <table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center">
+                    <tr>
+                        <td>
+                            <table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6">
+                                <tr>
+                                    <td width="60" valign="top"><img src="images/warning_yellow.jpg" width="51"
+                                            height="36" alt=""></td>
+                                    <TD valign="top">
+                                        <p class="docText">The <tt>DROP column</tt> command will also delete a column
+                                            even if there is data in it, so you have to be very careful when using it.
+                                            This is another one of the commands that affects multiple rows and caution
+                                            must be observed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </TD>
+                    </TR>
+                </table>
+                </P><BR>
+                <p class="docText">We will discuss a few other uses of the <tt>ALTER TABLE</tt> command in subsequent
+                    chapters. For example, you can use it to define or change a default column value, enable or disable
+                    an integrity constraint, manage internal space, and so on.</P>
+
+
+                <a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a>
+            </TD>
+        </TR>
+    </table>
+    <br>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Previous Page"></a>
+            <td align="right">
+                <div STYLE="MARGIN-LEFT: 0.15in;">
+                    <a href=learnsqlsvr05-CHP-3-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0"
+                            align="absmiddle" alt="Next Page"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

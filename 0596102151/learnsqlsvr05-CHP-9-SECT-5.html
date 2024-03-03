@@ -1,0 +1,171 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Section 9.5.&nbsp; Auditing in Subqueries</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="learnsqlsvr05-CHP-9-SECT-5"></a>
+<h3 id="title-IDAYZ4TC" class="docSection1Title">9.5. Auditing in Subqueries</H3><a name="IDX-CHP-9-0454"></a> 
+<a name="IDX-CHP-9-0455"></a> 
+<a name="IDX-CHP-9-0456"></a> 
+
+<p class="docText">In this section, we consider a potential problem of using aggregation with subqueries. As with Cartesian products and joins, aggregation hides details and should always be audited. The two tables that follow will be used to illustrate this problem.</p>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-9-TABLE-2">Table 9-2</a> is similar to the <tt>Grade_report</tt> table and contains a student section identifier (<tt>ssec</tt>), grades (<tt>gd</tt>), and student names (<tt>sname</tt>).</p>
+<a name="learnsqlsvr05-CHP-9-TABLE-2"></a><P><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table 9-2. GG table</H5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><TD class="docTableCell" align="left"><p class="docText"></P>
+<pre>
+ssec        gd   sname
+----------- ---- ------------
+100         A    Brenda
+110         B    Brenda
+120         A    Brenda
+200         A    Brenda
+210         A    Brenda
+220         B    Brenda
+100         A    Richard
+100         B    Doug
+200         A    Richard
+110         B    Morris
+&nbsp;
+(10 row(s) affected)
+</pre><BR>
+
+</TD></tr></table></P><BR>
+<p><table border="0" bgcolor="black" cellspacing="0" cellpadding="1" width="90%" align="center"><TR><TD><table bgcolor="white" width="100%" border="0" cellspacing="0" cellpadding="6"><tr><td width="60" valign="top"><img src="images/tip_yellow.jpg" width="50" height="54" alt=""></td><td valign="top"><p class="docText">Tables 9-2 and 9-3 (<tt>GG</tt> and <tt>SS</tt>) have not been created for you. You have to create them (and insert the records shown) and then run the queries that follow.</P></td></tr></table></TD></TR></table></P><br>
+<p class="docText"><a class="docLink" href="#learnsqlsvr05-CHP-9-TABLE-3">Table 9-3</a> is similar to the <tt>Section</tt> table and contains a section identifier (<tt>sec</tt>) and an instructor name (<tt>iname</tt>).</p>
+<a name="learnsqlsvr05-CHP-9-TABLE-3"></a><p><table cellspacing="0" FRAME="void" RULES="all" cellpadding="4" width="100%"><caption><h5 class="docTableTitle">Table 9-3. SS table</h5></caption><colgroup span="1"><col></colgroup><thead></thead><tr><td class="docTableCell" align="left"><p class="docText"></p>
+<pre>
+sec         iname
+----------- ------------
+100         Jones
+110         Smith
+120         Jones
+200         Adams
+210         Jones
+&nbsp;
+(5 row(s) affected)
+</pre><br>
+
+</td></tr></table></p><br>
+<p class="docText">Now suppose that you want to find out how many As each instructor awarded. You might start with a join of the <tt>GG</tt> and <tt>SS</tt> tables. A normal equi-join would be as follows:</p>
+<pre>
+SELECT *
+FROM   GG, SS
+WHERE  GG.ssec = SS.sec
+</pre><br>
+
+<p class="docText">This query would produce the following output (nine rows):</P>
+<pre>
+ssec        gd   sname        sec         iname
+----------- ---- ------------ ----------- ------------
+100         A    Brenda       100         Jones
+110         B    Brenda       110         Smith
+120         A    Brenda       120         Jones
+200         A    Brenda       200         Adams
+210         A    Brenda       210         Jones
+100         A    Richard      100         Jones
+100         B    Doug         100         Jones
+200         A    Richard      200         Adams
+110         B    Morris       110         Smith
+&nbsp;
+(9 row(s) affected)
+</pre><br>
+
+<p class="docText">In addition, the following query tells you that there are six As in the <tt>GG</tt> table:</p>
+<pre>
+SELECT COUNT(*) AS [Count of As]
+FROM   GG
+WHERE  gd = 'A'
+</pre><BR>
+
+<p class="docText">giving:</p>
+<pre>
+Count of As
+------------
+6
+&nbsp;
+(1 row(s) affected)
+&nbsp;
+</pre><br>
+
+<p class="docText">Now, if you want to find out which instructor gave the As, you would type this query:</P>
+<pre>
+SELECT  SS.iname
+FROM    SS, GG
+WHERE   SS.sec = GG.ssec
+  AND   GG.gd = 'A'
+</pre><br>
+
+<p class="docText">You get the following six rows of output:</p>
+<pre>
+iname
+------------
+Jones
+Jones
+Adams
+Jones
+Jones
+Adams
+&nbsp;
+(6 row(s) affected)
+</pre><BR>
+
+<p class="docText">Now, to find "how many" As each instructor gave, include a <tt>COUNT</tt> and <tt>GROUP BY</tt> as follows:</p>
+<pre>
+SELECT  SS.iname AS [iname], COUNT(*) AS [count]
+FROM    SS, GG
+WHERE   SS.sec = GG.ssec
+  AND   GG.gd = 'A'
+GROUP BY SS.iname
+</pre><BR>
+
+<p class="docText">This query produces the following output:</p>
+<pre>
+iname        count
+------------ -----------
+Adams        2
+Jones        4
+&nbsp;
+(2 row(s) affected)
+</pre><BR>
+
+<p class="docText">This shows that instructor Adams gave two As and instructor Jones gave four As. So far, so good. You should note that the final count/grouping has the same number of As as the original tablesthe sum of the counts equals 6. Now, if you had devised a <tt>COUNT</tt> query with a sub-<tt>SELECT</tt>, you could get an answer that looked correct but in fact was not. For example, consider the following subquery version of the preceding join query:</P>
+<pre>
+SELECT  SS.iname AS [iname], COUNT(*) AS [count]
+FROM    SS
+WHERE   SS.sec IN
+    (SELECT  GG.ssec
+     FROM    GG
+     WHERE   GG.gd = 'A')
+GROUP BY SS.iname
+</pre><BR>
+
+<p class="docText">This query produces the following output:</P>
+<pre>
+iname        count
+------------ -----------
+Adams        1
+Jones        3
+&nbsp;
+(2 row(s) affected)
+</pre><br>
+
+<p class="docText">The reason that you get this output is that the second query is counting names of instructors and whether an A is present in the set of courses that this instructor teachesnot how many As are in the set, just whether any exist. The previous join query gives you all the As in the joined table and hence gives the correct answer to the question "How many As did each instructor award?" The sub-<tt>SELECT</tt>ed query answers a different question: "In how many sections did the instructor award an A?"</P>
+<p class="docText">The point in this example is that if you are <tt>SELECT</tt>ing and <tt>COUNT</tt>ing, it is a very good idea to <span class="docEmphasis">audit</span> your results often. If you want to <tt>COUNT</tt> the number of As by instructor, begin by first counting how many As there are. Then, you can construct a query to join and count. You should be able to total and reconcile the number of As to the number of As by instructor. The fact that the result makes sense is very useful in determining (albeit not proving) correctness.</P>
+
+<a href="24991536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=learnsqlsvr05-CHP-9-SECT-6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+</body></html>
